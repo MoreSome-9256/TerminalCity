@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e347331b0760e98498f0b17b5acf2306, type: 3}
+  m_Name: IDcard_Lyn
+  m_EditorClassIdentifier: 
+  itemNum: 101001
+  itemName: "ID\u5361-\u51DB"
+  itemImage: {fileID: 21300000, guid: b84416b334c86f14b816af14bf778d0e, type: 3}
+  readTime: 0
+  isDecoded: 0
+  itemInfo: "\u51DB\uFF08Lyn\uFF09\u7684ID\u5361"
+  textFile: {fileID: 0}
+  itemType: 0
+  Name: "\u51DB/Lyn"
+  Time: 
+  Event: 
+  showDialogueOnPickup: 1
+  linkedCharacterName: Lyn

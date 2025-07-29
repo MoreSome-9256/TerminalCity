@@ -1,0 +1,9 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "New Third Level", menuName = "Inventory/New Third Level")]
+public class Level3Data : Item
+{
+    public int itemType; //记录某级中的具体类别
+}
