@@ -48,6 +48,19 @@ public class DialogueManager : MonoBehaviour
     private bool isDialogueActive = false;
     private bool dialogueEnded = false;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip clickSound;
+    [SerializeField] private float clickVolume = 0.3f;
+    private AudioSource audioSource;
+
+    private void Awake()
+    {
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
     void Start()
     {
         charNameText.gameObject.SetActive(true);
@@ -56,7 +69,6 @@ public class DialogueManager : MonoBehaviour
         nextButton.gameObject.SetActive(true);
         characterImage.gameObject.SetActive(true);
 
-        nextButton.onClick.AddListener(OnButtonClick);
         StartCoroutine(StartDialogueWithDelay());
     }
 
@@ -64,6 +76,7 @@ public class DialogueManager : MonoBehaviour
     {
         if (isDialogueActive && Input.GetKeyDown(KeyCode.Space))
         {
+            PlayClickSound();
             AdvanceDialogue();
         }
     }
@@ -87,6 +100,7 @@ public class DialogueManager : MonoBehaviour
 
     public void OnButtonClick()
     {
+        PlayClickSound();
         AdvanceDialogue();  // 直接调用
     }
 
@@ -100,6 +114,8 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue()
     {
+        nextButton.onClick.RemoveAllListeners();
+        nextButton.onClick.AddListener(OnButtonClick);
         dialogueEnded = false;
 
         bool hasButton = TryFindButton();
@@ -233,7 +249,7 @@ public class DialogueManager : MonoBehaviour
             targetButton.interactable = true;
             targetButton.gameObject.SetActive(true);
         }
-
+        nextButton.onClick.RemoveAllListeners();
         charNameText.text = string.Empty;
         dialogueText.text = string.Empty;
 
@@ -255,5 +271,15 @@ public class DialogueManager : MonoBehaviour
         nextButton.gameObject.SetActive(true);
 
         StartDialogue();
+    }
+    private void PlayClickSound()
+    {
+        Debug.Log("PlayClickSound");
+        if (!audioSource.enabled || !audioSource.gameObject.activeInHierarchy)
+            return;
+        if (audioSource != null && clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound, clickVolume);
+        }
     }
 }

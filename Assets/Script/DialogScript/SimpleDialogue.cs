@@ -45,15 +45,25 @@ public class SimpleDialogue : MonoBehaviour
     private bool wasButtonInitiallyActive;
     private bool hasSearchedButton;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip clickSound;
+    private AudioSource audioSource;
+
     private void Awake()
     {
-        nextButton.onClick.AddListener(NextDialogue);
+        audioSource = gameObject.GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
     }
 
     private void Update()
     {
         if (isDialogueActive && Input.GetKeyDown(KeyCode.Space))
         {
+            PlayClickSound();
             NextDialogue();
         }
     }
@@ -78,7 +88,12 @@ public class SimpleDialogue : MonoBehaviour
     public void StartDialogue()
     {
         bool hasButton = TryFindButton();
-
+        nextButton.onClick.RemoveAllListeners();
+        nextButton.onClick.AddListener(() =>
+        {
+            PlayClickSound();
+            NextDialogue();
+        });
         if (hasButton)
         {
             wasButtonInitiallyActive = targetButton.interactable;
@@ -177,6 +192,7 @@ public class SimpleDialogue : MonoBehaviour
             targetButton.interactable = true;
             targetButton.gameObject.SetActive(true);
         }
+        nextButton.onClick.RemoveAllListeners();
         charNameText.text = string.Empty;     // 清空角色名称
         dialogueText.text = string.Empty;     // 清空对话内容
         charNameText.gameObject.SetActive(false);
@@ -189,5 +205,14 @@ public class SimpleDialogue : MonoBehaviour
         }
         isDialogueActive = false;
         onDialogueEnd?.Invoke();
+    }
+    private void PlayClickSound()
+    {
+        if (!audioSource.enabled || !audioSource.gameObject.activeInHierarchy)
+            return;
+        if (audioSource != null && clickSound != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
     }
 }

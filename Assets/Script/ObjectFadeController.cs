@@ -15,6 +15,15 @@ public class ObjectFadeController : MonoBehaviour
     [Header("事件配置")]
     public UnityEvent OnFadeComplete = new UnityEvent();
     public UnityEvent OnFadeComplete2 = new UnityEvent();
+
+    public bool isAuto = false;
+    private void Awake()
+    {
+        if (isAuto)
+        {
+            Fade(false);
+        }
+    }
     public void Fade(bool isFadeIn)
     {
         Image image = fadeObject.GetComponent<Image>();

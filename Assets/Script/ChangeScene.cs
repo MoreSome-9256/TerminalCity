@@ -11,6 +11,7 @@ public class ChangeScene : MonoBehaviour
 
     public void Change()
     {
+        Debug.Log("SceneChange");
         StartCoroutine(WaitingAndChange(sceneName));
     }
 

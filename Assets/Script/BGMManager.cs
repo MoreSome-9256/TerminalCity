@@ -1,46 +1,56 @@
 using UnityEngine;
+using System.Collections;
 
 public class BGMManager : MonoBehaviour
 {
-    public static BGMManager Instance;
     private AudioSource bgmSource;
+
+    [SerializeField] private AudioClip initialClip;
+
+    private Coroutine fadeOutCoroutine = null;
 
     private void Awake()
     {
-        // 保证只有一个 BGMManager（单例模式）
-        if (Instance == null)
+        bgmSource = GetComponent<AudioSource>();
+        if (initialClip != null)
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // 音乐在切换场景时不销毁
-            bgmSource = GetComponent<AudioSource>();
-        }
-        else
-        {
-            Destroy(gameObject);
+            bgmSource.clip = initialClip;
+            //bgmSource.Play();
         }
     }
 
     public void PlayBGM()
     {
-        if (!bgmSource.isPlaying)
-            bgmSource.Play();
+        bgmSource.Stop();           // 停止旧音乐
+        bgmSource.clip = initialClip;      // 切换到新音乐
+        bgmSource.Play();
     }
 
-    public void StopBGM()
+    public void StopBGM() => bgmSource.Stop();
+    public void PauseBGM() => bgmSource.Pause();
+    public void ResumeBGM() => bgmSource.UnPause();
+    public void FadeOutBGM(float duration)
     {
-        if (bgmSource.isPlaying)
-            bgmSource.Stop();
+        if (fadeOutCoroutine != null)
+        {
+            StopCoroutine(fadeOutCoroutine);
+        }
+        fadeOutCoroutine = StartCoroutine(FadeOutCoroutine(duration));
     }
 
-    public void PauseBGM()
+    private IEnumerator FadeOutCoroutine(float duration)
     {
-        if (bgmSource.isPlaying)
-            bgmSource.Pause();
-    }
+        float startVolume = bgmSource.volume;
 
-    public void ResumeBGM()
-    {
-        if (!bgmSource.isPlaying)
-            bgmSource.UnPause();
+        float time = 0f;
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            bgmSource.volume = Mathf.Lerp(startVolume, 0f, time / duration);
+            yield return null;
+        }
+
+        bgmSource.Stop();
+        bgmSource.volume = startVolume; // 恢复音量，方便下次播放
     }
 }

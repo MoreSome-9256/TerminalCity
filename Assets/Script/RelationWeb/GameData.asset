@@ -1,33 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 733563529486bf44ebdf3e343703caa5, type: 3}
-  m_Name: GameData
-  m_EditorClassIdentifier: 
-  AllCharacters:
-  - Name: Lyn
-    Portrait: {fileID: 21300000, guid: 4f3def134d0b61d4faf6a532755a8c4e, type: 3}
-    DefaultPosition: {x: 0, y: 0}
-  - Name: Ronald
-    Portrait: {fileID: 21300000, guid: 3dcce56f13b918941b1ccc7f233e63cc, type: 3}
-    DefaultPosition: {x: 200, y: 200}
-  - Name: Derrick
-    Portrait: {fileID: 21300000, guid: ffb6b2dce4d85c2418fb90ac07fbe08f, type: 3}
-    DefaultPosition: {x: 30, y: 0}
-  - Name: Cosmo
-    Portrait: {fileID: 21300000, guid: f29803bf44bb4434ea8bb14f0a5d01d9, type: 3}
-    DefaultPosition: {x: -400, y: 300}
-  - Name: Derrick
-    Portrait: {fileID: 21300000, guid: ffb6b2dce4d85c2418fb90ac07fbe08f, type: 3}
-    DefaultPosition: {x: 200, y: -300}
-  AllRelationships:
-  - CharacterA: Lyn
-    CharacterB: Cosmo
+version https://git-lfs.github.com/spec/v1
+oid sha256:a383edd5a31799a741c3ff54e04eb385377ffed43cc399d43f0bb67b909c4c39
+size 1020
