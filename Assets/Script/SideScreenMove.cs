@@ -53,17 +53,19 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
     }
 
     // 实现IPointerClickHandler接口的OnPointerClick方法
+    private bool isAnimating = false;
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!isMoved) {
+        if (isAnimating) return; // 动画进行中，忽略点击
+
+        if (!isMoved)
+        {
             StartCoroutine(SequentialMove1());
-            isMoved = true;
-            OnBagOpened?.Invoke();
         }
         else
         {
             StartCoroutine(SequentialMove2());
-            isMoved = false;
         }
     }
 
@@ -125,36 +127,51 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
     }
     private IEnumerator SequentialMove1()
     {
-        //Debug.Log(Screen.width);
-        //Debug.Log(Screen.height);
+        isAnimating = true;
+
         if (mask != null)
             mask.SetActive(true);
-        float currentX = targetObject.transform.position.x;//侧边屏幕的x轴
-        float y1 = (float)(targetY * ((float)Screen.height / 405.0f));
-        Vector3 targetPosition = new Vector3(currentX, y1, targetZ);//侧边屏幕的目标位置
 
-        float currentX2 = dialogBox.transform.position.x;//对话框的x轴
-        float y2 = (float)(targetY2 * ((float)Screen.height / 405.0f));
-        Vector3 targetPosition2 = new Vector3(currentX2, y2, targetZ2);//对话框的目标位置
+        float currentX = targetObject.transform.position.x;
+        float y1 = targetY * ((float)Screen.height / 405.0f);
+        Vector3 targetPosition = new Vector3(currentX, y1, targetZ);
+
+        float currentX2 = dialogBox.transform.position.x;
+        float y2 = targetY2 * ((float)Screen.height / 405.0f);
+        Vector3 targetPosition2 = new Vector3(currentX2, y2, targetZ2);
 
         float currentY = mainScreen.transform.position.y;
-        float x3 = (float)(targetX3 * ((float)Screen.width / 720.0f));
+        float x3 = targetX3 * ((float)Screen.width / 720.0f);
         Vector3 targetPosition3 = new Vector3(x3, currentY, targetZ3);
 
         float currentY2 = Menu.transform.position.y;
-        float x4 = (float)(targetX4 * ((float)Screen.width / 720.0f));
+        float x4 = targetX4 * ((float)Screen.width / 720.0f);
         Vector3 targetPosition4 = new Vector3(x4, currentY2, targetZ4);
 
-        StartCoroutine(SmoothMove(targetObject.transform, targetObject.transform.position, targetPosition, moveDuration, 20));
-        StartCoroutine(RotateButton(targetAngle, rotationDuration));
-        StartCoroutine(SmoothMove(dialogBox.transform, dialogBox.transform.position, targetPosition2, moveDuration, 0));
-        yield return new WaitForSeconds(0.3f); 
-        StartCoroutine(SmoothMove(mainScreen.transform, mainScreen.transform.position, targetPosition3, moveDuration2, 0));
-        StartCoroutine(SmoothMove(Menu.transform, Menu.transform.position, targetPosition4, moveDuration3, 0));
+        // side screen, button, dialogBox 同时动
+        Coroutine moveSide = StartCoroutine(SmoothMove(targetObject.transform, targetObject.transform.position, targetPosition, moveDuration, 20));
+        Coroutine rotateBtn = StartCoroutine(RotateButton(targetAngle, rotationDuration));
+        Coroutine moveDialog = StartCoroutine(SmoothMove(dialogBox.transform, dialogBox.transform.position, targetPosition2, moveDuration, 0));
 
+        // 稍后再动 mainScreen 和 Menu
+        yield return new WaitForSeconds(0.3f);
+        Coroutine moveMain = StartCoroutine(SmoothMove(mainScreen.transform, mainScreen.transform.position, targetPosition3, moveDuration2, 0));
+        Coroutine moveMenu = StartCoroutine(SmoothMove(Menu.transform, Menu.transform.position, targetPosition4, moveDuration3, 0));
+
+        // 等全部完成
+        yield return moveSide;
+        yield return rotateBtn;
+        yield return moveDialog;
+        yield return moveMain;
+        yield return moveMenu;
+
+        isMoved = true;
+        isAnimating = false;
     }
+
     private IEnumerator SequentialMove2()
     {
+        isAnimating = true;
         float currentX = targetObject.transform.position.x;
         float y1 = (float)(targetY * ((float)Screen.height / 405.0f));
         Vector3 targetPosition = new Vector3(currentX, y1, targetZ);
@@ -193,6 +210,8 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
         //InventoryManager.instance.OnInventoryClosed();
         if (mask != null)
             mask.SetActive(false);
+        isMoved = false;
+        isAnimating = false;
     }
 
     public void ToggleInventory()

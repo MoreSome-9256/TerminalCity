@@ -1,24 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e347331b0760e98498f0b17b5acf2306, type: 3}
-  m_Name: Document_ability
-  m_EditorClassIdentifier: 
-  itemNum: 102001
-  itemName: "TeraCity\u7ACB\u9879\u4E66(1)"
-  itemImage: {fileID: 21300000, guid: 8e29980694b2b80459b5cdee2798f0d8, type: 3}
-  isUsed: 0
-  itemInfo: "TeraCity\u7ACB\u9879\u4E66\u7684\u4E00\u90E8\u5206\uFF0C\u4F3C\u4E4E\u4E0E\u8BE5\u9879\u76EE\u4E3A\u4F55\u6210\u7ACB\u6709\u5173"
-  textFile: {fileID: 4900000, guid: 1fe9f3ae12c50264d9e8f6a1df92d451, type: 3}
-  itemType: 1
-  Name: 
-  Time: 
-  Event: 
+version https://git-lfs.github.com/spec/v1
+oid sha256:ac17d88c486d02e556edb6e6a98235667da02b07b83d7cca27ec0c80102af178
+size 1110

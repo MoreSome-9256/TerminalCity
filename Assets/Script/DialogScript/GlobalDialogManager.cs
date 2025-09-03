@@ -7,6 +7,7 @@ using Mono.Data.Sqlite;
 using System.IO;
 using UnityEngine.EventSystems;
 using System;
+using System.Linq;
 
 public class GlobalDialogManager : MonoBehaviour
 {
@@ -37,6 +38,13 @@ public class GlobalDialogManager : MonoBehaviour
     [Header("Branch UI")]
     [SerializeField] private GameObject branchPanel;     // 包含按钮的父物体
     [SerializeField] private Button branchButtonPrefab;  // 预制按钮，用于生成分支按钮
+
+    // Q&A 历史记录
+    public static List<QARecord> qaHistory = new List<QARecord>();
+    // 临时记录：玩家刚刚问了什么问题
+    private string pendingQuestion = null;
+    // 已选择过的选项 flag
+    public static List<string> triggeredFlags = new List<string>();
 
     private void Awake()
     {
@@ -250,7 +258,6 @@ public class GlobalDialogManager : MonoBehaviour
 
     private void NextDialogue()
     {
-        // 防止 currentDialogue 为空或索引越界
         if (currentDialogue == null || currentIndex < 0 || currentIndex >= currentDialogue.Count)
             return;
 
@@ -262,12 +269,36 @@ public class GlobalDialogManager : MonoBehaviour
             return;
         }
 
+        // 如果是问答的第一句回答，创建 QARecord
+        if (pendingQuestion != null && currentIndex == 0)
+        {
+            var record = new QARecord(pendingQuestion);
+            GlobalDialogManager.qaHistory.Add(record);
+        }
+
+        // 只有当 pendingQuestion 不为空时，才写入回答
+        if (pendingQuestion != null)
+        {
+            QARecord currentRecord = GlobalDialogManager.qaHistory.Count > 0
+                ? GlobalDialogManager.qaHistory[GlobalDialogManager.qaHistory.Count - 1]
+                : null;
+
+            if (currentRecord != null)
+            {
+                var segment = currentDialogue[currentIndex];
+                currentRecord.Answers.Add((segment.charName, segment.dialogueText));
+            }
+        }
+
         currentIndex++;
 
         if (currentIndex >= currentDialogue.Count)
         {
             var lastSegment = currentDialogue[currentDialogue.Count - 1];
             var groupId = lastSegment.branchGroupID;
+
+            // 问答结束，清空 pendingQuestion
+            pendingQuestion = null;
 
             if (!string.IsNullOrEmpty(groupId) && HasBranchOptions(groupId))
             {
@@ -292,7 +323,6 @@ public class GlobalDialogManager : MonoBehaviour
 
         List<BranchOption> options = LoadBranchOptionsFromDB(branchGroupID);
 
-        // 没选项就直接结束，不弹面板、不只放一个“退出”
         if (options == null || options.Count == 0)
         {
             branchPanel.SetActive(false);
@@ -302,23 +332,49 @@ public class GlobalDialogManager : MonoBehaviour
 
         branchPanel.SetActive(true);
 
+        int shownCount = 0;
         foreach (var opt in options)
         {
+            var localOpt = opt;
+
+            // 跳过已触发
+            if (!string.IsNullOrEmpty(localOpt.conditionFlag) &&
+                GlobalDialogManager.triggeredFlags.Contains(localOpt.conditionFlag))
+            {
+                continue;
+            }
+
+            // 如果已经显示够 3 个，停止
+            if (shownCount >= 3) break;
+
+            // 生成按钮
             Button btn = Instantiate(branchButtonPrefab, branchPanel.transform);
-            btn.GetComponentInChildren<TMP_Text>().text = opt.optionText;
-            btn.onClick.AddListener(() => {
+            btn.GetComponentInChildren<TMP_Text>().text = localOpt.optionText;
+
+            btn.onClick.AddListener(() =>
+            {
+                pendingQuestion = localOpt.optionText;
+
+                if (!string.IsNullOrEmpty(localOpt.conditionFlag))
+                {
+                    GlobalDialogManager.triggeredFlags.Add(localOpt.conditionFlag);
+                    Debug.Log("Added flag: " + localOpt.conditionFlag + ", now count: " + GlobalDialogManager.triggeredFlags.Count);
+                }
+
                 branchPanel.SetActive(false);
-                TriggerDialogue(opt.targetDialogueID);
+                TriggerDialogue(localOpt.targetDialogueID);
             });
+
+            shownCount++;
         }
 
-        // 固定的“退出对话”按钮（可保留）
+        // 固定退出按钮
         Button exitBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
         exitBtn.GetComponentInChildren<TMP_Text>().text = "没什么事了";
         exitBtn.onClick.AddListener(() =>
         {
             branchPanel.SetActive(false);
-            // 读取 ID 999 的单条对话作为 currentDialogue
+
             DialogueSegment segment = LoadDialogueSegmentFromDB(999);
             if (segment != null)
             {
@@ -330,15 +386,26 @@ public class GlobalDialogManager : MonoBehaviour
                 isDialogueActive = true;
                 _lastAdvanceTime = -999f;
                 EventSystem.current?.SetSelectedGameObject(null);
+
+                // 退出对话也算 QARecord
+                if (pendingQuestion != null)
+                {
+                    var record = new QARecord
+                    {
+                        questionText = pendingQuestion
+                    };
+                    record.Answers.Add(("系统", segment.dialogueText));
+                    GlobalDialogManager.qaHistory.Add(record);
+
+                    pendingQuestion = null;
+                }
             }
             else
             {
                 EndDialogue();
             }
         });
-
     }
-
     private bool HasBranchOptions(string branchGroupID)
     {
         using (var conn = new SqliteConnection($"URI=file:{dbPath}"))
@@ -387,7 +454,7 @@ public class GlobalDialogManager : MonoBehaviour
             using (var cmd = conn.CreateCommand())
             {
                 // 使用实际列名 nextID
-                cmd.CommandText = "SELECT optionText, nextID FROM branch WHERE branchGroup=@id ORDER BY rowid ASC";
+                cmd.CommandText = "SELECT optionText, nextID, conditionFlag FROM branch WHERE branchGroup=@id ORDER BY rowid ASC";
                 cmd.Parameters.AddWithValue("@id", branchGroupID);
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -396,7 +463,8 @@ public class GlobalDialogManager : MonoBehaviour
                         list.Add(new BranchOption
                         {
                             optionText = reader.GetString(0),
-                            targetDialogueID = reader.GetInt32(1).ToString() // INTEGER 转 string
+                            targetDialogueID = reader.GetInt32(1).ToString(), // INTEGER 转 string
+                            conditionFlag = reader.GetString(0)
                         });
                     }
                 }
@@ -445,6 +513,7 @@ public class GlobalDialogManager : MonoBehaviour
     {
         public string optionText;
         public string targetDialogueID;
+        public string conditionFlag;
     }
 
     public void TriggerDialogue(string dialogueID)

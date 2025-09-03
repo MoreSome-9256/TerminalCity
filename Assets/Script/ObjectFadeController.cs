@@ -15,6 +15,7 @@ public class ObjectFadeController : MonoBehaviour
     [Header("事件配置")]
     public UnityEvent OnFadeComplete = new UnityEvent();
     public UnityEvent OnFadeComplete2 = new UnityEvent();
+    public UnityEvent OnFadeComplete3 = new UnityEvent();
 
     public bool isAuto = false;
     private void Awake()
@@ -55,6 +56,37 @@ public class ObjectFadeController : MonoBehaviour
         {
             StartCoroutine(FadeOut());
         }
+    }
+    public void FadeInAndOut()
+    {
+        StartCoroutine(FadeInOut());
+    }
+    IEnumerator FadeInOut()
+    {
+        Image image = fadeObject.GetComponent<Image>();
+        Text text = fadeObject.GetComponent<Text>();
+        TMP_Text tmpText = fadeObject.GetComponent<TMP_Text>();
+        CanvasGroup canvasGroup = fadeObject.GetComponent<CanvasGroup>();
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0;
+        }
+        else if (image != null)
+        {
+            Color color = image.color;
+            color.a = 0f;
+            image.color = color;
+        }
+        else if (text != null || tmpText != null)
+        {
+            Color color = (text != null) ? text.color : tmpText.color;
+            color.a = 0f;
+            if (text != null) text.color = color;
+            if (tmpText != null) tmpText.color = color;
+        }
+        yield return StartCoroutine(FadeIn());
+        yield return StartCoroutine(FadeOut());
+        OnFadeComplete3?.Invoke();
     }
     IEnumerator FadeIn()
     {

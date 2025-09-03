@@ -1713,8 +1713,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 267cd1ef8969dca478e26d520e8e027a, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls: []
@@ -7743,6 +7741,52 @@ MonoBehaviour:
   triggerOnce: 1
   targetButton: {fileID: 2007691668}
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+--- !u!1 &391186368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 391186369}
+  - component: {fileID: 391186370}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &391186369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391186368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1885062935}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &391186370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 391186368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa10902a51966364893fc9d30c8cec0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  previewArea: {fileID: 1949920549}
+  firstLevel: {fileID: 1801753213}
 --- !u!1 &396919915
 GameObject:
   m_ObjectHideFlags: 0
@@ -7872,8 +7916,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 3ee752210c81d2f4a85544a7f312ec6a, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls: []
@@ -10010,8 +10052,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 5916d1b587fde0b4d9d8c3554fb13321, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls:
@@ -20645,8 +20685,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 20f0919e3a3f58b48b27c9b81f12fc60, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls:
@@ -24037,8 +24075,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 7b9b286c3695aad4aba0e624b33b2ebc, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls: []
@@ -24749,8 +24785,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: ec3117d9ddfb2bc46a0be91787160744, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls:
@@ -27008,8 +27042,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 62d0ebe6a29439947909462b2ec8d411, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls: []
@@ -31183,8 +31215,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: bfa15093a17a3c04899d6d97a512e5de, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls:
@@ -33484,8 +33514,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: fab03acb97a19a14aa65b1f68530012c, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls:
@@ -33576,8 +33604,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: c2ba2d25cacb7374db94858c522df3f7, type: 2}
   playerInventory: {fileID: 11400000, guid: 40270cac645f6e842a7f91c744ce9f7a, type: 2}
-  previewArea: {fileID: 1949920549}
-  firstLevel: {fileID: 1801753213}
   onClick:
     m_PersistentCalls:
       m_Calls:
@@ -34910,6 +34936,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1991203865}
+  - {fileID: 391186369}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1889360660

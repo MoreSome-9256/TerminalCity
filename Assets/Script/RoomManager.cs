@@ -27,6 +27,7 @@ public class RoomManager : MonoBehaviour
         if (room0 != null)
         {
             room0.unlocked = true;
+            EnterRoom(0);
         }
     }
 
@@ -38,7 +39,7 @@ public class RoomManager : MonoBehaviour
         RoomInfo info = database.GetRoomInfo(roomID);
         if (info == null || info.prefab == null)
         {
-            Debug.LogError($"房间 {roomID} 在数据库中没有配置 prefab！");
+            //Debug.LogError($"房间 {roomID} 在数据库中没有配置 prefab！");
             return;
         }
 
@@ -60,7 +61,7 @@ public class RoomManager : MonoBehaviour
         currentRoom.transform.localPosition = roomScript.defaultPosition;
         currentRoomID = roomID;
 
-        Debug.Log($"进入房间 {roomID}");
+        //Debug.Log($"进入房间 {roomID}");
     }
 
     /// <summary>
