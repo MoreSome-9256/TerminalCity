@@ -14,11 +14,13 @@ public class GlobalDialogManager : MonoBehaviour
     public static GlobalDialogManager Instance { get; private set; }
 
     [Header("UI References")]
+    [SerializeField] private GameObject dialogueUI;
     [SerializeField] private TMP_Text charNameText;
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private Image characterImage;
     [SerializeField] private GameObject background;
     [SerializeField] private Button nextButton;
+    [SerializeField] private GameObject selectionUI;
     //[SerializeField] private GameObject dialoguePanel;
 
     [Header("Typing Settings")]
@@ -60,6 +62,7 @@ public class GlobalDialogManager : MonoBehaviour
 
         // 初始化 UI 关闭
         //dialoguePanel.SetActive(false);
+        dialogueUI.SetActive(false);
         charNameText.gameObject.SetActive(false);
         dialogueText.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
@@ -95,6 +98,8 @@ public class GlobalDialogManager : MonoBehaviour
         }
 
         currentIndex = 0;
+        selectionUI.SetActive(false);
+        dialogueUI.SetActive(true);
         charNameText.gameObject.SetActive(true);
         dialogueText.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
@@ -124,6 +129,8 @@ public class GlobalDialogManager : MonoBehaviour
         }
 
         // 显示 UI
+        selectionUI.SetActive(false);
+        dialogueUI.SetActive(true);
         charNameText.gameObject.SetActive(true);
         dialogueText.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
@@ -426,6 +433,7 @@ public class GlobalDialogManager : MonoBehaviour
     {
         charNameText.text = string.Empty;
         dialogueText.text = string.Empty;
+        dialogueUI.SetActive(false);
         charNameText.gameObject.SetActive(false);
         dialogueText.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
@@ -433,6 +441,12 @@ public class GlobalDialogManager : MonoBehaviour
         if (background != null) background.SetActive(false);
 
         isDialogueActive = false; // 结束标记
+
+        if (RoomManager.Instance != null && RoomManager.Instance.currentRoomID == 0)
+        {
+            if (selectionUI != null)
+                selectionUI.SetActive(true);
+        }
     }
 
     [System.Serializable]

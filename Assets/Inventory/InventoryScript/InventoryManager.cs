@@ -153,22 +153,39 @@ public class InventoryManager : MonoBehaviour
             scrollViewText.SetActive(false);
             scrollViewImage.SetActive(true);
 
-            // 清空旧的图片
+            // 清空旧图片
             foreach (Transform child in imageContent)
-            {
                 Destroy(child.gameObject);
-            }
 
-            // 生成新图片
+            // 强制刷新布局
+            Canvas.ForceUpdateCanvases();
+            float parentWidth = ((RectTransform)imageContent).rect.width;
+
             foreach (var sprite in slot.slotItem.itemImages)
             {
-                Debug.Log("it's an image");
-                if (sprite == null) continue;
-
                 Image img = Instantiate(imagePrefab, imageContent);
                 img.sprite = sprite;
-                img.preserveAspect = true;
+
+                // 关闭 preserveAspect，手动控制尺寸
+                img.preserveAspect = false;
+
+                RectTransform rt = img.GetComponent<RectTransform>();
+                float aspect = sprite.rect.height / sprite.rect.width;
+
+                // 设置宽度填满父容器，高度按比例
+                rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, parentWidth);
+                rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, parentWidth * aspect);
+
+                // 添加 LayoutElement，禁用 Flexible Width/Height，防止 LayoutGroup 覆盖
+                LayoutElement le = img.GetComponent<LayoutElement>();
+                if (le == null) le = img.gameObject.AddComponent<LayoutElement>();
+                le.flexibleWidth = 0;
+                le.flexibleHeight = 0;
+                le.preferredWidth = parentWidth;
+                le.preferredHeight = parentWidth * aspect;
             }
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(imageContent);
 
             var sr = scrollViewImage.GetComponent<ScrollRect>();
             sr.verticalNormalizedPosition = 1f;

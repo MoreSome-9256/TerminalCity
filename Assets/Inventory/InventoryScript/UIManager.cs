@@ -1,12 +1,25 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [Header("全局 UI 面板")]
+    [Header("Inventory UI")]
     public GameObject previewArea;  // 对应 PreView 面板
     public GameObject firstLevel;   // 对应 FirstLevel 面板 / 背包 UI
+
+    [Header("Dialogue UI")]
+    public GameObject dialogueUI;
+    public TMP_Text charNameText;
+    public TMP_Text dialogueText;
+    public Image characterImage;
+    public Button nextButton;
+    public GameObject dialogueBackground;
+
+    [Header("Selection UI")]
+    public GameObject selectionUI;
 
     private void Awake()
     {

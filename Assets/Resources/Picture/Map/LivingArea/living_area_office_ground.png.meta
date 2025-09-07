@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,196 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: living_area_office_ground_0
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 747
+        width: 1618
+        height: 1012
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf1244c297575674cab9f16c963f497b
+      internalID: 1122751443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_1
+      rect:
+        serializedVersion: 2
+        x: 1647
+        y: 886
+        width: 962
+        height: 887
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 600330bbc38670f4dbd87d38187c5854
+      internalID: -835125494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_2
+      rect:
+        serializedVersion: 2
+        x: 2056
+        y: 590
+        width: 214
+        height: 300
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2062fe3e29022144abc960165bae9655
+      internalID: -2112471905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_3
+      rect:
+        serializedVersion: 2
+        x: 1863
+        y: 748
+        width: 43
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cffec75dc6ce54c4688e8da204753d22
+      internalID: 532908334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_4
+      rect:
+        serializedVersion: 2
+        x: 2363
+        y: 671
+        width: 153
+        height: 182
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec2ce22397ece58478d2ffd1f629381e
+      internalID: 817037467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_5
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 56
+        width: 810
+        height: 672
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88d0830a9c7dce743b7abf1243831c16
+      internalID: 883631410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_6
+      rect:
+        serializedVersion: 2
+        x: 1856
+        y: 616
+        width: 81
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35d89ef413ab505418cb1c9b7685f85a
+      internalID: -435227420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_7
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 2
+        width: 830
+        height: 566
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e19d9fefb8e6147478ba2401c04292cf
+      internalID: 350101466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: living_area_office_ground_8
+      rect:
+        serializedVersion: 2
+        x: 1871
+        y: 75
+        width: 964
+        height: 353
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd12666b697e93e4788686c0cf2e6074
+      internalID: -1006772760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +295,16 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      living_area_office_ground_0: 1122751443
+      living_area_office_ground_1: -835125494
+      living_area_office_ground_2: -2112471905
+      living_area_office_ground_3: 532908334
+      living_area_office_ground_4: 817037467
+      living_area_office_ground_5: 883631410
+      living_area_office_ground_6: -435227420
+      living_area_office_ground_7: 350101466
+      living_area_office_ground_8: -1006772760
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
