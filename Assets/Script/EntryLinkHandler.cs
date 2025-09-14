@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class EntryLinkHandler : MonoBehaviour, IPointerClickHandler
 {
@@ -9,6 +10,8 @@ public class EntryLinkHandler : MonoBehaviour, IPointerClickHandler
 
     private TMP_Text textComponent;
     private Canvas rootCanvas;
+
+    [SerializeField] private Button exitButton;  // Inspector 里的退出按钮
 
     private void Awake()
     {
@@ -49,6 +52,12 @@ public class EntryLinkHandler : MonoBehaviour, IPointerClickHandler
                 rootCanvas,
                 eventData.pressEventCamera
             );
+            if (exitButton != null) exitButton.interactable = false;
+            /*currentWindow.onClosed += () =>
+            {
+                if (exitButton != null) exitButton.interactable = true;
+                currentWindow = null;
+            };*/
         }
         else
         {
@@ -57,6 +66,7 @@ public class EntryLinkHandler : MonoBehaviour, IPointerClickHandler
             {
                 Destroy(currentWindow.gameObject);
                 currentWindow = null;
+                if (exitButton != null) exitButton.interactable = true;
             }
         }
     }

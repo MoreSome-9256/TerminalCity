@@ -1,4 +1,4 @@
-<size=120><b>TERACITY项目立项书（1）</b></size>
+<align="center"><size=120><b>TERACITY项目立项书（1）</b></size></align>
 <size=90><b>一、引言</b></size>
 <size=70><b>1.项目建设背景</b></size>
 人类的统恒纪元自开启以来，一直以稳定与和平为主旋律。能力的出现是对平衡的打破，然而这并非灾难，而是社会的变迁（Transition）。我们处于变迁的时代（Era），应当再次联合（Reunited）常规者与能力者，建立新的领域（Area）。

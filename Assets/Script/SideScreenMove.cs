@@ -10,6 +10,7 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
     public GameObject targetObject;
     public GameObject dialogBox;
     public GameObject mainScreen;
+    public GameObject topRightScreen;
     public Button button;
     public float targetY;
     public float targetZ;
@@ -17,6 +18,8 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
     public float targetZ2;
     public float targetX3;
     public float targetZ3;
+    public float targetX5;
+    public float targetZ5;
 
     public float moveDuration = 2.0f; // 移动的持续时间（秒）
     public float moveDuration2 = 2.0f; //主屏幕的移动时间
@@ -30,6 +33,7 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
     private Vector3 originalPosition;//保存侧边屏幕的原始位置
     private Vector3 originalPosition2;//保存对话框的原始位置
     private Vector3 originalPosition3;//保留主屏幕的原始位置
+    private Vector3 originalPosition5;//保留右上屏幕的原始位置
 
     public GameObject Menu;
     public float targetX4;
@@ -48,6 +52,7 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
             originalPosition2 = dialogBox.transform.position;
             originalPosition3 = mainScreen.transform.position;
             originalPosition4 = Menu.transform.position;
+            originalPosition5 = topRightScreen.transform.position;
         }
         rectTransform = button.GetComponent<RectTransform>();
     }
@@ -148,10 +153,15 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
         float x4 = targetX4 * ((float)Screen.width / 720.0f);
         Vector3 targetPosition4 = new Vector3(x4, currentY2, targetZ4);
 
+        float currentY3 = topRightScreen.transform.position.y;
+        float x5 = targetX5 * ((float)Screen.width / 720.0f);
+        Vector3 targetPosition5 = new Vector3(x5, currentY3, targetZ5);
+
         // side screen, button, dialogBox 同时动
         Coroutine moveSide = StartCoroutine(SmoothMove(targetObject.transform, targetObject.transform.position, targetPosition, moveDuration, 20));
         Coroutine rotateBtn = StartCoroutine(RotateButton(targetAngle, rotationDuration));
         Coroutine moveDialog = StartCoroutine(SmoothMove(dialogBox.transform, dialogBox.transform.position, targetPosition2, moveDuration, 0));
+        Coroutine moveTopRight = StartCoroutine(SmoothMove(topRightScreen.transform, topRightScreen.transform.position, targetPosition5, moveDuration, 0));
 
         // 稍后再动 mainScreen 和 Menu
         yield return new WaitForSeconds(0.3f);
@@ -164,6 +174,7 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
         yield return moveDialog;
         yield return moveMain;
         yield return moveMenu;
+        yield return moveTopRight;
 
         isMoved = true;
         isAnimating = false;
@@ -188,6 +199,10 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
         float x4 = (float)(targetX4 * ((float)Screen.width / 720.0f));
         Vector3 targetPosition4 = new Vector3(x4, currentY2, targetZ4);
 
+        float currentY3 = topRightScreen.transform.position.y;
+        float x5 = (float)(targetX5 * ((float)Screen.width / 720.0f));
+        Vector3 targetPosition5 = new Vector3(x5, currentY3, targetZ5);
+
         // 同时关闭菜单和主屏幕
         Coroutine closeMenu = StartCoroutine(SmoothMove(Menu.transform, targetPosition4, originalPosition4, moveDuration3, 0));
         Coroutine closeMain = StartCoroutine(SmoothMove(mainScreen.transform, targetPosition3, originalPosition3, moveDuration, 0));
@@ -200,6 +215,7 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
         Coroutine moveSide = StartCoroutine(SmoothMove(targetObject.transform, targetPosition, originalPosition, moveDuration, 20));
         Coroutine rotateBtn = StartCoroutine(RotateButton(targetAngle + 180f, rotationDuration));
         yield return StartCoroutine(SmoothMove(dialogBox.transform, targetPosition2, originalPosition2, moveDuration, 0));
+        yield return StartCoroutine(SmoothMove(topRightScreen.transform, targetPosition5, originalPosition5, moveDuration, 0));
 
         // 等 side screen 和按钮旋转完成
         yield return moveSide;

@@ -21,6 +21,12 @@ public class UIManager : MonoBehaviour
     [Header("Selection UI")]
     public GameObject selectionUI;
 
+    [Header("Room Info UI")]
+    public GameObject roomInfoPanel;
+    public TMP_Text instabilityText;
+    public TMP_Text descriptionText;
+    public Image npcImage;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

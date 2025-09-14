@@ -17,12 +17,10 @@ public class DoorController : MonoBehaviour
 
     public void OnDoorClicked()
     {
-        preview.SetActive(false);
-        message.SetActive(false);
         if (isLocked)
         {
             Debug.Log("门锁着 → 弹背包 UI + 播放对话");
-            inventoryUI.SetActive(true);
+            SidePanelManager.Instance.ShowPanel(inventoryUI);
 
             InventoryManager4 inventoryManager = FindObjectOfType<InventoryManager4>();
             if (inventoryManager != null)

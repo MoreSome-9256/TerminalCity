@@ -102,6 +102,7 @@ public class InventoryManager : MonoBehaviour
             if (string.IsNullOrEmpty(traits)) traits = "无";
 
             newItem.slotTrait.text = traits.Trim();
+            level1Data.isPicked = true;
         }
 
         newItem.slotSynopsis.text = item.itemInfo;
@@ -138,8 +139,9 @@ public class InventoryManager : MonoBehaviour
                     }
                 }
             }
-
-            contentText.text = text;
+            float chaos = PlayerChaos.Instance.chaos;
+            string corrupedText = ChaosTextProcessor.ApplyChaosMixed(text, chaos);
+            contentText.text = corrupedText;
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentText.rectTransform);
             float newHeight = contentText.preferredHeight;
             contentText.rectTransform.sizeDelta = new Vector2(contentText.rectTransform.sizeDelta.x, newHeight);

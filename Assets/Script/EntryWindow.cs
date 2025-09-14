@@ -4,6 +4,7 @@ using UnityEngine;
 public class EntryWindow : MonoBehaviour
 {
     public TextMeshProUGUI definitionText;
+    public System.Action onClosed;
 
     public void Show(string definition, Vector2 screenPos, Canvas rootCanvas, Camera eventCam)
     {
@@ -28,7 +29,11 @@ public class EntryWindow : MonoBehaviour
         // 可选：把弹窗限制在屏幕内
         ClampToCanvas(rect, rootRect);
     }
-
+    public void Close()
+    {
+        onClosed?.Invoke();
+        Destroy(gameObject);
+    }
     private void ClampToCanvas(RectTransform window, RectTransform root)
     {
         var size = window.rect.size;

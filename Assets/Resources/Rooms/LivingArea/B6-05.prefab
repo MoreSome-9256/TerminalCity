@@ -242,7 +242,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomID: 5
-  resourcePath: Rooms/LivingArea/B6-05
+  instability: 9500
+  instabilityThreshold: 10000
+  defaultPosition: {x: 0, y: 0, z: 0}
   connectedRoomIDs: 
 --- !u!1 &7410437844191243040
 GameObject:

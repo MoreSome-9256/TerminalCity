@@ -79,11 +79,13 @@ public class ItemOnWorld : MonoBehaviour, IPointerClickHandler
 
     private void ShowPreView()
     {
-        if (previewArea != null)
-        {
-            previewArea.SetActive(true);
-            PreView.ShowInformation(item);
-        }
+        if (previewArea == null) return;
+
+        // 通过 SidePanelManager 保证同时只显示一个 Panel
+        SidePanelManager.Instance.ShowPanel(previewArea);
+
+        // 刷新面板内容
+        PreView.ShowInformation(item);
     }
     private void AddGraph()
     {

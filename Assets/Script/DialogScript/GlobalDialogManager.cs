@@ -13,6 +13,8 @@ public class GlobalDialogManager : MonoBehaviour
 {
     public static GlobalDialogManager Instance { get; private set; }
 
+    public string charName;
+
     [Header("UI References")]
     [SerializeField] private GameObject dialogueUI;
     [SerializeField] private TMP_Text charNameText;
@@ -40,6 +42,11 @@ public class GlobalDialogManager : MonoBehaviour
     [Header("Branch UI")]
     [SerializeField] private GameObject branchPanel;     // 包含按钮的父物体
     [SerializeField] private Button branchButtonPrefab;  // 预制按钮，用于生成分支按钮
+
+    [Header("UI Control")]
+    [SerializeField] private Button targetButton;
+    private bool wasButtonInitiallyActive;
+    private bool hasSearchedButton;
 
     // Q&A 历史记录
     public static List<QARecord> qaHistory = new List<QARecord>();
@@ -90,6 +97,13 @@ public class GlobalDialogManager : MonoBehaviour
 
     public void StartDialogue(string dialogueID)
     {
+        bool hasButton = TryFindButton();
+        if (hasButton)
+        {
+            wasButtonInitiallyActive = targetButton.interactable;
+            targetButton.interactable = false;
+            targetButton.gameObject.SetActive(false);
+        }
         currentDialogue = LoadDialogueFromDB(dialogueID);
         if (currentDialogue == null || currentDialogue.Count == 0)
         {
@@ -367,6 +381,12 @@ public class GlobalDialogManager : MonoBehaviour
                     GlobalDialogManager.triggeredFlags.Add(localOpt.conditionFlag);
                     Debug.Log("Added flag: " + localOpt.conditionFlag + ", now count: " + GlobalDialogManager.triggeredFlags.Count);
                 }
+                // 恢复按钮（上一段结束）
+                if (targetButton != null && wasButtonInitiallyActive)
+                {
+                    targetButton.interactable = true;
+                    targetButton.gameObject.SetActive(true);
+                }
 
                 branchPanel.SetActive(false);
                 TriggerDialogue(localOpt.targetDialogueID);
@@ -374,7 +394,19 @@ public class GlobalDialogManager : MonoBehaviour
 
             shownCount++;
         }
-
+        // 固定随便聊聊按钮
+        Button chatBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
+        chatBtn.GetComponentInChildren<TMP_Text>().text = "随便聊聊";
+        chatBtn.onClick.AddListener(() =>
+        {
+            branchPanel.SetActive(false);
+            if (targetButton != null && wasButtonInitiallyActive)
+            {
+                targetButton.interactable = true;
+                targetButton.gameObject.SetActive(true);
+            }
+            TriggerRandomCasualDialogue(charName);
+        });
         // 固定退出按钮
         Button exitBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
         exitBtn.GetComponentInChildren<TMP_Text>().text = "没什么事了";
@@ -431,6 +463,11 @@ public class GlobalDialogManager : MonoBehaviour
 
     private void EndDialogue()
     {
+        if (targetButton != null && wasButtonInitiallyActive)
+        {
+            targetButton.interactable = true;
+            targetButton.gameObject.SetActive(true);
+        }
         charNameText.text = string.Empty;
         dialogueText.text = string.Empty;
         dialogueUI.SetActive(false);
@@ -533,5 +570,131 @@ public class GlobalDialogManager : MonoBehaviour
     public void TriggerDialogue(string dialogueID)
     {
         StartDialogue(dialogueID);
+    }
+
+    // 随机挑选一条开场语（比如洛的问候语）
+    public void TriggerRandomOpening(List<int> candidateIDs)
+    {
+        List<int> validIDs = new List<int>();
+
+        foreach (int id in candidateIDs)
+        {
+            DialogueSegment seg = LoadDialogueSegmentFromDB(id);
+            if (seg == null) continue;
+
+            // 检查条件
+            if (CheckCondition(seg.id))
+            {
+                validIDs.Add(id);
+            }
+        }
+
+        if (validIDs.Count == 0)
+        {
+            Debug.LogWarning("没有符合条件的开场语！");
+            return;
+        }
+
+        // 随机选一条
+        int chosenID = validIDs[UnityEngine.Random.Range(0, validIDs.Count)];
+
+        // 直接走原有逻辑
+        TriggerDialogue(chosenID.ToString());
+    }
+
+    // 根据 conditionFlag 检查是否满足条件
+    private bool CheckCondition(int dialogueID)
+    {
+        using (var conn = new SqliteConnection($"URI=file:{dbPath}"))
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT conditionFlag FROM dialogue WHERE id = @id";
+                cmd.Parameters.AddWithValue("@id", dialogueID);
+
+                var flag = cmd.ExecuteScalar() as string;
+
+                if (string.IsNullOrEmpty(flag) || flag == "always")
+                    return true;
+
+                if (flag == "firstOnly")
+                    return qaHistory.Count == 0;
+
+                if (flag == "notFirst")
+                    return qaHistory.Count > 0;
+
+                /*if (flag.StartsWith("docs>"))
+                {
+                    int required = int.Parse(flag.Substring(5));
+                    return GameState.collectedDocsCount > required;
+                }*/
+
+                // 其他条件扩展
+                return false;
+            }
+        }
+    }
+    public void TriggerRandomCasualDialogue(string category)
+    {
+        List<int> candidateIDs = LoadCasualDialogueIDs(category);
+        List<int> validIDs = new List<int>();
+
+        foreach (int id in candidateIDs)
+        {
+            if (CheckCondition(id)) validIDs.Add(id);
+        }
+
+        if (validIDs.Count == 0)
+        {
+            Debug.Log($"没有符合条件的随便聊聊对话（角色 {category}）");
+            EndDialogue();
+            return;
+        }
+
+        string chosenID = validIDs[UnityEngine.Random.Range(0, validIDs.Count)].ToString();
+
+        TriggerDialogue(chosenID);
+    }
+
+    private List<int> LoadCasualDialogueIDs(string category)
+    {
+        List<int> ids = new List<int>();
+        using (var conn = new SqliteConnection($"URI=file:{dbPath}"))
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = "SELECT id FROM dialogue WHERE type='casual' AND category=@cat";
+                cmd.Parameters.AddWithValue("@cat", category);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ids.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+        }
+        return ids;
+    }
+    private bool TryFindButton()
+    {
+        if (targetButton != null) return true;
+        if (hasSearchedButton) return false; // 避免重复查找
+
+        // 尝试按路径查找
+        Transform buttonTransform = GameObject.Find("GlobalUI")?
+                                    .transform.Find("Canvas/sideScreen/Button");
+
+        if (buttonTransform != null)
+        {
+            targetButton = buttonTransform.GetComponent<Button>();
+            //Debug.Log("自动查找到按钮: " + targetButton.name);
+        }
+
+        hasSearchedButton = true;
+        return targetButton != null;
     }
 }
