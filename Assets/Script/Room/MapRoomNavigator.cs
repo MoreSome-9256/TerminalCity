@@ -24,10 +24,18 @@ public class MapRoomNavigator : MonoBehaviour
     [Header("按钮映射")]
     public List<ButtonMoveMapping> buttonMappings = new List<ButtonMoveMapping>();
 
+    public bool hasRestoredPosition = false;
+
     private Coroutine moveCoroutine;
 
     void Start()
     {
+        // 只有没有恢复过位置，才走默认初始位置
+        if (!hasRestoredPosition)
+        {
+            MoveToPosition(startPosition, immediate: true);
+        }
+
         // 注册所有按钮
         foreach (var mapping in buttonMappings)
         {
@@ -37,10 +45,7 @@ public class MapRoomNavigator : MonoBehaviour
                 MoveToPosition(pos);
             });
         }
-
-        MoveToPosition(startPosition, immediate: true);
     }
-
     public void MoveToPosition(Vector2 pixelPosition, bool immediate = false)
     {
         // Clamp 移动范围（允许显示空白）
@@ -80,6 +85,12 @@ public class MapRoomNavigator : MonoBehaviour
 
         mapContent.anchoredPosition = targetPos;
     }
+    public Vector2 GetCurrentTargetPosition()
+    {
+        // anchoredPosition 是取反的，所以要再取反回来
+        return new Vector2(-mapContent.anchoredPosition.x, -mapContent.anchoredPosition.y);
+    }
+
 }
 
 [Serializable]

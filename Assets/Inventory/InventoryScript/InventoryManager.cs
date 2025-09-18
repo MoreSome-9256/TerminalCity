@@ -49,6 +49,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private DialogTriggerAfterInventory dialogTriggerAfterInventory;
     [SerializeField] private SideScreenMove bagController;
 
+    // 用来记录当前 UI 已显示的 itemId，防止重复创建 UI
+    private HashSet<int> displayedItemIds = new HashSet<int>();
+
     void Awake()
     {
         if (instance != null)
@@ -71,10 +74,53 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+    void Start()
+    {
+        // 在游戏开始时把已标记为 isPicked 的物品加载到背包（使用统一入口）
+        if (myBag != null)
+        {
+            foreach (var item in myBag.GetPickedItems())
+            {
+                AddItemToInventory(item);
+            }
+        }
+    }
+    // 检查物品是否已经在 UI 中显示
+    public bool IsItemDisplayed(Item item)
+    {
+        if (item == null) return false;
+        return displayedItemIds.Contains(item.itemNum);
+    }
 
+    // 统一的“添加到背包”接口，用于外部调用
+    public void AddItemToInventory(Item item)
+    {
+        if (item == null) return;
+
+        if (IsItemDisplayed(item)) return;
+
+        if (item is Level1Data level1)
+        {
+            if (myBag != null && !myBag.level1List.Contains(level1))
+            {
+                myBag.level1List.Add(level1);
+            }
+            level1.isPicked = true;
+        }
+
+        CreateNewItem(item);
+    }
+
+    // 创建 UI 的方法
     public static void CreateNewItem(Item item)
     {
-        Slot newItem = Instantiate(instance.slotPrefab, instance.slotGrid.transform.position, Quaternion.identity);
+        if (instance == null || item == null) return;
+
+        // 二次防重：如果已经显示了就不再创建
+        if (instance.IsItemDisplayed(item)) return;
+
+        // 推荐使用带 parent 的 Instantiate，这样 transform 不会跑偏
+        Slot newItem = Instantiate(instance.slotPrefab, instance.slotGrid.transform);
         newItem.transform.SetParent(instance.slotGrid.transform, false);
 
         newItem.slotItem = item;
@@ -83,8 +129,11 @@ public class InventoryManager : MonoBehaviour
         if (iconTransform != null)
         {
             Image iconImage = iconTransform.GetComponent<Image>();
-            iconImage.sprite = item.itemImage;
-            iconImage.gameObject.SetActive(true);
+            if (iconImage != null)
+            {
+                iconImage.sprite = item.itemImage;
+                iconImage.gameObject.SetActive(item.itemImage != null);
+            }
         }
         else
         {
@@ -102,10 +151,18 @@ public class InventoryManager : MonoBehaviour
             if (string.IsNullOrEmpty(traits)) traits = "无";
 
             newItem.slotTrait.text = traits.Trim();
+
+            // 保底把 isPicked 设 true（通常 AddItemToInventory 已设）
             level1Data.isPicked = true;
         }
 
         newItem.slotSynopsis.text = item.itemInfo;
+
+        // 记录 UI 状态（用于去重与后续删除）
+        instance.inventoryItems.Add(newItem.gameObject);
+        instance.displayedItemIds.Add(item.itemNum);
+
+        // 将项放在格子顶部（你已有的布局方法）
         instance.gridLayout.AddItemToTop(newItem.gameObject);
     }
 

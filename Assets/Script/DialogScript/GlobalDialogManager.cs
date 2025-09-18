@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,24 +35,24 @@ public class GlobalDialogManager : MonoBehaviour
 
     private string dbPath;
 
-    private bool isDialogueActive;                 // ĞÂÔö£ºÊÇ·ñÕıÔÚ¶Ô»°
-    [SerializeField] private float advanceCooldown = 0.08f; // ĞÂÔö£º·À¶¶ÀäÈ´(Ãë)
-    private float _lastAdvanceTime = -999f;       // ĞÂÔö£ºÉÏ´Î´¥·¢Ê±¼ä
+    private bool isDialogueActive;                 // æ–°å¢ï¼šæ˜¯å¦æ­£åœ¨å¯¹è¯
+    [SerializeField] private float advanceCooldown = 0.08f; // æ–°å¢ï¼šé˜²æŠ–å†·å´(ç§’)
+    private float _lastAdvanceTime = -999f;       // æ–°å¢ï¼šä¸Šæ¬¡è§¦å‘æ—¶é—´
 
     [Header("Branch UI")]
-    [SerializeField] private GameObject branchPanel;     // °üº¬°´Å¥µÄ¸¸ÎïÌå
-    [SerializeField] private Button branchButtonPrefab;  // Ô¤ÖÆ°´Å¥£¬ÓÃÓÚÉú³É·ÖÖ§°´Å¥
+    [SerializeField] private GameObject branchPanel;     // åŒ…å«æŒ‰é’®çš„çˆ¶ç‰©ä½“
+    [SerializeField] private Button branchButtonPrefab;  // é¢„åˆ¶æŒ‰é’®ï¼Œç”¨äºç”Ÿæˆåˆ†æ”¯æŒ‰é’®
 
     [Header("UI Control")]
     [SerializeField] private Button targetButton;
     private bool wasButtonInitiallyActive;
     private bool hasSearchedButton;
 
-    // Q&A ÀúÊ·¼ÇÂ¼
+    // Q&A å†å²è®°å½•
     public static List<QARecord> qaHistory = new List<QARecord>();
-    // ÁÙÊ±¼ÇÂ¼£ºÍæ¼Ò¸Õ¸ÕÎÊÁËÊ²Ã´ÎÊÌâ
+    // ä¸´æ—¶è®°å½•ï¼šç©å®¶åˆšåˆšé—®äº†ä»€ä¹ˆé—®é¢˜
     private string pendingQuestion = null;
-    // ÒÑÑ¡Ôñ¹ıµÄÑ¡Ïî flag
+    // å·²é€‰æ‹©è¿‡çš„é€‰é¡¹ flag
     public static List<string> triggeredFlags = new List<string>();
 
     private void Awake()
@@ -64,10 +64,10 @@ public class GlobalDialogManager : MonoBehaviour
         }
         Instance = this;
 
-        // Êı¾İ¿âÂ·¾¶£¨StreamingAssets ÏÂ£©
+        // æ•°æ®åº“è·¯å¾„ï¼ˆStreamingAssets ä¸‹ï¼‰
         dbPath = Path.Combine(Application.streamingAssetsPath, "dialog_global.db");
 
-        // ³õÊ¼»¯ UI ¹Ø±Õ
+        // åˆå§‹åŒ– UI å…³é—­
         //dialoguePanel.SetActive(false);
         dialogueUI.SetActive(false);
         charNameText.gameObject.SetActive(false);
@@ -86,8 +86,8 @@ public class GlobalDialogManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // Èç¹ûµ±Ç° EventSystem Ñ¡ÖĞµÄÊÇ nextButton£¬¿Õ¸ñ»á´¥·¢ onClick£¬
-            // ´ËÊ±ÎÒÃÇ²»ÔÚ Update ÔÙ´¥·¢Ò»´Î£¬±ÜÃâË«»÷¡£
+            // å¦‚æœå½“å‰ EventSystem é€‰ä¸­çš„æ˜¯ nextButtonï¼Œç©ºæ ¼ä¼šè§¦å‘ onClickï¼Œ
+            // æ­¤æ—¶æˆ‘ä»¬ä¸åœ¨ Update å†è§¦å‘ä¸€æ¬¡ï¼Œé¿å…åŒå‡»ã€‚
             if (EventSystem.current == null || EventSystem.current.currentSelectedGameObject != nextButton.gameObject)
             {
                 TryAdvance();
@@ -123,17 +123,17 @@ public class GlobalDialogManager : MonoBehaviour
         ShowDialogueSegment(currentDialogue[currentIndex]);
 
         nextButton.onClick.RemoveAllListeners();
-        nextButton.onClick.AddListener(TryAdvance);   //¸Ä£º°´Å¥×ß TryAdvance
+        nextButton.onClick.AddListener(TryAdvance);   //æ”¹ï¼šæŒ‰é’®èµ° TryAdvance
 
-        isDialogueActive = true;                      //±ê¼Ç¼¤»î
-        _lastAdvanceTime = -999f;                     //ÖØÖÃÀäÈ´
+        isDialogueActive = true;                      //æ ‡è®°æ¿€æ´»
+        _lastAdvanceTime = -999f;                     //é‡ç½®å†·å´
 
-        // ¿ÉÑ¡£º±ÜÃâ°´Å¥±»Ñ¡ÖĞ´Ó¶ø¿Õ¸ñ´¥·¢ Submit ¡ú Ë«´¥·¢
+        // å¯é€‰ï¼šé¿å…æŒ‰é’®è¢«é€‰ä¸­ä»è€Œç©ºæ ¼è§¦å‘ Submit â†’ åŒè§¦å‘
         EventSystem.current?.SetSelectedGameObject(null);
     }
     public void ShowDialogueByID(int id, Action onComplete = null)
     {
-        // ¶ÁÈ¡µ¥Ìõ¶Ô»°
+        // è¯»å–å•æ¡å¯¹è¯
         DialogueSegment segment = LoadDialogueSegmentFromDB(id);
         if (segment == null)
         {
@@ -142,7 +142,7 @@ public class GlobalDialogManager : MonoBehaviour
             return;
         }
 
-        // ÏÔÊ¾ UI
+        // æ˜¾ç¤º UI
         selectionUI.SetActive(false);
         dialogueUI.SetActive(true);
         charNameText.gameObject.SetActive(true);
@@ -151,26 +151,26 @@ public class GlobalDialogManager : MonoBehaviour
         characterImage?.gameObject.SetActive(true);
         if (background != null) background.SetActive(true);
 
-        // Í£Ö¹ÒÑÓĞ´ò×ÖĞ§¹û
+        // åœæ­¢å·²æœ‰æ‰“å­—æ•ˆæœ
         if (typingCoroutine != null) StopCoroutine(typingCoroutine);
 
-        // ¿ªÆô´ò×ÖĞ§¹û
+        // å¼€å¯æ‰“å­—æ•ˆæœ
         typingCoroutine = StartCoroutine(TypeText(segment.dialogueText, () =>
         {
-            // Ì¨´Ê´òÍêºó´¥·¢»Øµ÷
+            // å°è¯æ‰“å®Œåè§¦å‘å›è°ƒ
             onComplete?.Invoke();
         }));
 
         isDialogueActive = true;
         _lastAdvanceTime = -999f;
 
-        // ¿ÉÑ¡£º±ÜÃâ°´Å¥±»Ñ¡ÖĞ´Ó¶ø¿Õ¸ñ´¥·¢ Submit ¡ú Ë«´¥·¢
+        // å¯é€‰ï¼šé¿å…æŒ‰é’®è¢«é€‰ä¸­ä»è€Œç©ºæ ¼è§¦å‘ Submit â†’ åŒè§¦å‘
         EventSystem.current?.SetSelectedGameObject(null);
     }
-    // Í³Ò»Èë¿Ú + ·À¶¶
+    // ç»Ÿä¸€å…¥å£ + é˜²æŠ–
     private void TryAdvance()
     {
-        if (!isDialogueActive) return;  // ½áÊø¶Ô»°ºó²»ÔÙ´¥·¢
+        if (!isDialogueActive) return;  // ç»“æŸå¯¹è¯åä¸å†è§¦å‘
         if (Time.unscaledTime - _lastAdvanceTime < advanceCooldown) return;
 
         _lastAdvanceTime = Time.unscaledTime;
@@ -215,12 +215,12 @@ public class GlobalDialogManager : MonoBehaviour
 
                             dialogueList.Add(segment);
 
-                            // ×¼±¸ÏÂÒ»ÂÖ
+                            // å‡†å¤‡ä¸‹ä¸€è½®
                             currentID = nextID;
                         }
                         else
                         {
-                            break; // ²é²»µ½¾ÍÍË³ö
+                            break; // æŸ¥ä¸åˆ°å°±é€€å‡º
                         }
                     }
                 }
@@ -261,7 +261,7 @@ public class GlobalDialogManager : MonoBehaviour
 
         isTyping = false;
     }
-    // ĞŞ¸Ä´ò×ÖĞ­³Ì£¬Ôö¼ÓÍê³É»Øµ÷
+    // ä¿®æ”¹æ‰“å­—åç¨‹ï¼Œå¢åŠ å®Œæˆå›è°ƒ
     private IEnumerator TypeText(string fullText, Action onComplete)
     {
         isTyping = true;
@@ -290,14 +290,14 @@ public class GlobalDialogManager : MonoBehaviour
             return;
         }
 
-        // Èç¹ûÊÇÎÊ´ğµÄµÚÒ»¾ä»Ø´ğ£¬´´½¨ QARecord
+        // å¦‚æœæ˜¯é—®ç­”çš„ç¬¬ä¸€å¥å›ç­”ï¼Œåˆ›å»º QARecord
         if (pendingQuestion != null && currentIndex == 0)
         {
             var record = new QARecord(pendingQuestion);
             GlobalDialogManager.qaHistory.Add(record);
         }
 
-        // Ö»ÓĞµ± pendingQuestion ²»Îª¿ÕÊ±£¬²ÅĞ´Èë»Ø´ğ
+        // åªæœ‰å½“ pendingQuestion ä¸ä¸ºç©ºæ—¶ï¼Œæ‰å†™å…¥å›ç­”
         if (pendingQuestion != null)
         {
             QARecord currentRecord = GlobalDialogManager.qaHistory.Count > 0
@@ -318,7 +318,7 @@ public class GlobalDialogManager : MonoBehaviour
             var lastSegment = currentDialogue[currentDialogue.Count - 1];
             var groupId = lastSegment.branchGroupID;
 
-            // ÎÊ´ğ½áÊø£¬Çå¿Õ pendingQuestion
+            // é—®ç­”ç»“æŸï¼Œæ¸…ç©º pendingQuestion
             pendingQuestion = null;
 
             if (!string.IsNullOrEmpty(groupId) && HasBranchOptions(groupId))
@@ -338,7 +338,6 @@ public class GlobalDialogManager : MonoBehaviour
 
     private void ShowBranchOptions(string branchGroupID)
     {
-        // Çå¿Õ¾É°´Å¥
         foreach (Transform t in branchPanel.transform)
             Destroy(t.gameObject);
 
@@ -353,22 +352,21 @@ public class GlobalDialogManager : MonoBehaviour
 
         branchPanel.SetActive(true);
 
+        bool hasStoryBranch = options.Any(opt => opt.isStoryBranch); // æ£€æŸ¥æ˜¯å¦å‰§æƒ…åˆ†æ”¯
+
         int shownCount = 0;
         foreach (var opt in options)
         {
             var localOpt = opt;
 
-            // Ìø¹ıÒÑ´¥·¢
             if (!string.IsNullOrEmpty(localOpt.conditionFlag) &&
                 GlobalDialogManager.triggeredFlags.Contains(localOpt.conditionFlag))
             {
                 continue;
             }
 
-            // Èç¹ûÒÑ¾­ÏÔÊ¾¹» 3 ¸ö£¬Í£Ö¹
             if (shownCount >= 3) break;
 
-            // Éú³É°´Å¥
             Button btn = Instantiate(branchButtonPrefab, branchPanel.transform);
             btn.GetComponentInChildren<TMP_Text>().text = localOpt.optionText;
 
@@ -379,9 +377,8 @@ public class GlobalDialogManager : MonoBehaviour
                 if (!string.IsNullOrEmpty(localOpt.conditionFlag))
                 {
                     GlobalDialogManager.triggeredFlags.Add(localOpt.conditionFlag);
-                    Debug.Log("Added flag: " + localOpt.conditionFlag + ", now count: " + GlobalDialogManager.triggeredFlags.Count);
                 }
-                // »Ö¸´°´Å¥£¨ÉÏÒ»¶Î½áÊø£©
+
                 if (targetButton != null && wasButtonInitiallyActive)
                 {
                     targetButton.interactable = true;
@@ -394,57 +391,49 @@ public class GlobalDialogManager : MonoBehaviour
 
             shownCount++;
         }
-        // ¹Ì¶¨Ëæ±ãÁÄÁÄ°´Å¥
-        Button chatBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
-        chatBtn.GetComponentInChildren<TMP_Text>().text = "Ëæ±ãÁÄÁÄ";
-        chatBtn.onClick.AddListener(() =>
+
+        // åªæœ‰éå‰§æƒ…åˆ†æ”¯æ‰é¢å¤–åŠ â€œéšä¾¿èŠèŠâ€å’Œâ€œæ²¡ä»€ä¹ˆäº‹äº†â€
+        if (!hasStoryBranch)
         {
-            branchPanel.SetActive(false);
-            if (targetButton != null && wasButtonInitiallyActive)
+            // éšä¾¿èŠèŠ
+            Button chatBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
+            chatBtn.GetComponentInChildren<TMP_Text>().text = "éšä¾¿èŠèŠ";
+            chatBtn.onClick.AddListener(() =>
             {
-                targetButton.interactable = true;
-                targetButton.gameObject.SetActive(true);
-            }
-            TriggerRandomCasualDialogue(charName);
-        });
-        // ¹Ì¶¨ÍË³ö°´Å¥
-        Button exitBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
-        exitBtn.GetComponentInChildren<TMP_Text>().text = "Ã»Ê²Ã´ÊÂÁË";
-        exitBtn.onClick.AddListener(() =>
-        {
-            branchPanel.SetActive(false);
-
-            DialogueSegment segment = LoadDialogueSegmentFromDB(999);
-            if (segment != null)
-            {
-                currentDialogue = new List<DialogueSegment> { segment };
-                currentIndex = 0;
-                ShowDialogueSegment(currentDialogue[currentIndex]);
-
-                nextButton.gameObject.SetActive(true);
-                isDialogueActive = true;
-                _lastAdvanceTime = -999f;
-                EventSystem.current?.SetSelectedGameObject(null);
-
-                // ÍË³ö¶Ô»°Ò²Ëã QARecord
-                if (pendingQuestion != null)
+                branchPanel.SetActive(false);
+                if (targetButton != null && wasButtonInitiallyActive)
                 {
-                    var record = new QARecord
-                    {
-                        questionText = pendingQuestion
-                    };
-                    record.Answers.Add(("ÏµÍ³", segment.dialogueText));
-                    GlobalDialogManager.qaHistory.Add(record);
-
-                    pendingQuestion = null;
+                    targetButton.interactable = true;
+                    targetButton.gameObject.SetActive(true);
                 }
-            }
-            else
+                TriggerRandomCasualDialogue(charName);
+            });
+
+            // æ²¡ä»€ä¹ˆäº‹äº†
+            Button exitBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
+            exitBtn.GetComponentInChildren<TMP_Text>().text = "æ²¡ä»€ä¹ˆäº‹äº†";
+            exitBtn.onClick.AddListener(() =>
             {
-                EndDialogue();
-            }
-        });
+                branchPanel.SetActive(false);
+                DialogueSegment segment = LoadDialogueSegmentFromDB(999);
+                if (segment != null)
+                {
+                    currentDialogue = new List<DialogueSegment> { segment };
+                    currentIndex = 0;
+                    ShowDialogueSegment(currentDialogue[currentIndex]);
+                    nextButton.gameObject.SetActive(true);
+                    isDialogueActive = true;
+                    _lastAdvanceTime = -999f;
+                    EventSystem.current?.SetSelectedGameObject(null);
+                }
+                else
+                {
+                    EndDialogue();
+                }
+            });
+        }
     }
+
     private bool HasBranchOptions(string branchGroupID)
     {
         using (var conn = new SqliteConnection($"URI=file:{dbPath}"))
@@ -477,7 +466,7 @@ public class GlobalDialogManager : MonoBehaviour
         characterImage?.gameObject.SetActive(false);
         if (background != null) background.SetActive(false);
 
-        isDialogueActive = false; // ½áÊø±ê¼Ç
+        isDialogueActive = false; // ç»“æŸæ ‡è®°
 
         if (RoomManager.Instance != null && RoomManager.Instance.currentRoomID == 0)
         {
@@ -504,9 +493,9 @@ public class GlobalDialogManager : MonoBehaviour
             conn.Open();
             using (var cmd = conn.CreateCommand())
             {
-                // Ê¹ÓÃÊµ¼ÊÁĞÃû nextID
-                cmd.CommandText = "SELECT optionText, nextID, conditionFlag FROM branch WHERE branchGroup=@id ORDER BY rowid ASC";
+                cmd.CommandText = "SELECT optionText, nextID, conditionFlag, isStoryBranch FROM branch WHERE branchGroup=@id ORDER BY rowid ASC";
                 cmd.Parameters.AddWithValue("@id", branchGroupID);
+
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -514,8 +503,9 @@ public class GlobalDialogManager : MonoBehaviour
                         list.Add(new BranchOption
                         {
                             optionText = reader.GetString(0),
-                            targetDialogueID = reader.GetInt32(1).ToString(), // INTEGER ×ª string
-                            conditionFlag = reader.GetString(0)
+                            targetDialogueID = reader.GetInt32(1).ToString(),
+                            conditionFlag = reader.IsDBNull(2) ? null : reader.GetString(2),
+                            isStoryBranch = !reader.IsDBNull(3) && reader.GetString(3).ToLower() == "true"  // ğŸ‘ˆ sqlite text è½¬ bool
                         });
                     }
                 }
@@ -523,7 +513,8 @@ public class GlobalDialogManager : MonoBehaviour
         }
         return list;
     }
-    // ¶ÁÈ¡µ¥Ìõ¶Ô»°
+
+    // è¯»å–å•æ¡å¯¹è¯
     private DialogueSegment LoadDialogueSegmentFromDB(int id)
     {
         using (var conn = new SqliteConnection($"URI=file:{dbPath}"))
@@ -565,6 +556,7 @@ public class GlobalDialogManager : MonoBehaviour
         public string optionText;
         public string targetDialogueID;
         public string conditionFlag;
+        public bool isStoryBranch;
     }
 
     public void TriggerDialogue(string dialogueID)
@@ -572,7 +564,7 @@ public class GlobalDialogManager : MonoBehaviour
         StartDialogue(dialogueID);
     }
 
-    // Ëæ»úÌôÑ¡Ò»Ìõ¿ª³¡Óï£¨±ÈÈçÂåµÄÎÊºòÓï£©
+    // éšæœºæŒ‘é€‰ä¸€æ¡å¼€åœºè¯­ï¼ˆæ¯”å¦‚æ´›çš„é—®å€™è¯­ï¼‰
     public void TriggerRandomOpening(List<int> candidateIDs)
     {
         List<int> validIDs = new List<int>();
@@ -582,7 +574,7 @@ public class GlobalDialogManager : MonoBehaviour
             DialogueSegment seg = LoadDialogueSegmentFromDB(id);
             if (seg == null) continue;
 
-            // ¼ì²éÌõ¼ş
+            // æ£€æŸ¥æ¡ä»¶
             if (CheckCondition(seg.id))
             {
                 validIDs.Add(id);
@@ -591,18 +583,18 @@ public class GlobalDialogManager : MonoBehaviour
 
         if (validIDs.Count == 0)
         {
-            Debug.LogWarning("Ã»ÓĞ·ûºÏÌõ¼şµÄ¿ª³¡Óï£¡");
+            Debug.LogWarning("æ²¡æœ‰ç¬¦åˆæ¡ä»¶çš„å¼€åœºè¯­ï¼");
             return;
         }
 
-        // Ëæ»úÑ¡Ò»Ìõ
+        // éšæœºé€‰ä¸€æ¡
         int chosenID = validIDs[UnityEngine.Random.Range(0, validIDs.Count)];
 
-        // Ö±½Ó×ßÔ­ÓĞÂß¼­
+        // ç›´æ¥èµ°åŸæœ‰é€»è¾‘
         TriggerDialogue(chosenID.ToString());
     }
 
-    // ¸ù¾İ conditionFlag ¼ì²éÊÇ·ñÂú×ãÌõ¼ş
+    // æ ¹æ® conditionFlag æ£€æŸ¥æ˜¯å¦æ»¡è¶³æ¡ä»¶
     private bool CheckCondition(int dialogueID)
     {
         using (var conn = new SqliteConnection($"URI=file:{dbPath}"))
@@ -630,7 +622,7 @@ public class GlobalDialogManager : MonoBehaviour
                     return GameState.collectedDocsCount > required;
                 }*/
 
-                // ÆäËûÌõ¼şÀ©Õ¹
+                // å…¶ä»–æ¡ä»¶æ‰©å±•
                 return false;
             }
         }
@@ -647,7 +639,7 @@ public class GlobalDialogManager : MonoBehaviour
 
         if (validIDs.Count == 0)
         {
-            Debug.Log($"Ã»ÓĞ·ûºÏÌõ¼şµÄËæ±ãÁÄÁÄ¶Ô»°£¨½ÇÉ« {category}£©");
+            Debug.Log($"æ²¡æœ‰ç¬¦åˆæ¡ä»¶çš„éšä¾¿èŠèŠå¯¹è¯ï¼ˆè§’è‰² {category}ï¼‰");
             EndDialogue();
             return;
         }
@@ -682,16 +674,16 @@ public class GlobalDialogManager : MonoBehaviour
     private bool TryFindButton()
     {
         if (targetButton != null) return true;
-        if (hasSearchedButton) return false; // ±ÜÃâÖØ¸´²éÕÒ
+        if (hasSearchedButton) return false; // é¿å…é‡å¤æŸ¥æ‰¾
 
-        // ³¢ÊÔ°´Â·¾¶²éÕÒ
+        // å°è¯•æŒ‰è·¯å¾„æŸ¥æ‰¾
         Transform buttonTransform = GameObject.Find("GlobalUI")?
                                     .transform.Find("Canvas/sideScreen/Button");
 
         if (buttonTransform != null)
         {
             targetButton = buttonTransform.GetComponent<Button>();
-            //Debug.Log("×Ô¶¯²éÕÒµ½°´Å¥: " + targetButton.name);
+            //Debug.Log("è‡ªåŠ¨æŸ¥æ‰¾åˆ°æŒ‰é’®: " + targetButton.name);
         }
 
         hasSearchedButton = true;

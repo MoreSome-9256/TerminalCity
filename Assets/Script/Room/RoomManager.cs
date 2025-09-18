@@ -20,6 +20,8 @@ public class RoomManager : MonoBehaviour
     public int currentRoomID = -1;
 
     private float chaosTickTimer = 0f;
+    // 记录走廊上次视角位置
+    private Dictionary<int, Vector2> lastCorridorViewPositions = new Dictionary<int, Vector2>();
 
     private void Awake()
     {
@@ -107,6 +109,16 @@ public class RoomManager : MonoBehaviour
         // 卸载当前房间
         if (currentRoom != null)
         {
+            // 如果当前房间是走廊 → 记录 UI 视角位置
+            if (IsCorridor(currentRoomID))
+            {
+                MapRoomNavigator nav = currentRoom.GetComponentInChildren<MapRoomNavigator>();
+                if (nav != null)
+                {
+                    lastCorridorViewPositions[currentRoomID] = nav.GetCurrentTargetPosition();
+                    Debug.Log($"记录走廊 {currentRoomID} 的 targetPosition：{lastCorridorViewPositions[currentRoomID]}");
+                }
+            }
             Destroy(currentRoom);
         }
 
@@ -115,6 +127,23 @@ public class RoomManager : MonoBehaviour
         Room roomScript = currentRoom.GetComponent<Room>();
         currentRoom.transform.localPosition = roomScript.defaultPosition;
         currentRoomID = roomID;
+        // 如果是走廊，并且之前记录过 → 恢复位置
+        if (IsCorridor(roomID) && lastCorridorViewPositions.TryGetValue(roomID, out Vector2 savedPos))
+        {
+            MapRoomNavigator nav = currentRoom.GetComponentInChildren<MapRoomNavigator>();
+            if (nav != null)
+            {
+                nav.hasRestoredPosition = true;   // 告诉它别再走默认 startPosition
+                nav.MoveToPosition(savedPos, immediate: true);
+                Debug.Log($"恢复走廊 {roomID} 的 targetPosition：{savedPos}");
+            }
+        }
+
+        else
+        {
+            // 走默认初始化逻辑
+            currentRoom.transform.localPosition = roomScript.defaultPosition;
+        }
         ItemOnWorld[] items = currentRoom.GetComponentsInChildren<ItemOnWorld>(true);
         foreach (var worldItem in items)
         {
@@ -131,6 +160,27 @@ public class RoomManager : MonoBehaviour
         if (state != null)
         {
             PlayerChaos.Instance.OnEnterRoom(state);
+            // 检查是否首次进入
+            if (!state.hasEntered)
+            {
+                state.hasEntered = true;
+                TriggerRoomFirstEnterEvent(roomID);
+            }
+        }
+    }
+    private bool IsCorridor(int roomID)
+    {
+        RoomInfo info = database.GetRoomInfo(roomID);
+        return info != null && info.isCorridor; // 你需要在 RoomInfo 里加个 bool 标记走廊
+    }
+    private void TriggerRoomFirstEnterEvent(int roomID)
+    {
+        Debug.Log($"房间 {roomID} 首次进入，触发事件！");
+        // 如果要在房间 prefab 里定义事件，可以这样：
+        Room room = currentRoom.GetComponent<Room>();
+        if (room != null)
+        {
+            room.onFirstEnter?.Invoke();
         }
     }
 
