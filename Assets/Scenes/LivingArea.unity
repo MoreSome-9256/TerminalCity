@@ -19403,7 +19403,6 @@ MonoBehaviour:
   moveDuration: 0.5
   waitTime1: 0.25
   waitTime2: 0.25
-  button1: {fileID: 2131809004}
   button2: {fileID: 936935124}
 --- !u!222 &1008010728
 CanvasRenderer:
@@ -29594,7 +29593,6 @@ MonoBehaviour:
   moveDuration: 0.75
   waitTime1: 0
   waitTime2: 0
-  button1: {fileID: 2131809004}
   button2: {fileID: 936935124}
 --- !u!114 &1825066161
 MonoBehaviour:
@@ -30743,6 +30741,7 @@ Transform:
   - {fileID: 317109049}
   - {fileID: 1851533315}
   - {fileID: 1847702779}
+  - {fileID: 2042285873}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1877642221
@@ -31817,7 +31816,6 @@ MonoBehaviour:
   moveDuration: 0.5
   waitTime1: 0.5
   waitTime2: 0.5
-  button1: {fileID: 2131809004}
   button2: {fileID: 936935124}
 --- !u!114 &1951496940
 MonoBehaviour:
@@ -32701,6 +32699,61 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2041137268}
   m_CullTransparentMesh: 0
+--- !u!1 &2042285872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2042285873}
+  - component: {fileID: 2042285874}
+  m_Layer: 0
+  m_Name: Converter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2042285873
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042285872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1876254282}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2042285874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042285872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f8e9e76eda5d94e988659a566b8f5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  background: {fileID: 2048249130}
+  backgroundFade: {fileID: 2048249131}
+  window: {fileID: 1152221526}
+  windowBehavior: {fileID: 685120229}
+  text1Fade: {fileID: 684163818}
+  text2Fade: {fileID: 1989414659}
+  clueWindow: {fileID: 1345252624}
+  moveControllers:
+  - {fileID: 1008010727}
+  - {fileID: 1951496939}
+  - {fileID: 1825066160}
 --- !u!1 &2048249130
 GameObject:
   m_ObjectHideFlags: 0

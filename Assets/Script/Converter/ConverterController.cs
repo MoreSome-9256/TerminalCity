@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 
-public class FloatScreenController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ConverterController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public GameObject floatScreen;
     public Image[] imagesToAnimate; // UI中的Image组件数组
@@ -14,6 +14,8 @@ public class FloatScreenController : MonoBehaviour, IPointerEnterHandler, IPoint
     private Vector2[] originalSizes; // 存储每个Image的原始大小
     private Coroutine currentAnimationCoroutine = null; // 存储当前运行的动画协程
 
+    public Button openButton;
+
     private void Start()
     {
         // 初始化时存储每个Image的原始大小
@@ -22,6 +24,10 @@ public class FloatScreenController : MonoBehaviour, IPointerEnterHandler, IPoint
         {
             originalSizes[i] = imagesToAnimate[i].rectTransform.sizeDelta;
             imagesToAnimate[i].rectTransform.sizeDelta = new Vector2(imagesToAnimate[i].rectTransform.sizeDelta.x, 0);
+        }
+        if (openButton != null && SynthesizerUIManager.Instance != null)
+        {
+            SynthesizerUIManager.Instance.RegisterSynthButton(openButton);
         }
     }
 
@@ -46,7 +52,16 @@ public class FloatScreenController : MonoBehaviour, IPointerEnterHandler, IPoint
         }
         currentAnimationCoroutine = StartCoroutine(AnimateUIImages(false));
     }
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        // 遍历全局 MoveController，执行打开动作
+        foreach (var mc in SynthesizerUIManager.Instance.moveControllers)
+        {
+            mc.StartMove(true); // 移入
+        }
 
+        SynthesizerUIManager.Instance.Open();
+    }
     private IEnumerator AnimateUIImages(bool isForward)
     {
         isAnimating = true;

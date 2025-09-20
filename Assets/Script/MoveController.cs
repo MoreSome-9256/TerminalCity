@@ -11,7 +11,7 @@ public class MoveController : MonoBehaviour
     public float moveDuration = 2.0f;
     public float waitTime1 = 0f;  // 移入前等待时间
     public float waitTime2 = 0f;  // 移回前等待时间
-    public Button button1;
+    private Button button1;
     public Button button2;
 
     private Vector3 originalPosition;
@@ -29,11 +29,29 @@ public class MoveController : MonoBehaviour
             originalPosition.z
         );
 
-        button1.onClick.AddListener(() => StartMove(true));
-        button2.onClick.AddListener(() => StartMove(false));
+        if (button2 != null)
+            button2.onClick.AddListener(() => StartMove(false));
+    }
+    // prefab 调用此方法注册按钮
+    public void RegisterOpenButton(Button prefabButton)
+    {
+        if (prefabButton == null) return;
+        Debug.Log($"RegisterOpenButton: {prefabButton.name}, active: {prefabButton.gameObject.activeInHierarchy}");
+        // 保存引用
+        button1 = prefabButton;
+
+        // 确保不会重复注册
+        prefabButton.onClick.RemoveListener(OnOpenButtonClicked);
+        prefabButton.onClick.AddListener(OnOpenButtonClicked);
     }
 
-    private void StartMove(bool moveIn)
+    private void OnOpenButtonClicked()
+    {
+        Debug.Log("OnOpenButtonClicked"); // 确认触发
+        StartMove(true);
+    }
+
+    public void StartMove(bool moveIn)
     {
         if (!isMoving)
         {
@@ -77,7 +95,6 @@ public class MoveController : MonoBehaviour
         isMoving = false;
     }
 
-    // 保持原有SmoothMove方法不变
     private IEnumerator SmoothMove(Transform target,
                                 Vector3 startPos,
                                 Vector3 endPos,

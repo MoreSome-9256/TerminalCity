@@ -9794,7 +9794,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &456986985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13263,6 +13263,7 @@ MonoBehaviour:
     targetPosition: {x: 100, y: 300}
   - button: {fileID: 895819306}
     targetPosition: {x: 100, y: -670}
+  hasRestoredPosition: 0
 --- !u!1 &642255844
 GameObject:
   m_ObjectHideFlags: 0
@@ -38450,6 +38451,7 @@ MonoBehaviour:
   targetObject: {fileID: 1689644825}
   dialogBox: {fileID: 1907320873}
   mainScreen: {fileID: 904760583}
+  topRightScreen: {fileID: 0}
   button: {fileID: 2007691668}
   targetY: 202
   targetZ: 0
@@ -38457,6 +38459,8 @@ MonoBehaviour:
   targetZ2: 0
   targetX3: 356
   targetZ3: 0
+  targetX5: 0
+  targetZ5: 0
   moveDuration: 0.75
   moveDuration2: 1
   rotationDuration: 0.4
