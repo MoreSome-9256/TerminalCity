@@ -22,7 +22,7 @@ public class GlobalDialogManager : MonoBehaviour
     [SerializeField] private Image characterImage;
     [SerializeField] private GameObject background;
     [SerializeField] private Button nextButton;
-    [SerializeField] private GameObject selectionUI;
+    [SerializeField] public GameObject selectionUI;
     //[SerializeField] private GameObject dialoguePanel;
 
     [Header("Typing Settings")]

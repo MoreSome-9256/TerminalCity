@@ -34,13 +34,6 @@ public class RoomManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        // 默认解锁房间 0
-        RoomInfo room0 = database.GetRoomInfo(0);
-        if (room0 != null)
-        {
-            room0.unlocked = true;
-            EnterRoom(0);
-        }
         // 初始化区域内所有房间的运行时状态
         /*foreach (int id in roomIDsInArea)
         {
@@ -58,10 +51,17 @@ public class RoomManager : MonoBehaviour
 
                 // 你可以在这里做差异化初始化
                 if (id == 0) defaultInstability = 9700;
-                if (id == 4) defaultInstability = 9900;
+                if (id == 2) defaultInstability = 11000;
 
                 roomStates[id] = new RoomState(id, defaultInstability, threshold);
             }
+        }
+        // 默认解锁房间 0
+        RoomInfo room0 = database.GetRoomInfo(0);
+        if (room0 != null)
+        {
+            room0.unlocked = true;
+            EnterRoom(0);
         }
         //UpdateAreaInstability();
         FindObjectOfType<MapUIController>()?.RefreshMap();
@@ -94,6 +94,18 @@ public class RoomManager : MonoBehaviour
     public void EnterRoom(int roomID)
     {
         RoomInfo info = database.GetRoomInfo(roomID);
+        RoomState state = GetRoomState(roomID);
+        // 检查逆恒值是否达到临界
+        if (state != null && state.instability >= state.instabilityThreshold)
+        {
+            Debug.Log($"房间 {roomID} 已达到临界值，无法进入！");
+            if (GlobalDialogManager.Instance != null)
+            {
+                GlobalDialogManager.Instance.TriggerDialogue("1000");
+            }
+            return; // 阻止进入
+        }
+
         if (info == null || info.prefab == null)
         {
             //Debug.LogError($"房间 {roomID} 在数据库中没有配置 prefab！");
@@ -156,7 +168,6 @@ public class RoomManager : MonoBehaviour
 
         //Debug.Log($"进入房间 {roomID}");
         // 更新混乱度逻辑
-        RoomState state = GetRoomState(roomID);
         if (state != null)
         {
             PlayerChaos.Instance.OnEnterRoom(state);
@@ -166,6 +177,11 @@ public class RoomManager : MonoBehaviour
                 state.hasEntered = true;
                 TriggerRoomFirstEnterEvent(roomID);
             }
+        }
+        // 房间切换时更新 selectionUI
+        if (GlobalDialogManager.Instance != null && GlobalDialogManager.Instance.selectionUI != null)
+        {
+            GlobalDialogManager.Instance.selectionUI.SetActive(roomID == 0);
         }
     }
     private bool IsCorridor(int roomID)

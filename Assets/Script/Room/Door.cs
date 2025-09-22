@@ -1,12 +1,14 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Door : MonoBehaviour
+public class Door : MonoBehaviour, IPointerClickHandler
 {
     public int targetRoomID;
 
-    void Update()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (Input.GetMouseButtonDown(1)) // 右键
+        //Debug.Log($"[{name}] 被点击，按键={eventData.button}");
+        if (eventData.button == PointerEventData.InputButton.Right) // 右键
         {
             ShowRoomInfo();
         }
@@ -21,7 +23,6 @@ public class Door : MonoBehaviour
         if (ui == null) return;
 
         SidePanelManager.Instance.ShowPanel(ui.roomInfoPanel);
-        // 一次性拿到描述 + Sprite
         InstabilityInfo info = InstabilityTextProvider.GetInfo(state.instability, state.instabilityThreshold);
 
         ui.instabilityText.text = $"{state.instability}";

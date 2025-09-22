@@ -37,10 +37,17 @@ public static class InstabilityTextProvider
                 Resources.Load<Sprite>("Picture/Character/Locus/Locus_normal")
             );
         }
-        else
+        else if (instability >= 9900 && instability < 10000)
         {
             return new InstabilityInfo(
                 "危险！逆恒值接近极限，强烈不建议进入！",
+                Resources.Load<Sprite>("Picture/Character/Locus/Locus_normal")
+            );
+        }
+        else
+        {
+            return new InstabilityInfo(
+                "该房间因逆恒值突破极限点，已无法进入。",
                 Resources.Load<Sprite>("Picture/Character/Locus/Locus_normal")
             );
         }

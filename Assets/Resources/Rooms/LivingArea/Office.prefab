@@ -906,7 +906,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2419739373164296026}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &8876805259458356097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1056,7 +1056,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3513260355485755505}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &844726449042036484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1989,6 +1989,9 @@ MonoBehaviour:
   roomID: 0
   defaultPosition: {x: -100, y: 300, z: 0}
   connectedRoomIDs: 01000000
+  onFirstEnter:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8428228867818051497
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,7 +2077,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8517285392637293897}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &7959363178317264394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2255,7 +2258,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8645564651648266738}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &9004172195185796298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2361,7 +2364,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8748964499510224661}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!114 &8213138477631953598
 MonoBehaviour:
   m_ObjectHideFlags: 0
