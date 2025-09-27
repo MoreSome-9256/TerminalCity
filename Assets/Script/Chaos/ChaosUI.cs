@@ -11,6 +11,11 @@ public class ChaosUI : MonoBehaviour
     [Range(0f, 1f)]
     public float backgroundAlpha = 0.5f; // 固定透明度
 
+    [Header("动画设置")]
+    public float fillSpeed = 0.5f; // 进度条动画速度（每秒变化比例）
+
+    private float currentFill = 0f;
+
     private void Update()
     {
         if (PlayerChaos.Instance == null) return;
@@ -24,23 +29,23 @@ public class ChaosUI : MonoBehaviour
             chaosText.text = $"{percent}%";
         }
 
-        // 更新进度条
+        // 平滑更新填充条
         if (barFill != null)
         {
-            barFill.fillAmount = chaos;
-        }
+            currentFill = Mathf.MoveTowards(currentFill, chaos, fillSpeed * Time.deltaTime);
+            barFill.fillAmount = currentFill;
 
-        if (barFill != null)
-        {
+            // 颜色渐变
             Color low = Color.white;
             Color high = Color.red;
-            barFill.color = Color.Lerp(low, high, chaos);
+            barFill.color = Color.Lerp(low, high, currentFill);
         }
+
         if (barBackground != null)
         {
             Color low = Color.white;
             Color high = Color.red;
-            Color c = Color.Lerp(low, high, chaos);
+            Color c = Color.Lerp(low, high, currentFill);
             c.a = backgroundAlpha;
             barBackground.color = c;
         }

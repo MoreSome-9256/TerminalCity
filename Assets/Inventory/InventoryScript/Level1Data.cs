@@ -11,6 +11,7 @@ public class Level1Data : Item
     public string Event;
     public bool showDialogueOnPickup = true;
     public bool isPicked = false;
+    public bool isImportant = false;
 
     [Header("如果此资料关联角色，则填角色名字，否则留空")]
     public string linkedCharacterName;

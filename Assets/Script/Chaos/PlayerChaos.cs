@@ -9,6 +9,8 @@ public class PlayerChaos : MonoBehaviour
     public float baseRate = 0.01f;             // 基础增长速率
     public float rate = 50f;
 
+    private bool hasTriggeredDialogue = false;
+
     private RoomState currentRoomState;
 
     private void Awake()
@@ -30,6 +32,7 @@ public class PlayerChaos : MonoBehaviour
             chaos += rate * Time.deltaTime;
             chaos = Mathf.Clamp01(chaos);
         }
+        CheckChaosThreshold();
     }
 
     /// <summary>
@@ -71,5 +74,17 @@ public class PlayerChaos : MonoBehaviour
             return 1;
         else
             return 0;
+    }
+    private void CheckChaosThreshold()
+    {
+        if (!hasTriggeredDialogue && chaos >= 0.9f)
+        {
+            hasTriggeredDialogue = true;
+            Debug.Log("玩家混乱度首次达到 90%，触发对话");
+
+            // 调用 GlobalDialogManager
+            GlobalDialogManager.Instance?.TriggerDialogue("27");
+            // "Chaos90" 替换为你在对话表里配置的 ID
+        }
     }
 }

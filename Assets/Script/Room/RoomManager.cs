@@ -51,7 +51,7 @@ public class RoomManager : MonoBehaviour
 
                 // 你可以在这里做差异化初始化
                 if (id == 0) defaultInstability = 9700;
-                if (id == 2) defaultInstability = 11000;
+                if (id == 2) defaultInstability = 9900;
 
                 roomStates[id] = new RoomState(id, defaultInstability, threshold);
             }

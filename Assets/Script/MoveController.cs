@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class MoveController : MonoBehaviour
 {
     public GameObject moveObject;
-    public bool isMoveX;
+    public bool isMoveX;   // 仅X方向移动
+    public bool isMoveY;   // 仅Y方向移动
     public float targetX;
     public float targetY;
     public float moveDuration = 2.0f;
@@ -23,15 +24,21 @@ public class MoveController : MonoBehaviour
         originalPosition = moveObject.transform.position;
 
         float screenRatio = (float)Screen.height / 720f;
+
+        // 根据标记来决定移动方向
+        float targetPosX = isMoveY ? originalPosition.x : targetX * screenRatio;
+        float targetPosY = isMoveX ? originalPosition.y : targetY * screenRatio;
+
         targetScreenPosition = new Vector3(
-            targetX * screenRatio,
-            targetY * screenRatio,
+            targetPosX,
+            targetPosY,
             originalPosition.z
         );
 
         if (button2 != null)
             button2.onClick.AddListener(() => StartMove(false));
     }
+
     // prefab 调用此方法注册按钮
     public void RegisterOpenButton(Button prefabButton)
     {
@@ -63,7 +70,6 @@ public class MoveController : MonoBehaviour
     {
         isMoving = true;
 
-        // 添加移入前的等待时间
         if (waitTime1 > 0)
         {
             yield return new WaitForSeconds(waitTime1);
@@ -81,7 +87,6 @@ public class MoveController : MonoBehaviour
     {
         isMoving = true;
 
-        // 添加移回前的等待时间
         if (waitTime2 > 0)
         {
             yield return new WaitForSeconds(waitTime2);

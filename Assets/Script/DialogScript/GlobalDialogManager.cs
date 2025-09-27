@@ -190,7 +190,7 @@ public class GlobalDialogManager : MonoBehaviour
             {
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, speaker, text, spritePath, backgroundPath, nextID, branchGroup FROM dialogue WHERE id = @id";
+                    cmd.CommandText = "SELECT id, speaker, text, spritePath, backgroundPath, nextID, branchGroup, conditionFlag FROM dialogue WHERE id = @id";
                     cmd.Parameters.AddWithValue("@id", currentID);
 
                     using (var reader = cmd.ExecuteReader())
@@ -212,6 +212,7 @@ public class GlobalDialogManager : MonoBehaviour
 
                             string nextID = reader.IsDBNull(5) ? null : reader.GetInt32(5).ToString();
                             segment.branchGroupID = reader.IsDBNull(6) ? null : reader.GetString(6);
+                            segment.conditionFlag = reader.IsDBNull(7) ? null : reader.GetString(7);
 
                             dialogueList.Add(segment);
 
@@ -452,6 +453,19 @@ public class GlobalDialogManager : MonoBehaviour
 
     private void EndDialogue()
     {
+        if (currentDialogue != null && currentDialogue.Count > 0)
+        {
+            var lastSegment = currentDialogue[currentDialogue.Count - 1];
+            if (!string.IsNullOrEmpty(lastSegment.conditionFlag) &&
+                lastSegment.conditionFlag.ToLower() == "trigger")
+            {
+                DialogueEventDatabase eventDB = FindObjectOfType<DialogueEventDatabase>();
+                if (eventDB != null)
+                {
+                    eventDB.TriggerEvents(lastSegment.id);
+                }
+            }
+        }
         if (targetButton != null && wasButtonInitiallyActive)
         {
             targetButton.interactable = true;
@@ -483,7 +497,8 @@ public class GlobalDialogManager : MonoBehaviour
         public string dialogueText;
         public Sprite characterSprite;
         public Sprite backgroundSprite;
-        public string branchGroupID; 
+        public string branchGroupID;
+        public string conditionFlag;
     }
     private List<BranchOption> LoadBranchOptionsFromDB(string branchGroupID)
     {
@@ -522,7 +537,7 @@ public class GlobalDialogManager : MonoBehaviour
             conn.Open();
             using (var cmd = conn.CreateCommand())
             {
-                cmd.CommandText = "SELECT id, speaker, text, spritePath, backgroundPath FROM dialogue WHERE id = @id";
+                cmd.CommandText = "SELECT id, speaker, text, spritePath, backgroundPath, conditionFlag FROM dialogue WHERE id = @id";
                 cmd.Parameters.AddWithValue("@id", id);
 
                 using (var reader = cmd.ExecuteReader())
@@ -541,6 +556,7 @@ public class GlobalDialogManager : MonoBehaviour
                         string bgPath = reader.IsDBNull(4) ? null : reader.GetString(4);
                         if (!string.IsNullOrEmpty(bgPath))
                             segment.backgroundSprite = Resources.Load<Sprite>(bgPath);
+                        segment.conditionFlag = reader.IsDBNull(7) ? null : reader.GetString(7);
 
                         return segment;
                     }
@@ -561,6 +577,7 @@ public class GlobalDialogManager : MonoBehaviour
 
     public void TriggerDialogue(string dialogueID)
     {
+        SidePanelManager.Instance.HideAll();
         StartDialogue(dialogueID);
     }
 

@@ -76,38 +76,28 @@ public class InventoryManager : MonoBehaviour
     }
     void Start()
     {
-        // 在游戏开始时把已标记为 isPicked 的物品加载到背包（使用统一入口）
-        if (myBag != null)
-        {
-            foreach (var item in myBag.GetPickedItems())
-            {
-                AddItemToInventory(item);
-            }
-        }
+        RefreshInventoryUI();
     }
-    // 检查物品是否已经在 UI 中显示
+    /// <summary>
+    /// 判断物品是否已经显示在 UI
+    /// </summary>
     public bool IsItemDisplayed(Item item)
     {
         if (item == null) return false;
         return displayedItemIds.Contains(item.itemNum);
     }
 
-    // 统一的“添加到背包”接口，用于外部调用
+    /// <summary>
+    /// 添加物品到背包
+    /// </summary>
     public void AddItemToInventory(Item item)
     {
-        if (item == null) return;
+        if (item == null || IsItemDisplayed(item)) return;
 
-        if (IsItemDisplayed(item)) return;
+        // 统一走 Inventory 接口
+        myBag?.AddItem(item);
 
-        if (item is Level1Data level1)
-        {
-            if (myBag != null && !myBag.level1List.Contains(level1))
-            {
-                myBag.level1List.Add(level1);
-            }
-            level1.isPicked = true;
-        }
-
+        // 创建 UI
         CreateNewItem(item);
     }
 
@@ -288,5 +278,48 @@ public class InventoryManager : MonoBehaviour
             dialogTriggerAfterInventory.RequestTriggerAfterInventoryClosed(bagController, pendingDialogEvent);
             pendingDialogEvent = null;
         }
+    }
+    void OnEnable()
+    {
+        if (myBag != null)
+            myBag.OnInventoryChanged += RefreshInventoryUI;
+    }
+
+    void OnDisable()
+    {
+        if (myBag != null)
+            myBag.OnInventoryChanged -= RefreshInventoryUI;
+    }
+    public void RefreshInventoryUI()
+    {
+        if (myBag == null) return;
+
+        HashSet<int> currentItems = new HashSet<int>();
+        foreach (var item in myBag.GetPickedItems())
+            currentItems.Add(item.itemNum);
+
+        // 删除 UI 中已经不存在的
+        for (int i = inventoryItems.Count - 1; i >= 0; i--)
+        {
+            Slot slot = inventoryItems[i].GetComponent<Slot>();
+            if (slot == null || slot.slotItem == null || !currentItems.Contains(slot.slotItem.itemNum))
+            {
+                displayedItemIds.Remove(slot.slotItem.itemNum);
+                Destroy(inventoryItems[i]);
+                inventoryItems.RemoveAt(i);
+            }
+        }
+
+        // 创建 UI 中缺失的
+        foreach (var item in myBag.GetPickedItems())
+        {
+            if (!displayedItemIds.Contains(item.itemNum))
+                CreateNewItem(item);
+        }
+    }
+    public void RemoveItem(Item item)
+    {
+        if (item == null) return;
+        myBag?.RemoveItem(item);
     }
 }

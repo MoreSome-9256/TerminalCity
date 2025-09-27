@@ -1,27 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e347331b0760e98498f0b17b5acf2306, type: 3}
-  m_Name: IDCard_Cosmo
-  m_EditorClassIdentifier: 
-  itemNum: 101005
-  itemName: "ID\u5361-\u79D1\u65AF\u9ED8"
-  itemImage: {fileID: 21300000, guid: 56e1c97ffd0636744a1fbda340f39615, type: 3}
-  readTime: 0
-  isDecoded: 0
-  itemInfo: "\u79D1\u65AF\u9ED8\uFF08Cosmo\uFF09\u7684ID\u5361"
-  textFile: {fileID: 0}
-  itemType: 0
-  Name: "\u79D1\u65AF\u9ED8/Cosmo"
-  Time: 
-  Event: 
-  showDialogueOnPickup: 1
-  linkedCharacterName: Cosmo
+version https://git-lfs.github.com/spec/v1
+oid sha256:d71e439a698ed16712595ef3233eb9d518339e0d96aa2d614c22c69afd6159e7
+size 878

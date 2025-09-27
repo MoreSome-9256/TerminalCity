@@ -69,7 +69,8 @@ public class ItemOnWorld : MonoBehaviour, IPointerClickHandler
         }
 
         InventoryManager.instance.AddItemToInventory(item);
-        InventoryManager2.CreateNewItem(item);
+        InventoryManager2.instance.AddItemToInventory(item);
+        InventoryManager5.instance.AddItemToInventory(item);
 
         if (firstLevel != null)
         {
