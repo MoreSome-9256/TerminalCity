@@ -92,10 +92,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomID: 4
-  instability: 9500
-  instabilityThreshold: 10000
+  roomName: B6-04
   defaultPosition: {x: 0, y: 0, z: 0}
   connectedRoomIDs: 
+  onFirstEnter:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8559479013297067384
 GameObject:
   m_ObjectHideFlags: 0

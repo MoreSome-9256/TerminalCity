@@ -7,6 +7,8 @@ public class Room : MonoBehaviour
     [Header("房间ID（全局唯一）")]
     public int roomID;
 
+    //public string roomName;
+
     public Vector3 defaultPosition = Vector3.zero;
 
     [Header("可通往的其他房间ID")]

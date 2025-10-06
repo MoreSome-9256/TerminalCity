@@ -10,6 +10,8 @@ public class PlayerChaos : MonoBehaviour
     public float rate = 50f;
 
     private bool hasTriggeredDialogue = false;
+    private bool hasTriggeredDialogue1 = false;
+    private bool hasTriggeredDialogue2 = false;
 
     private RoomState currentRoomState;
 
@@ -77,6 +79,16 @@ public class PlayerChaos : MonoBehaviour
     }
     private void CheckChaosThreshold()
     {
+        if (!hasTriggeredDialogue1 && chaos >= 0.7f)
+        {
+            hasTriggeredDialogue1 = true;
+            GlobalDialogManager.Instance?.TriggerDialogue("30");
+        }
+        if (!hasTriggeredDialogue2 && chaos >= 0.8f)
+        {
+            hasTriggeredDialogue2 = true;
+            GlobalDialogManager.Instance?.TriggerDialogue("32");
+        }
         if (!hasTriggeredDialogue && chaos >= 0.9f)
         {
             hasTriggeredDialogue = true;

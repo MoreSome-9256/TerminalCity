@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2009377710359834609}
   - component: {fileID: -5689237333135394750}
   m_Layer: 5
-  m_Name: B6-10
+  m_Name: B6-12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,8 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5a892f650d37245bc430af89ecda18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomID: 2
-  roomName: B6-10
+  roomID: 12
   defaultPosition: {x: 0, y: 0, z: 0}
   connectedRoomIDs: 01000000
   onFirstEnter:

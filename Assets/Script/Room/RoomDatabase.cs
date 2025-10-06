@@ -4,6 +4,7 @@ using UnityEngine;
 public class RoomInfo
 {
     public int roomID;
+    public string roomName;
     public GameObject prefab;   // 直接拖 prefab 进来
     public bool unlocked = false;
     public bool isCorridor = false;

@@ -15,4 +15,6 @@ public class Level1Data : Item
 
     [Header("如果此资料关联角色，则填角色名字，否则留空")]
     public string linkedCharacterName;
+    [Header("此资料属于的房间ID")]
+    public int room;
 }

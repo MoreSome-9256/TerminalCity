@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Linq;
 using System.Collections;
 using UnityEngine.Events;
+using TMPro;
 
 public class Exchange : MonoBehaviour, IPointerClickHandler
 {
@@ -14,6 +15,8 @@ public class Exchange : MonoBehaviour, IPointerClickHandler
     [SerializeField] private CraftingProgress craftingProgress;
 
     Level2Data loadedItem = null;
+
+    public TMP_Text penaltyText;
 
     // 修改后的合成点击逻辑
     public void OnPointerClick(PointerEventData eventData)
@@ -74,6 +77,9 @@ public class Exchange : MonoBehaviour, IPointerClickHandler
         InventoryManager4.CreateNewItem(loadedItem);
         secondLevel.SetActive(false);
         secondLevel2.SetActive(false);
+
+        PlayerChaos.Instance.ReduceChaos(0.3f);
+
         craftingProgress.OnProgressComplete1?.Invoke();
     }
 
@@ -108,6 +114,26 @@ public class Exchange : MonoBehaviour, IPointerClickHandler
         loadedItem = null; // 清理加载的物品
         craftingProgress.OnProgressFailed?.Invoke();
         craftingProgress.HideImmediate(); // 确保立即隐藏进度条
+                                          // === 新增：合成失败时增加原材料所在房间的逆恒值 ===
+        var failedItems = FindObjectsOfType<Window>()
+            .Where(w => w.windowItem != null && w.ItemNum != 0)
+            .Select(w => w.windowItem)  // 直接取 Item 对象
+            .ToList();
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        foreach (var item in failedItems)
+        {
+            if (item is Level1Data level1 && level1.room >= 0)
+            {
+                int penalty = 30;
+                RoomManager.Instance.IncreaseInstability(level1.room, penalty);
+
+                string roomName = RoomManager.Instance.GetRoomName(level1.room);
+                sb.AppendLine($"{roomName} 逆恒值 +{penalty}");
+            }
+        }
+        if (penaltyText != null)
+            //penaltyText.gameObject.SetActive(true);
+            penaltyText.text = sb.Length > 0 ? sb.ToString() : "";
     }
     public void HandleCraftSuccess()
     {

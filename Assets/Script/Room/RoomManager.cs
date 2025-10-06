@@ -13,6 +13,7 @@ public class RoomManager : MonoBehaviour
 
     // 存储运行时房间数据
     private Dictionary<int, RoomState> roomStates = new Dictionary<int, RoomState>();
+    //private Dictionary<int, Room> roomDict = new Dictionary<int, Room>();
 
     public float AreaInstability { get; private set; }
 
@@ -50,7 +51,7 @@ public class RoomManager : MonoBehaviour
                 int threshold = 10000;
 
                 // 你可以在这里做差异化初始化
-                if (id == 0) defaultInstability = 9700;
+                if (id == 11) defaultInstability = 9700;
                 if (id == 2) defaultInstability = 9900;
 
                 roomStates[id] = new RoomState(id, defaultInstability, threshold);
@@ -276,5 +277,17 @@ public class RoomManager : MonoBehaviour
 
         return Color.Lerp(low, high, t);
     }
+    public string GetRoomName(int roomID)
+    {
+        // 优先从数据库里取
+        RoomInfo info = database.GetRoomInfo(roomID);
+        if (info != null && !string.IsNullOrEmpty(info.roomName))
+            return info.roomName;
 
+        // 如果数据库里没配，就退回到场景的 Room
+        //if (roomDict.TryGetValue(roomID, out Room room))
+        //    return room.roomName;
+
+        return $"房间{roomID}"; // fallback
+    }
 }

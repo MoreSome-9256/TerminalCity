@@ -20,7 +20,7 @@ public static class InstabilityTextProvider
         {
             return new InstabilityInfo(
                 "这里很安稳，可以放心进入。",
-                Resources.Load<Sprite>("Picture/Character/Locus/Locus_normal") // 预制路径
+                Resources.Load<Sprite>("Picture/Character/Locus/Locus_smile") // 预制路径
             );
         }
         else if (instability >= 9700 && instability < 9800)
@@ -40,15 +40,15 @@ public static class InstabilityTextProvider
         else if (instability >= 9900 && instability < 10000)
         {
             return new InstabilityInfo(
-                "危险！逆恒值接近极限，强烈不建议进入！",
-                Resources.Load<Sprite>("Picture/Character/Locus/Locus_normal")
+                "危险！逆恒值接近极限，强烈不建议进入。",
+                Resources.Load<Sprite>("Picture/Character/Locus/Locus_serious")
             );
         }
         else
         {
             return new InstabilityInfo(
                 "该房间因逆恒值突破极限点，已无法进入。",
-                Resources.Load<Sprite>("Picture/Character/Locus/Locus_normal")
+                Resources.Load<Sprite>("Picture/Character/Locus/Locus_serious")
             );
         }
     }
