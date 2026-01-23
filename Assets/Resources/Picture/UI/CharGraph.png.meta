@@ -106,7 +106,7 @@ TextureImporter:
         x: 2370
         y: 854
         width: 830
-        height: 924
+        height: 764
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -116,6 +116,27 @@ TextureImporter:
       bones: []
       spriteID: 363e92deece2fcc4592d73f6a52605a2
       internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CharGraph_1
+      rect:
+        serializedVersion: 2
+        x: 2674
+        y: 535
+        width: 480
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8696e05b71a8c8144b85d4d99e1a111f
+      internalID: 1779228882
       vertices: []
       indices: 
       edges: []
@@ -132,6 +153,7 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       CharGraph_0: 21300000
+      CharGraph_1: 1779228882
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -86,6 +86,21 @@ public class WindowCloseButton : MonoBehaviour
                 element.sizeDelta = new Vector2(element.sizeDelta.x, 0);
             }
         }
+        // === 关键：通知 SynthesisManager ===
+        if (SynthesisManager.Instance != null)
+        {
+            Window w = GetComponent<Window>();
+            if (w != null)
+            {
+                SynthesisManager.Instance.UnregisterLevel2(w);
+            }
+
+            Window2 w2 = GetComponent<Window2>();
+            if (w2 != null)
+            {
+                SynthesisManager.Instance.UnregisterWindow2(w2);
+            }
+        }
 
         Destroy(gameObject);
     }

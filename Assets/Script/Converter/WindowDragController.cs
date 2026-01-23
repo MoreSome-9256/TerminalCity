@@ -7,42 +7,58 @@ public class WindowDragController : MonoBehaviour, IDragHandler, IEndDragHandler
     private RectTransform windowTransform;
     private Canvas canvas;
     private float scaleFactor;
+    public Window window;
+
+    // 缓存 Window 组件引用
+    private Window myWindow;
 
     public void Init(RectTransform area)
     {
-        validArea = area;
         windowTransform = GetComponent<RectTransform>();
+        myWindow = GetComponent<Window>(); // 获取 Window 组件
 
-        // 直接通过validArea获取父级Canvas（适用于ScreenSpaceOverlay）
-        canvas = validArea.GetComponentInParent<Canvas>();
-        if (canvas == null)
+        // 向上查找 Canvas
+        canvas = GetComponentInParent<Canvas>();
+        if (canvas == null && area != null)
         {
-            Debug.LogError("找不到父级Canvas！请确保validArea在Canvas层级下");
-            return;
+            canvas = area.GetComponentInParent<Canvas>();
         }
-        scaleFactor = canvas.scaleFactor;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if (windowTransform == null || canvas == null) return;
-        windowTransform.anchoredPosition += eventData.delta / scaleFactor;
+
+        // 1. 移动父节点自身
+        // 使用 scaleFactor 处理不同分辨率下的拖拽速度
+        windowTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+
+        // 2. 【关键】立刻通知 Window 更新子节点位置
+        // 这样每一帧都在重新计算，看起来就是完全同步的
+        if (myWindow != null)
+        {
+            myWindow.UpdateChildrenLayout();
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (validArea == null || canvas == null) return;
 
-        // 强制使用ScreenSpaceOverlay参数（第三个参数传null）
         bool isInside = RectTransformUtility.RectangleContainsScreenPoint(
             validArea,
             eventData.position,
-            null // 显式指定摄像机为null
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera
         );
 
         if (!isInside)
         {
             windowTransform.anchoredPosition = Vector2.zero;
+            // 复位后也要更新子节点位置，否则子节点会留在原地
+            if (myWindow != null)
+            {
+                myWindow.UpdateChildrenLayout();
+            }
         }
     }
 }

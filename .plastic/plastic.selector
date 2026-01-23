@@ -1,4 +1,0 @@
-repository "Terminal City@moresome@cloud.cn"
-  path "/"
-    br "/main"
-    co "/main"

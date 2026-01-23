@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 
+// 主背包-二级资料部分
 public class InventoryManager3 : MonoBehaviour
 {
     static InventoryManager3 instance;
@@ -15,6 +16,9 @@ public class InventoryManager3 : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private ReverseGridLayout gridLayout; // 自定义布局组件
     public List<GameObject> inventoryItems;
+
+    // 新增：记录已显示的 itemNum
+    private HashSet<int> displayedItemIds = new HashSet<int>();
 
     public ScrollRect scrollRect;
     public GameObject textDisplayPanel;
@@ -84,6 +88,9 @@ public class InventoryManager3 : MonoBehaviour
 
         newItem.slotSynopsis.text = item.itemInfo;
         instance.gridLayout.AddItemToTop(newItem.gameObject);
+        // 记录
+        instance.displayedItemIds.Add(item.itemNum);
+        //instance.inventoryItems.Add(newItem.gameObject);
     }
     public void OnItemClicked(GameObject itemGameObject)
     {
@@ -117,4 +124,30 @@ public class InventoryManager3 : MonoBehaviour
 
         }
     }
+    void Start()
+    {
+        RebuildFromBag();
+    }
+
+    void OnEnable()
+    {
+        //RebuildFromBag();
+    }
+
+    private void RebuildFromBag()
+    {
+        if (myBag == null) return;
+
+        foreach (var item in myBag.level2List)
+        {
+            if (item == null) continue;
+
+            if (!displayedItemIds.Contains(item.itemNum))
+            {
+                CreateNewItem(item);
+                displayedItemIds.Add(item.itemNum);
+            }
+        }
+    }
+
 }

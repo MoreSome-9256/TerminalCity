@@ -55,10 +55,10 @@ public class ConverterController : MonoBehaviour, IPointerEnterHandler, IPointer
     public void OnPointerClick(PointerEventData eventData)
     {
         // 遍历全局 MoveController，执行打开动作
-        foreach (var mc in SynthesizerUIManager.Instance.moveControllers)
+        /*foreach (var mc in SynthesizerUIManager.Instance.moveControllers)
         {
             mc.StartMove(true); // 移入
-        }
+        }*/
 
         SynthesizerUIManager.Instance.Open();
     }

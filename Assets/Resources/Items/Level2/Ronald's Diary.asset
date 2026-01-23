@@ -1,22 +1,3 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c26ce3c972b27047a935e1f6102719a, type: 3}
-  m_Name: Ronald's Diary
-  m_EditorClassIdentifier: 
-  itemNum: 201001
-  itemName: "\u63A7\u5236\u5BA4\u94A5\u5319\u5361"
-  itemImage: {fileID: 21300000, guid: cdb0df1f719f6784a98c9c4670b0e32b, type: 3}
-  readTime: 0
-  isDecoded: 0
-  itemInfo: "\u7F57\u5948\u5C14\u5FB7\u4E8E223\u5E748\u67089\u65E5\u7684\u65E5\u8BB0\uFF0C\u4F3C\u4E4E\u662F\u524D\u534A\u90E8\u5206\u3002"
-  textFile: {fileID: 4900000, guid: 4400bbb072fa0cb418a41daddf844256, type: 3}
-  itemType: 0
+version https://git-lfs.github.com/spec/v1
+oid sha256:0f52f615047d8a260ad27d788605f477db1cb51de1ff478d34c5efdc8a1b95be
+size 897

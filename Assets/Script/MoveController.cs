@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +13,8 @@ public class MoveController : MonoBehaviour
     public float moveDuration = 2.0f;
     public float waitTime1 = 0f;  // 移入前等待时间
     public float waitTime2 = 0f;  // 移回前等待时间
-    private Button button1;
-    public Button button2;
+    private Button button1; 
+    public List<Button> closeButtons;       // 多个“关闭/返回”按钮
 
     private Vector3 originalPosition;
     private Vector3 targetScreenPosition;
@@ -35,8 +36,14 @@ public class MoveController : MonoBehaviour
             originalPosition.z
         );
 
-        if (button2 != null)
-            button2.onClick.AddListener(() => StartMove(false));
+        // 注册所有关闭按钮
+        if (closeButtons != null)
+        {
+            foreach (var btn in closeButtons)
+            {
+                btn.onClick.AddListener(() => StartMove(false));
+            }
+        }
     }
 
     // prefab 调用此方法注册按钮
@@ -54,7 +61,7 @@ public class MoveController : MonoBehaviour
 
     private void OnOpenButtonClicked()
     {
-        Debug.Log("OnOpenButtonClicked"); // 确认触发
+        //Debug.Log("OnOpenButtonClicked"); // 确认触发
         StartMove(true);
     }
 

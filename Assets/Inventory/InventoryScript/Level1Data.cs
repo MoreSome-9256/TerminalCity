@@ -13,8 +13,8 @@ public class Level1Data : Item
     public bool isPicked = false;
     public bool isImportant = false;
 
-    [Header("如果此资料关联角色，则填角色名字，否则留空")]
+    [Header("如果此资料关联角色，则填角色名字，否则留空")] 
     public string linkedCharacterName;
-    [Header("此资料属于的房间ID")]
+    [Header("此资料属于的房间ID")] // 用于合成失败时增加对应房间的逆恒
     public int room;
 }

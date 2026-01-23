@@ -71,7 +71,7 @@ public class GraphZoomController : MonoBehaviour
 
         foreach (var result in results)
         {
-            if (result.gameObject.GetComponent<CharacterNode>() != null)
+            if (result.gameObject.GetComponent<CharacterNode>() != null || result.gameObject.GetComponent<GraphInteractable>() != null)
                 return true;
         }
 

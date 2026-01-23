@@ -34,6 +34,29 @@ public class Inventory : ScriptableObject
 
         return picked;
     }
+    public List<Item> GetAllItems()
+    {
+        List<Item> picked = new List<Item>();
+
+        foreach (var item in level1List)
+        {
+            if (item.isPicked)
+                picked.Add(item);
+        }
+
+        foreach (var item in level2List)
+        {
+            // Level2、3 里可能不需要 isPicked，直接加入
+            picked.Add(item);
+        }
+
+        /*foreach (var item in level3List)
+        {
+            picked.Add(item);
+        }*/
+
+        return picked;
+    }
     /// <summary>
     /// 添加物品
     /// </summary>
