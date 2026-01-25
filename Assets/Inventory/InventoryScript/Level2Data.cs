@@ -7,4 +7,5 @@ public class Level2Data : Item
 {
     public List<Level1Data> requiredLevel1;
     public string Event;
+    public int type;
 }

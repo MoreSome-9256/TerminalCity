@@ -22,9 +22,19 @@ public class InventoryManager3 : MonoBehaviour
 
     public ScrollRect scrollRect;
     public GameObject textDisplayPanel;
-    public TMP_Text contentText;
+    [Header("Text Display")]
+    [SerializeField] private GameObject scrollViewText;
+    [SerializeField] private TMP_Text contentText;
+
+    [Header("Image Display")]
+    [SerializeField] private GameObject scrollViewImage;
+    [SerializeField] private RectTransform imageContent;
+    [SerializeField] private Image imagePrefab;
     public Button closeButton;
     [SerializeField] private RectTransform contentRect;
+
+    [Header("Chat System Reference")]
+    public ChatManager chatManager;
 
     [System.Serializable]
     public class ItemDialogPair
@@ -94,35 +104,127 @@ public class InventoryManager3 : MonoBehaviour
     }
     public void OnItemClicked(GameObject itemGameObject)
     {
-        //Debug.Log("onItemClicked");
         Slot slot = itemGameObject.GetComponent<Slot>();
-        if (slot != null && slot.slotItem != null && slot.slotItem.textFile != null)
-        {
-            slot.slotItem.readTime++;
-            textDisplayPanel.SetActive(true);
-            contentText.text = slot.slotItem.textFile.text;
+        if (slot == null || slot.slotItem == null) return;
 
+        slot.slotItem.readTime++; // 统一增加阅读次数
+
+        // --- 新增：聊天功能判断 ---
+        // 尝试将物品转换为Level2Data以访问type属性
+        Level2Data level2Item = slot.slotItem as Level2Data;
+
+        // 如果是聊天类型 (type 1)，并且有ChatManager，则进入此分支
+        if (level2Item != null && level2Item.type == 1 && chatManager != null && level2Item.textFile != null)
+        {
+            textDisplayPanel.SetActive(false); // 确保旧的显示面板是关闭的
+            chatManager.StartConversation(level2Item.textFile); // 把任务交给ChatManager
+
+            // 可以在这里保留你旧的对话事件逻辑，如果需要的话
+            // int itemID = slot.slotItem.itemNum; ...
+
+            return; // **重要**：处理完聊天逻辑后，直接退出方法，不再执行下面的旧逻辑
+        }
+
+        // --- 原有逻辑 (仅调整了一行代码的位置) ---
+
+        // 如果代码执行到这里，说明它不是一个聊天物品，可以安全地打开常规显示面板
+        textDisplayPanel.SetActive(true);
+
+        // --- 文本逻辑 ---
+        if (slot.slotItem.textFile != null)
+        {
+            scrollViewText.SetActive(true);
+            scrollViewImage.SetActive(false);
+
+            string text = slot.slotItem.textFile.text;
+            foreach (var entry in DictionaryManager.Instance.entries.Values)
+            {
+                if (!entry.hasTerm) continue;
+                text = ReplaceWithLink(text, entry.term, entry.term);
+                if (entry.aliases != null)
+                {
+                    foreach (var alias in entry.aliases)
+                    {
+                        text = ReplaceWithLink(text, alias, entry.term);
+                    }
+                }
+            }
+            float chaos = PlayerChaos.Instance.chaos;
+            string corrupedText = ChaosTextProcessor.ApplyChaosMixed(text, chaos);
+            contentText.text = corrupedText;
             LayoutRebuilder.ForceRebuildLayoutImmediate(contentText.rectTransform);
             float newHeight = contentText.preferredHeight;
-            contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, newHeight);
-
-            if (scrollRect != null)
-            {
-                scrollRect.verticalNormalizedPosition = 1f;
-            }
-
-            /*int itemID = slot.slotItem.itemNum;
-            if (itemDialogMap.TryGetValue(itemID, out UnityEvent dialogEvent))
-            {
-                pendingDialogEvent = dialogEvent;
-            }
-            else
-            {
-                pendingDialogEvent = null;
-            }*/
-            dialogTriggerAfterInventory.RequestTriggerByItemID(slot.slotItem.itemNum, bagController);
-
+            contentText.rectTransform.sizeDelta = new Vector2(contentText.rectTransform.sizeDelta.x, newHeight);
+            var sr = scrollViewText.GetComponent<ScrollRect>();
+            sr.verticalNormalizedPosition = 1f;
         }
+        // --- 图片逻辑 ---
+        else if (slot.slotItem.itemImages != null && slot.slotItem.itemImages.Count > 0)
+        {
+            scrollViewText.SetActive(false);
+            scrollViewImage.SetActive(true);
+            foreach (Transform child in imageContent)
+                Destroy(child.gameObject);
+
+            Canvas.ForceUpdateCanvases();
+            float parentWidth = ((RectTransform)imageContent).rect.width;
+            foreach (var sprite in slot.slotItem.itemImages)
+            {
+                Image img = Instantiate(imagePrefab, imageContent);
+                img.sprite = sprite;
+                img.preserveAspect = false;
+                RectTransform rt = img.GetComponent<RectTransform>();
+                float aspect = sprite.rect.height / sprite.rect.width;
+                rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, parentWidth);
+                rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, parentWidth * aspect);
+                LayoutElement le = img.GetComponent<LayoutElement>();
+                if (le == null) le = img.gameObject.AddComponent<LayoutElement>();
+                le.flexibleWidth = 0;
+                le.flexibleHeight = 0;
+                le.preferredWidth = parentWidth;
+                le.preferredHeight = parentWidth * aspect;
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(imageContent);
+            var sr = scrollViewImage.GetComponent<ScrollRect>();
+            sr.verticalNormalizedPosition = 1f;
+        }
+
+        // --- 对话逻辑 (你原有的UnityEvent系统) ---
+        int itemID = slot.slotItem.itemNum;
+        if (itemDialogMap.TryGetValue(itemID, out UnityEvent dialogEvent))
+        {
+            pendingDialogEvent = dialogEvent;
+        }
+        else
+        {
+            pendingDialogEvent = null;
+        }
+    }
+    private void DisableTextDisplayRaycast()
+    {
+        var graphics = textDisplayPanel.GetComponentsInChildren<Graphic>(true);
+        foreach (var g in graphics)
+        {
+            g.raycastTarget = false;
+        }
+    }
+    private string ReplaceWithLink(string text, string keyword, string linkID = null)
+    {
+        if (string.IsNullOrEmpty(keyword)) return text;
+
+        string escaped = System.Text.RegularExpressions.Regex.Escape(keyword);
+        string id = string.IsNullOrEmpty(linkID) ? keyword : linkID;
+
+        // 忽略大小写
+        return System.Text.RegularExpressions.Regex.Replace(text, escaped, m =>
+        {
+            // 如果已经在 <link> 内部，就跳过
+            int index = m.Index;
+            if (index > 0 && text.Substring(Mathf.Max(0, index - 7), 7).Contains("<link="))
+                return m.Value;
+
+            return $"<link=\"{id}\"><u><color=#BBDAFF>{m.Value}</color></u></link>";
+        }, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
     }
     void Start()
     {

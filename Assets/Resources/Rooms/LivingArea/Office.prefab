@@ -2065,7 +2065,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomID: 0
-  roomName: "\u6D1B\u5E93\u65AF\u7684\u529E\u516C\u5BA4"
   defaultPosition: {x: -100, y: 300, z: 0}
   connectedRoomIDs: 01000000
   onFirstEnter:

@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: e93e50234adc18849a83ed1db1131b2f
+guid: 2c46a2c01b3c88542a58179a4e9467c5
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 21300000
-    second: 6FAFABD49ACA231A28A8F2E04A713515_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -66,13 +63,13 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 512
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -82,10 +79,10 @@ TextureImporter:
     overridden: 0
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 1
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -95,18 +92,18 @@ TextureImporter:
     overridden: 0
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 1
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: window1_0
+      name: Shadow_0
       rect:
         serializedVersion: 2
-        x: 200
-        y: 1018
-        width: 676
-        height: 506
+        x: 34
+        y: 100
+        width: 429
+        height: 345
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -114,29 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0340953c7d0396e4493165608c34b634
-      internalID: 1621448939
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: window1_1
-      rect:
-        serializedVersion: 2
-        x: 986
-        y: 651
-        width: 1047
-        height: 651
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 82fda060a231fc14fba9d31982168e27
-      internalID: 1854647017
+      spriteID: 4ac6ba68e02408a41a9178a4383eb75e
+      internalID: 289759892
       vertices: []
       indices: 
       edges: []
@@ -144,7 +120,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: adcd23cd054fd6e4a903fb854600aecb
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -152,8 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      window1_0: 1621448939
-      window1_1: 1854647017
+      Shadow_0: 289759892
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
