@@ -29,8 +29,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private Button nextButton;
 
     [Header("Dialogue Configuration")]
-    [SerializeField] private List<DialogueSegment> dialogueSequence;
-    [SerializeField] private float typingSpeed = 0.05f;
+    [SerializeField] public List<DialogueSegment> dialogueSequence;
+    [SerializeField] public float typingSpeed = 0.05f;
 
     [Header("背景切换")]
     [SerializeField] private Image backgroundTransition; // 可选的过渡层
@@ -41,8 +41,8 @@ public class DialogueManager : MonoBehaviour
     public UnityEvent onDialogueEnd;
 
     [Header("Delay Settings")]
-    [SerializeField] private float startDelay = 2f;
-    [SerializeField] private float endDelay = 0f;
+    [SerializeField] public float startDelay = 2f;
+    [SerializeField] public float endDelay = 0f;
 
     [Header("UI Control")]
     [SerializeField] private Button targetButton;

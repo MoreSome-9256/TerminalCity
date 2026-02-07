@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,15 +19,15 @@ public class Level3SynthesisSystem : MonoBehaviour
         TextAsset csv = Resources.Load<TextAsset>("ExchangeRules2");
         if (csv == null)
         {
-            Debug.LogError("Î´ÕÒµ½ ExchangeRules2.csv");
+            Debug.LogError("æœªæ‰¾åˆ° ExchangeRules2.csv");
             return;
         }
 
-        Debug.Log($"Level3 CSV Ô­Ê¼ÄÚÈİ:\n{csv.text}");
+        Debug.Log($"Level3 CSV åŸå§‹å†…å®¹:\n{csv.text}");
 
         string[] lines = csv.text.Split('\n');
 
-        foreach (string rawLine in lines.Skip(1)) // Ìø¹ı±íÍ·
+        foreach (string rawLine in lines.Skip(1)) // è·³è¿‡è¡¨å¤´
         {
             string line = rawLine.Trim();
             if (string.IsNullOrWhiteSpace(line)) continue;
@@ -35,7 +35,7 @@ public class Level3SynthesisSystem : MonoBehaviour
             string[] parts = line.Split(',');
             if (parts.Length < 4)
             {
-                Debug.LogWarning($"Ìø¹ıÎŞĞ§ĞĞ: {line}");
+                Debug.LogWarning($"è·³è¿‡æ— æ•ˆè¡Œ: {line}");
                 continue;
             }
 
@@ -48,7 +48,7 @@ public class Level3SynthesisSystem : MonoBehaviour
 
             if (itemStrs.Length != weightStrs.Length)
             {
-                Debug.LogError($"¹æÔòÎïÆ·ÊıÓëÈ¨ÖØÊı²»Ò»ÖÂ£¬ÒÑÌø¹ı: {line}");
+                Debug.LogError($"è§„åˆ™ç‰©å“æ•°ä¸æƒé‡æ•°ä¸ä¸€è‡´ï¼Œå·²è·³è¿‡: {line}");
                 continue;
             }
 
@@ -61,14 +61,14 @@ public class Level3SynthesisSystem : MonoBehaviour
             {
                 if (!int.TryParse(itemStrs[i], out int itemID))
                 {
-                    Debug.LogError($"ÎŞ·¨½âÎöÎïÆ·ID: {itemStrs[i]}");
+                    Debug.LogError($"æ— æ³•è§£æç‰©å“ID: {itemStrs[i]}");
                     parseError = true;
                     break;
                 }
 
                 if (!float.TryParse(weightStrs[i], out float w))
                 {
-                    Debug.LogError($"ÎŞ·¨½âÎöÈ¨ÖØ: {weightStrs[i]}");
+                    Debug.LogError($"æ— æ³•è§£ææƒé‡: {weightStrs[i]}");
                     parseError = true;
                     break;
                 }
@@ -81,7 +81,7 @@ public class Level3SynthesisSystem : MonoBehaviour
 
             if (!int.TryParse(parts[3], out int resultID))
             {
-                Debug.LogError($"ÎŞ·¨½âÎö½á¹ûID: {parts[3]}");
+                Debug.LogError($"æ— æ³•è§£æç»“æœID: {parts[3]}");
                 continue;
             }
 
@@ -95,18 +95,19 @@ public class Level3SynthesisSystem : MonoBehaviour
             rules.Add(rule);
 
             Debug.Log(
-                $"¼ÓÔØÈı¼¶¹æÔò: [{string.Join(" ", items)}] " +
-                $"È¨ÖØ[{string.Join(" ", weights)}] -> {resultID}"
+                $"åŠ è½½ä¸‰çº§è§„åˆ™: [{string.Join(" ", items)}] " +
+                $"æƒé‡[{string.Join(" ", weights)}] -> {resultID}"
             );
         }
 
-        Debug.Log($"Èı¼¶¹æÔò¼ÓÔØÍê³É£¬×ÜÊı: {rules.Count}");
+        Debug.Log($"ä¸‰çº§è§„åˆ™åŠ è½½å®Œæˆï¼Œæ€»æ•°: {rules.Count}");
     }
     public bool TrySynthesize(
     List<int> playerItems,
     out int resultID,
     out float similarityPercent,
-    float threshold = 0.7f   // 70% Ä¬ÈÏãĞÖµ
+    float threshold = 0.7f,
+    float extraPenalty = 0.2f   // â­ æ¯ä¸ªå¤šä½™ç‰©å“æ‰£å¤šå°‘æƒé‡ï¼ˆå¯è°ƒï¼‰
 )
     {
         resultID = -1;
@@ -122,6 +123,7 @@ public class Level3SynthesisSystem : MonoBehaviour
         {
             float matchedWeight = 0f;
 
+            // è®¡ç®—å‘½ä¸­æƒé‡
             for (int i = 0; i < rule.items.Count; i++)
             {
                 int ruleItem = rule.items[i];
@@ -133,12 +135,20 @@ public class Level3SynthesisSystem : MonoBehaviour
                 }
             }
 
-            float similarity = matchedWeight / rule.TotalWeight;
+            // è®¡ç®—å¤šä½™ç‰©å“æ•°é‡
+            int extraCount = playerItems.Count(id => !rule.items.Contains(id));
+
+            // è®¡ç®—æƒ©ç½š
+            float penalty = extraCount * extraPenalty;
+
+            // æœ€ç»ˆå¾—åˆ†
+            float finalWeight = Mathf.Max(0, matchedWeight - penalty);
+            float similarity = finalWeight / rule.TotalWeight;
 
             Debug.Log(
-                $"¹æÔò[{string.Join(" ", rule.items)}] " +
-                $"Æ¥ÅäÈ¨ÖØ {matchedWeight}/{rule.TotalWeight} " +
-                $"= {similarity * 100f:F1}%"
+                $"è§„åˆ™[{string.Join(" ", rule.items)}] " +
+                $"å‘½ä¸­æƒé‡={matchedWeight:F2}, å¤šä½™={extraCount}, æ‰£åˆ†={penalty:F2}, " +
+                $"æœ€ç»ˆç›¸ä¼¼åº¦={similarity * 100f:F1}%"
             );
 
             if (similarity > bestScore)
