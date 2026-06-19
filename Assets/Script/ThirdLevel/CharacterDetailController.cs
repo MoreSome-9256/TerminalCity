@@ -66,7 +66,7 @@ public class CharacterDetailController : MonoBehaviour
 
     public void OnSlotClicked(Level3Data data)
     {
-        // 打开三级资料阅读界面
+        Level3SequencePlayer.Play(data);
     }
 
     public void OnBackClicked()

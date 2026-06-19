@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 
 public class Level3Exchange : MonoBehaviour, IPointerClickHandler
 {
+    public Inventory playerInventory;
     public void OnPointerClick(PointerEventData eventData)
     {
         // 1. 收集当前三级合成界面中的所有资料
@@ -53,12 +54,20 @@ public class Level3Exchange : MonoBehaviour, IPointerClickHandler
 
         // 1. 解锁对应三级资料
         Level3Data itemData = FindLevel3DataByID(resultID);
+        playerInventory.level3List.Add(itemData);
+
         if (itemData != null)
         {
             var progress = PlayerDataManager.Instance.Data
                 .GetOrCreateCharacter(itemData.characterId); // 假设每个三级资料有角色ID
 
+            bool isFirstTime = !progress.HasCollectible(resultID);
+
             progress.AddCollectible(resultID);
+            if (isFirstTime)
+            {
+                Level3SequencePlayer.Play(itemData);
+            }
 
             // 如果需要，还可以播放解锁动画/演出
             Debug.Log($"已解锁资料: {itemData.itemName}");

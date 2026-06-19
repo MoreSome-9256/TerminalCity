@@ -107,25 +107,33 @@ public class InventoryManager3 : MonoBehaviour
         Slot slot = itemGameObject.GetComponent<Slot>();
         if (slot == null || slot.slotItem == null) return;
 
-        slot.slotItem.readTime++; // 统一增加阅读次数
+        slot.slotItem.readTime++;
 
-        // --- 新增：聊天功能判断 ---
-        // 尝试将物品转换为Level2Data以访问type属性
         Level2Data level2Item = slot.slotItem as Level2Data;
 
-        // 如果是聊天类型 (type 1)，并且有ChatManager，则进入此分支
-        if (level2Item != null && level2Item.type == 1 && chatManager != null && level2Item.textFile != null)
+        bool isChatItem = level2Item != null && level2Item.type == 1 && chatManager != null && level2Item.textFile != null;
+
+        if (isChatItem)
         {
-            textDisplayPanel.SetActive(false); // 确保旧的显示面板是关闭的
-            chatManager.StartConversation(level2Item.textFile); // 把任务交给ChatManager
-
-            // 可以在这里保留你旧的对话事件逻辑，如果需要的话
-            // int itemID = slot.slotItem.itemNum; ...
-
-            return; // **重要**：处理完聊天逻辑后，直接退出方法，不再执行下面的旧逻辑
+            textDisplayPanel.SetActive(false);  // 关闭资料显示，确保只显示聊天
+            if (level2Item.readTime == 1)
+            {
+                // 首次阅读：逐条显示
+                chatManager.StartConversation(level2Item.textFile);
+            }
+            else
+            {
+                // 非首次：直接显示全部内容
+                chatManager.DisplayFullConversation(level2Item.textFile);
+            }
+            return;
         }
-
-        // --- 原有逻辑 (仅调整了一行代码的位置) ---
+        // --- 非聊天资料，先清空聊天 UI ---
+        chatManager.CloseChat(); // 清掉聊天面板
+        if (chatManager.chatContentText != null)
+            chatManager.chatContentText.text = ""; // 清空聊天文本
+        if (chatManager.chatScrollRect != null)
+            chatManager.chatScrollRect.verticalNormalizedPosition = 1f; // 滚动到顶部
 
         // 如果代码执行到这里，说明它不是一个聊天物品，可以安全地打开常规显示面板
         textDisplayPanel.SetActive(true);

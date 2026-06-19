@@ -268,6 +268,7 @@ GameObject:
   - component: {fileID: 325831472155430698}
   - component: {fileID: 118433204967426589}
   - component: {fileID: 3824406498102369677}
+  - component: {fileID: 2488951515044876147}
   m_Layer: 5
   m_Name: Window2
   m_TagString: Untagged
@@ -349,11 +350,15 @@ MonoBehaviour:
   windowItem: {fileID: 0}
   parent: {fileID: 0}
   sourceType: 0
+  offset: {x: 0, y: 0}
   background: {fileID: 325831472155430698}
   titleText: {fileID: 372885381151745874}
   closeButton: {fileID: 5820572349343369607}
   manualSprite: {fileID: -979820652, guid: 355ec21b25c0f644a8266898c4468cd1, type: 3}
   autoSprite: {fileID: -801579807, guid: 355ec21b25c0f644a8266898c4468cd1, type: 3}
+  proxySprite: {fileID: 0}
+  isProxy: 0
+  original: {fileID: 0}
 --- !u!114 &3824406498102369677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,3 +371,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5130dea74c4b35c4b8fef81c5a8b8018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2488951515044876147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834022630405750345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e884dcaa7ef47c94183e659c6f4f4cb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  closeAnimationDuration: 0.1
+  closeButton: {fileID: 5820572349343369607}
+  elementsToAnimate:
+  - {fileID: 5353912209074845201}
+  - {fileID: 4255274853464591886}

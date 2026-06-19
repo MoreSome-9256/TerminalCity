@@ -50,12 +50,27 @@ public class SynthesisManager : MonoBehaviour
     // =========================
     // 判定：是否允许拖入
     // =========================
-    public bool CanAccept(Item item)
+    /*public bool CanAccept(Item item)
     {
         // 已经被占用（例如被二级展开）
         if (occupied.Contains(item))
             return false;
 
+        // 如果这个 item 是 Level1Data，并且它已经属于某个被拖入的二级资料
+        if (item is Level1Data l1)
+        {
+            // 检查它是否已经被拖入过
+            bool alreadyDragged = level1Windows.Any(w2 => w2.windowItem == l1 && !w2.isProxy);
+            if (alreadyDragged)
+                return false;
+
+            // 检查它是否属于已拖入的二级资料
+            bool partOfDraggedLevel2 = level2Windows
+                .Any(w2 => w2.windowItem is Level2Data l2 && l2.requiredLevel1.Contains(l1));
+
+            if (partOfDraggedLevel2)
+                return false;
+        }
         // 尚未锁定事件：任何物品都可以作为起点
         if (string.IsNullOrEmpty(currentEvent))
             return true;
@@ -72,7 +87,7 @@ public class SynthesisManager : MonoBehaviour
             return true;
 
         return false;
-    }
+    }*/
 
     // =========================
     // 注册二级窗口（Window）

@@ -123,4 +123,24 @@ public class ChatManager : MonoBehaviour
     {
         if (chatPanel != null) chatPanel.SetActive(false);
     }
+    public void DisplayFullConversation(TextAsset conversationFile)
+    {
+        if (conversationFile == null) return;
+
+        // 解析对话文件
+        if (!ParseConversationFile(conversationFile))
+        {
+            Debug.LogError("解析对话文件失败！");
+            return;
+        }
+
+        // 直接把所有区块拼起来
+        chatContentText.text = conversationHeader + string.Join("", conversationChunks);
+        chatPanel.SetActive(true);
+        nextMessageButton.gameObject.SetActive(false); // 不显示“下一条”按钮
+        Canvas.ForceUpdateCanvases();
+        if (chatScrollRect != null)
+            chatScrollRect.verticalNormalizedPosition = 0f; // 滚动到底
+    }
+
 }

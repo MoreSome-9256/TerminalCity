@@ -85,8 +85,15 @@ public class DragItemController : MonoBehaviour, IBeginDragHandler, IDragHandler
     // 检查物品是否已存在窗口
     private bool IsItemAlreadyInWindows(Item targetItem)
     {
-        return FindObjectsOfType<Window>()
+        // 检查二级窗口
+        bool inWindow = FindObjectsOfType<Window>()
             .Any(window => window.windowItem == targetItem);
+
+        // 检查一级窗口（排除代理节点）
+        bool inWindow2 = FindObjectsOfType<Window2>()
+            .Any(w2 => w2.windowItem == targetItem && !w2.isProxy);
+
+        return inWindow || inWindow2;
     }
 
     private void CreateNewWindow(Slot2 originalSlot, Vector2 position)

@@ -27,6 +27,9 @@ public class UIManager : MonoBehaviour
     public TMP_Text descriptionText;
     public Image npcImage;
 
+    [Header("Level3 UI")]
+    public Transform viewPanelTransform;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

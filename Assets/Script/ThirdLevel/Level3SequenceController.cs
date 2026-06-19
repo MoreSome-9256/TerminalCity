@@ -26,5 +26,6 @@ public class Level3SequenceController : MonoBehaviour
     private void OnSequenceFinished()
     {
         Debug.Log("Sequence finished!");
+        Destroy(gameObject);
     }
 }
