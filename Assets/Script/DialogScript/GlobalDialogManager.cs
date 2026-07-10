@@ -211,6 +211,15 @@ public class GlobalDialogManager : MonoBehaviour
                                 segment.backgroundSprite = Resources.Load<Sprite>(bgPath);
 
                             string nextID = reader.IsDBNull(5) ? null : reader.GetInt32(5).ToString();
+                            // 如果下个ID是 "-1" 或者小于0的值，直接视为结束，不再继续查询
+                            if (nextID == "-1" || string.IsNullOrEmpty(nextID))
+                            {
+                                currentID = null;
+                            }
+                            else
+                            {
+                                currentID = nextID;
+                            }
                             segment.branchGroupID = reader.IsDBNull(6) ? null : reader.GetString(6);
                             segment.conditionFlag = reader.IsDBNull(7) ? null : reader.GetString(7);
 
@@ -233,20 +242,25 @@ public class GlobalDialogManager : MonoBehaviour
 
     private void ShowDialogueSegment(DialogueSegment segment)
     {
+        // 🔍 核心修改：将原本的 segment.charName 和 dialogueText 视为 Key 进行翻译
+        string localizedName = GetLocalizedText($"char_{segment.charName}", segment.charName);
+        string localizedText = GetLocalizedText($"dialog_{segment.id}", segment.dialogueText);
+
         // Set UI
-        charNameText.text = segment.charName;
-        characterImage.sprite = segment.characterSprite;
+        charNameText.text = localizedName; //
+        characterImage.sprite = segment.characterSprite; //[cite: 1]
 
         if (background != null)
         {
-            background.SetActive(true);
+            background.SetActive(true); //[cite: 1]
         }
 
         // Start typing effect
         if (typingCoroutine != null)
-            StopCoroutine(typingCoroutine);
+            StopCoroutine(typingCoroutine); //[cite: 1]
 
-        typingCoroutine = StartCoroutine(TypeText(segment.dialogueText));
+        // 🔍 传入翻译后的台词，而不是原数据库里的字
+        typingCoroutine = StartCoroutine(TypeText(localizedText));
     }
 
     private IEnumerator TypeText(string fullText)
@@ -285,10 +299,14 @@ public class GlobalDialogManager : MonoBehaviour
 
         if (isTyping)
         {
-            if (typingCoroutine != null) StopCoroutine(typingCoroutine);
-            dialogueText.text = currentDialogue[currentIndex].dialogueText;
-            isTyping = false;
-            return;
+            if (typingCoroutine != null) StopCoroutine(typingCoroutine); //[cite: 1]
+
+            // 🔍 核心修改：这里原本是直接写 segment.dialogueText，改成获取翻译后的文本
+            string localizedText = GetLocalizedText($"dialog_{currentDialogue[currentIndex].id}", currentDialogue[currentIndex].dialogueText);
+            dialogueText.text = localizedText;
+
+            isTyping = false; //[cite: 1]
+            return; //[cite: 1]
         }
 
         // 如果是问答的第一句回答，创建 QARecord
@@ -369,11 +387,12 @@ public class GlobalDialogManager : MonoBehaviour
             if (shownCount >= 3) break;
 
             Button btn = Instantiate(branchButtonPrefab, branchPanel.transform);
+            string localizedOption = GetLocalizedText($"branch_{branchGroupID}_{shownCount}", localOpt.optionText);
             btn.GetComponentInChildren<TMP_Text>().text = localOpt.optionText;
 
             btn.onClick.AddListener(() =>
             {
-                pendingQuestion = localOpt.optionText;
+                pendingQuestion = localizedOption;
 
                 if (!string.IsNullOrEmpty(localOpt.conditionFlag))
                 {
@@ -398,7 +417,7 @@ public class GlobalDialogManager : MonoBehaviour
         {
             // 随便聊聊
             Button chatBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
-            chatBtn.GetComponentInChildren<TMP_Text>().text = "随便聊聊";
+            chatBtn.GetComponentInChildren<TMP_Text>().text = GetLocalizedText("ui_chat_casual", "随便聊聊");
             chatBtn.onClick.AddListener(() =>
             {
                 branchPanel.SetActive(false);
@@ -412,7 +431,7 @@ public class GlobalDialogManager : MonoBehaviour
 
             // 没什么事了
             Button exitBtn = Instantiate(branchButtonPrefab, branchPanel.transform);
-            exitBtn.GetComponentInChildren<TMP_Text>().text = "没什么事了";
+            exitBtn.GetComponentInChildren<TMP_Text>().text = GetLocalizedText("ui_chat_exit", "没什么事了");
             exitBtn.onClick.AddListener(() =>
             {
                 branchPanel.SetActive(false);
@@ -705,5 +724,27 @@ public class GlobalDialogManager : MonoBehaviour
 
         hasSearchedButton = true;
         return targetButton != null;
+    }
+
+    /// <summary>
+    /// 本地化文本获取中心（未来的多语言安全锁）
+    /// </summary>
+    /// <param name="key">推荐给该文本定义的唯一 Key</param>
+    /// <param name="fallbackValue">如果找不到翻译，或者目前还没做翻译时返回的默认文本（即你目前的中文）</param>
+    private string GetLocalizedText(string key, string fallbackValue)
+    {
+        // ==========================================
+        // 以后接入 Unity Localization 时，只需解开这里的注释：
+        // try {
+        //     // 假设你的本地化表名叫 "DialogueTable"
+        //     string translated = UnityEngine.Localization.Settings.LocalizationSettings.StringDatabase.GetLocalizedString("DialogueTable", key);
+        //     if (!string.IsNullOrEmpty(translated)) return translated;
+        // } catch { 
+        //     /* 预防未找到 Key 报错 */ 
+        // }
+        // ==========================================
+
+        // 目前阶段：直接返回原本的中文内容，完全不影响你现在的测试和开发
+        return fallbackValue;
     }
 }

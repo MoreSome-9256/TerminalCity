@@ -76,7 +76,7 @@ public class InventoryManager6 : MonoBehaviour
             iconImage.gameObject.SetActive(item.itemImage != null);
         }
 
-        newSlot.slotName.text = item.itemName;
+        newSlot.slotName.text = item.LocalizedItemName;
 
         inventoryItems.Add(newSlot.gameObject);
         displayedItemIds.Add(item.itemNum);

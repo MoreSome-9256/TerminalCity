@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +15,34 @@ public class DialogForPrefab : MonoBehaviour
         [TextArea(3, 10)]
         public string dialogueText;
         public Sprite characterSprite;
+
+        // ========================================================
+        // ✨ 新增：多语言拦截属性（只读，不影响 Inspector 原有数据）
+        // ========================================================
+        public string LocalizedName
+        {
+            get
+            {
+                // 如果以后接入了多语言组件，这里可以用 charName 作为 Key 去查表
+                // string key = $"char_{charName}";
+                // return GetGlobalLocalizedText(key, charName);
+                return charName; // 目前阶段：直接返回原有中文
+            }
+        }
+
+        public string LocalizedText
+        {
+            get
+            {
+                // 因为 List 里没有唯一 ID，我们生成一个基于“名字+文本哈希”的临时 Key，或者直接用原始中文当 Key 查表
+                // 推荐后期：直接拿原中文作为 Key 去本地化表里索引英文
+                // return GetGlobalLocalizedText(dialogueText, dialogueText);
+                return dialogueText; // 目前阶段：直接返回原有中文
+            }
+        }
+        // 后期引入多语言时改用这个
+        // public string LocalizedName => LocalizationHelper.GetText($"char_{charName}", charName);
+        // public string LocalizedText => LocalizationHelper.GetText(dialogueText, dialogueText); // 用原中文当 Key
     }
 
     [Header("Dialogue Data")]
@@ -51,7 +79,7 @@ public class DialogForPrefab : MonoBehaviour
         if (audioSource == null)
             audioSource = gameObject.AddComponent<AudioSource>();
 
-        // �Զ��� UIManager ��ȡȫ�� UI
+        // 自动从 UIManager 获取全局 UI
         if (UIManager.Instance != null)
         {
             dialogueUI = UIManager.Instance.dialogueUI;
@@ -64,7 +92,7 @@ public class DialogForPrefab : MonoBehaviour
         }
         else
         {
-            Debug.LogError("DialogForPrefab: UIManager.Instance Ϊ�գ��޷���ȡȫ�� UI��");
+            Debug.LogError("DialogForPrefab: UIManager.Instance 为空，无法获取全局 UI！");
         }
     }
 
@@ -97,7 +125,7 @@ public class DialogForPrefab : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(null);
 
-        // ���� UI
+        // 启用 UI
         selectionUI.SetActive(false);
         dialogueUI.SetActive(true);
         if (charNameText != null) charNameText.gameObject.SetActive(true);
@@ -116,13 +144,13 @@ public class DialogForPrefab : MonoBehaviour
 
     private void ShowDialogueSegment(DialogueSegment segment)
     {
-        if (charNameText != null) charNameText.text = segment.charName;
+        if (charNameText != null) charNameText.text = segment.LocalizedName;
         if (characterImage != null) characterImage.sprite = segment.characterSprite;
 
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
 
-        typingCoroutine = StartCoroutine(TypeText(segment.dialogueText));
+        typingCoroutine = StartCoroutine(TypeText(segment.LocalizedText));
     }
 
     private IEnumerator TypeText(string fullText)
@@ -151,7 +179,7 @@ public class DialogForPrefab : MonoBehaviour
                 StopCoroutine(typingCoroutine);
 
             if (dialogueText != null)
-                dialogueText.text = dialogueSequence[currentIndex].dialogueText;
+                dialogueText.text = dialogueSequence[currentIndex].LocalizedText;
             isTyping = false;
         }
         else

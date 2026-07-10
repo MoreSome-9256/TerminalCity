@@ -17,6 +17,34 @@ public class DialogueManager : MonoBehaviour
 
         [Header("背景切换(可空)")]
         public Sprite backgroundSprite;
+
+        // ========================================================
+        // ✨ 新增：多语言拦截属性（只读，不影响 Inspector 原有数据）
+        // ========================================================
+        public string LocalizedName
+        {
+            get
+            {
+                // 如果以后接入了多语言组件，这里可以用 charName 作为 Key 去查表
+                // string key = $"char_{charName}";
+                // return GetGlobalLocalizedText(key, charName);
+                return charName; // 目前阶段：直接返回原有中文
+            }
+        }
+
+        public string LocalizedText
+        {
+            get
+            {
+                // 因为 List 里没有唯一 ID，我们生成一个基于“名字+文本哈希”的临时 Key，或者直接用原始中文当 Key 查表
+                // 推荐后期：直接拿原中文作为 Key 去本地化表里索引英文
+                // return GetGlobalLocalizedText(dialogueText, dialogueText);
+                return dialogueText; // 目前阶段：直接返回原有中文
+            }
+        }
+        // 后期引入多语言时改用这个
+        // public string LocalizedName => LocalizationHelper.GetText($"char_{charName}", charName);
+        // public string LocalizedText => LocalizationHelper.GetText(dialogueText, dialogueText); // 用原中文当 Key
     }
 
     public GameObject thisObject;
@@ -148,7 +176,7 @@ public class DialogueManager : MonoBehaviour
     private void UpdateDialogueUI()
     {
         // 切换角色名、立绘等
-        charNameText.text = dialogueSequence[currentIndex].charName;
+        charNameText.text = dialogueSequence[currentIndex].LocalizedName;
 
         if (dialogueSequence[currentIndex].characterSprite != null)
         {
@@ -187,7 +215,7 @@ public class DialogueManager : MonoBehaviour
             isTyping = false;
         }
 
-        typingCoroutine = StartCoroutine(TypeSentence(dialogueSequence[currentIndex].dialogueText));
+        typingCoroutine = StartCoroutine(TypeSentence(dialogueSequence[currentIndex].LocalizedText));
     }
 
     IEnumerator TypeSentence(string sentence)
@@ -242,7 +270,7 @@ public class DialogueManager : MonoBehaviour
         {
             StopCoroutine(typingCoroutine);
             typingCoroutine = null;
-            dialogueText.text = dialogueSequence[currentIndex].dialogueText;
+            dialogueText.text = dialogueSequence[currentIndex].LocalizedText;
             isTyping = false;
             return true;
         }

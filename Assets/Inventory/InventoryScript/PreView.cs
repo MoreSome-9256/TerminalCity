@@ -37,8 +37,8 @@ public class PreView : MonoBehaviour
             instance.message.SetActive(false);
         }
         instance.image.sprite = item.itemImage;
-        instance.name.text = item.itemName;
-        instance.info.text = item.itemInfo;
+        instance.name.text = item.LocalizedItemName;
+        instance.info.text = item.LocalizedItemInfo;
         if (item is Level1Data level1Data)
         {
             string traits = "";

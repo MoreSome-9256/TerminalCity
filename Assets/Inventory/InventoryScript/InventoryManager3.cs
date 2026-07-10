@@ -94,9 +94,9 @@ public class InventoryManager3 : MonoBehaviour
         {
             Debug.LogError("找不到Icon子物体！");
         }
-        newItem.slotName.text = item.itemName;
+        newItem.slotName.text = item.LocalizedItemName;
 
-        newItem.slotSynopsis.text = item.itemInfo;
+        newItem.slotSynopsis.text = item.LocalizedItemInfo;
         instance.gridLayout.AddItemToTop(newItem.gameObject);
         // 记录
         instance.displayedItemIds.Add(item.itemNum);

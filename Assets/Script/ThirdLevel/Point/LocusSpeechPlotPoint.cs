@@ -51,7 +51,7 @@ public class LocusSpeechPlotPoint : PlotPoint
                 yield return ShowChoices(segment);
             }
 
-            yield return ShowOfficialLine(segment.officialLine);
+            yield return ShowOfficialLine(segment.LocalizedOfficialLine);
 
             // 等待点击进入下一句
             yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
@@ -119,11 +119,11 @@ public class LocusSpeechPlotPoint : PlotPoint
                 selectedIndex = index;
 
                 // 去掉前缀再比较
-                string chosen = currentSegment.options[index];
-                if (chosen.StartsWith(">> "))
-                    chosen = chosen.Substring(3);
+                string rawChosen = currentSegment.options[index];
+                if (rawChosen.StartsWith(">> "))
+                    rawChosen = rawChosen.Substring(3);
 
-                if (chosen != currentSegment.officialLine)
+                if (rawChosen != currentSegment.officialLine)
                 {
                     breakdown += 1f;
                     UpdateBreakdownVisual();
@@ -151,9 +151,9 @@ public class LocusSpeechPlotPoint : PlotPoint
                     choiceButtons[i]
                     .GetComponentInChildren<TextMeshProUGUI>();
 
-                tmp.text =
-                    GenerateDynamicCorruption(
-                        segment.options[i]);
+                string localizedOpt = segment.GetLocalizedOption(i);
+
+                tmp.text = GenerateDynamicCorruption(localizedOpt);
             }
 
             yield return new WaitForSeconds(0.1f);
@@ -264,4 +264,17 @@ public class SpeechSegment
     [TextArea(2, 4)]
     public string[] options = new string[3];
     // 三个按钮显示的文本（其中一个应该是officialLine）
+
+    // ========================================================
+    // ✨ 新增：多语言拦截属性（直接指向全局多语言助手）
+    // ========================================================
+    // 官方台词翻译，用原始文本做 Key
+    public string LocalizedOfficialLine => LocalizationHelper.GetText(officialLine, officialLine);
+
+    // 选项列表翻译
+    public string GetLocalizedOption(int index)
+    {
+        if (index < 0 || index >= options.Length) return "";
+        return LocalizationHelper.GetText(options[index], options[index]);
+    }
 }

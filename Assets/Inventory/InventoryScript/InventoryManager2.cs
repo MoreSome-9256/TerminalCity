@@ -90,7 +90,7 @@ public class InventoryManager2 : MonoBehaviour
             iconImage.gameObject.SetActive(item.itemImage != null);
         }
 
-        newSlot.slotName.text = item.itemName;
+        newSlot.slotName.text = item.LocalizedItemName;
 
         // 记录状态
         inventoryItems.Add(newSlot.gameObject);

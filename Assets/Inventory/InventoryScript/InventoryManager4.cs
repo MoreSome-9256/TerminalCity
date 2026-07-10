@@ -49,7 +49,7 @@ public class InventoryManager4 : MonoBehaviour
             Debug.LogError("找不到Icon子物体！");
         }
 
-        newItem.slotName.text = item.itemName;
+        newItem.slotName.text = item.LocalizedItemName;
         instance.gridLayout.AddItemToTop(newItem.gameObject);
     }
     public void SetActiveDoor(DoorController door)

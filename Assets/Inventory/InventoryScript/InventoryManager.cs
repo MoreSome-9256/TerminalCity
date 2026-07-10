@@ -130,15 +130,15 @@ public class InventoryManager : MonoBehaviour
             Debug.LogError("找不到Icon子物体！");
         }
 
-        newItem.slotName.text = item.itemName;
+        newItem.slotName.text = item.LocalizedItemName;
 
         if (item is Level1Data level1Data)
         {
             string traits = "";
-            if (!string.IsNullOrEmpty(level1Data.Name)) traits += "人物 ";
-            if (!string.IsNullOrEmpty(level1Data.Time)) traits += "时间 ";
-            if (!string.IsNullOrEmpty(level1Data.Event)) traits += "事件 ";
-            if (string.IsNullOrEmpty(traits)) traits = "无";
+            if (!string.IsNullOrEmpty(level1Data.Name)) traits += LocalizationHelper.GetText("ui_trait_char", "人物") + " ";
+            if (!string.IsNullOrEmpty(level1Data.Time)) traits += LocalizationHelper.GetText("ui_trait_time", "时间") + " ";
+            if (!string.IsNullOrEmpty(level1Data.Event)) traits += LocalizationHelper.GetText("ui_trait_event", "事件") + " ";
+            if (string.IsNullOrEmpty(traits)) traits = LocalizationHelper.GetText("ui_trait_none", "无");
 
             newItem.slotTrait.text = traits.Trim();
 
@@ -146,7 +146,7 @@ public class InventoryManager : MonoBehaviour
             level1Data.isPicked = true;
         }
 
-        newItem.slotSynopsis.text = item.itemInfo;
+        newItem.slotSynopsis.text = item.LocalizedItemInfo;
 
         // 记录 UI 状态（用于去重与后续删除）
         instance.inventoryItems.Add(newItem.gameObject);
@@ -170,7 +170,8 @@ public class InventoryManager : MonoBehaviour
             scrollViewText.SetActive(true);
             scrollViewImage.SetActive(false);
 
-            string text = slot.slotItem.textFile.text;
+            string textKey = $"file_{slot.slotItem.textFile.name}";
+            string text = LocalizationHelper.GetText(textKey, slot.slotItem.textFile.text);
 
             foreach (var entry in DictionaryManager.Instance.entries.Values)
             {

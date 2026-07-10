@@ -18,4 +18,14 @@ public class Item : ScriptableObject
     public TextAsset textFile;
     [Header("词典资料")]
     public MaterialData materialData; // 每个物品独立的词典信息
+
+    // ========================================================
+    // ✨ 新增：基础物品的多语言拦截属性（子类也会自动继承）
+    // ========================================================
+
+    // 物品基础名称的本地化
+    public string LocalizedItemName => LocalizationHelper.GetText(itemName, itemName);
+
+    // 物品简要介绍/描述信息的本地化
+    public string LocalizedItemInfo => LocalizationHelper.GetText(itemInfo, itemInfo);
 }

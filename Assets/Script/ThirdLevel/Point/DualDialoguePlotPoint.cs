@@ -26,6 +26,34 @@ public class DualDialoguePlotPoint : PlotPoint
 
         [Header("背景切换(可空)")]
         public Sprite backgroundSprite;  // 可空
+
+        // ========================================================
+        // ✨ 新增：多语言拦截属性（只读，不影响 Inspector 原有数据）
+        // ========================================================
+        public string LocalizedName
+        {
+            get
+            {
+                // 如果以后接入了多语言组件，这里可以用 charName 作为 Key 去查表
+                // string key = $"char_{charName}";
+                // return GetGlobalLocalizedText(key, charName);
+                return charName; // 目前阶段：直接返回原有中文
+            }
+        }
+
+        public string LocalizedText
+        {
+            get
+            {
+                // 因为 List 里没有唯一 ID，我们生成一个基于“名字+文本哈希”的临时 Key，或者直接用原始中文当 Key 查表
+                // 推荐后期：直接拿原中文作为 Key 去本地化表里索引英文
+                // return GetGlobalLocalizedText(dialogueText, dialogueText);
+                return dialogueText; // 目前阶段：直接返回原有中文
+            }
+        }
+        // 后期引入多语言时改用这个
+        // public string LocalizedName => LocalizationHelper.GetText($"char_{charName}", charName);
+        // public string LocalizedText => LocalizationHelper.GetText(dialogueText, dialogueText); // 用原中文当 Key
     }
 
     [Header("UI References")]
@@ -87,7 +115,7 @@ public class DualDialoguePlotPoint : PlotPoint
         nextPressed = false;
 
         // 名字
-        charNameText.text = segment.charName;
+        charNameText.text = segment.LocalizedName;
 
         // 背景切换
         if (segment.backgroundSprite != null && backgroundImage != null)
@@ -110,15 +138,28 @@ public class DualDialoguePlotPoint : PlotPoint
 
         UpdateSpeakerVisual(segment.speaker);
 
-        // 打字
-        yield return TypeSentence(segment.dialogueText);
+        // 🔍 1. 将打字协程存下来，方便在按下空格时停止它
+        typingCoroutine = StartCoroutine(TypeSentence(segment.LocalizedText));
 
-        // 等待输入
-        while (!nextPressed)
+        // 🔍 2. 改进等待输入的逻辑，兼容“打字中跳过”和“打完字翻页”
+        while (true)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-                break;
-
+            if (nextPressed || Input.GetKeyDown(KeyCode.Space))
+            {
+                if (isTyping)
+                {
+                    // 如果正在打字，按空格或点按钮改为“立刻显示全句”
+                    if (typingCoroutine != null) StopCoroutine(typingCoroutine);
+                    dialogueText.maxVisibleCharacters = dialogueText.textInfo.characterCount;
+                    isTyping = false;
+                    nextPressed = false; // 重置标记，防止直接跳到下一句
+                }
+                else
+                {
+                    // 如果字已经打完了，按空格或点按钮才真正进入下一句
+                    break;
+                }
+            }
             yield return null;
         }
     }
