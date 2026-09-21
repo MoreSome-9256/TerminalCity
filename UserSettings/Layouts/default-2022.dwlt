@@ -418,9 +418,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: e0830000
-      m_LastClickedID: 33760
-      m_ExpandedIDs: 74f9ffff80f9ffff8a830000c4830000c8830000dc830000
+      m_SelectedIDs: e66fffff
+      m_LastClickedID: -36890
+      m_ExpandedIDs: 6c4bffff724ffffffc77ffff72b9ffff8cbaffffcabeffff50d9ffff08deffff6ae6ffffa2f5ffffd6f5ffff36f6ffff36f7ffffb0f7ffffaef8ffff0af9ffff5ef9ffff26fbffff048e000060920000329f0000e4a1000012a500005aa60000dcb3000024b50000b2b500000cb900002ed20000cad500008ed700008ad8000012d900005ada00005eda000004db0000dcdc000006dd00004406010096060100e6060100d0090100e00b01005e0c01003e0d0100a60d01005a0e0100900e010052230100da23010022250100f0280100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -510,7 +510,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 1
       snapOffset: {x: -326, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 1
       id: unity-scene-view-toolbar
       index: 0
@@ -523,7 +523,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 1
       id: unity-search-toolbar
       index: 1
@@ -536,7 +536,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Open Tile Palette
       index: 2
@@ -549,7 +549,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Tilemap Focus
       index: 3
@@ -588,7 +588,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Light Settings
       index: 0
@@ -614,7 +614,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Cloth Constraints
       index: 1
@@ -627,7 +627,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Cloth Collisions
       index: 2
@@ -679,7 +679,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Occlusion Culling
       index: 3
@@ -692,7 +692,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Physics Debugger
       index: 4
@@ -705,7 +705,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Scene Visibility
       index: 5
@@ -718,7 +718,7 @@ MonoBehaviour:
       collapsed: 0
       displayed: 0
       snapOffset: {x: 0, y: 0}
-      snapOffsetDelta: {x: 0, y: 25}
+      snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: Scene View/Particles
       index: 6
@@ -793,17 +793,17 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_WindowGUID: cc27987af1a868c49b0894db9c0f5429
   m_Gizmos: 0
-  m_OverrideSceneCullingMask: 0
-  m_SceneIsLit: 0
+  m_OverrideSceneCullingMask: 6917529027641081856
+  m_SceneIsLit: 1
   m_SceneLighting: 1
   m_2DMode: 1
   m_isRotationLocked: 0
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 5515.6626, y: 954.0127, z: 28.399809}
+    m_Target: {x: 6941.0723, y: 926.5734, z: 209.05043}
     speed: 2
-    m_Value: {x: 5515.6626, y: 954.0127, z: 28.399809}
+    m_Value: {x: 6941.0723, y: 926.5734, z: 209.05043}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -814,7 +814,7 @@ MonoBehaviour:
   m_SceneViewState:
     m_AlwaysRefresh: 0
     showFog: 1
-    showSkybox: 0
+    showSkybox: 1
     showFlares: 1
     showImageEffects: 1
     showParticleSystems: 1
@@ -853,9 +853,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 851.5443
+    m_Target: 1006.73865
     speed: 2
-    m_Value: 851.5443
+    m_Value: 1006.73865
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1033,7 +1033,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Rooms/LivingArea
+    - Assets/Resources/Picture/UI
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1041,15 +1041,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Rooms/LivingArea
+  - Assets/Resources/Picture/UI
   m_LastFoldersGridSize: 64
   m_LastProjectPath: C:\MMGA\TerminalCity
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 502}
-    m_SelectedIDs: e8820000
-    m_LastClickedID: 33512
+    scrollPos: {x: 0, y: 606}
+    m_SelectedIDs: e6820000
+    m_LastClickedID: 33510
     m_ExpandedIDs: 00000000928200009482000096820000988200009a8200009c8200009e820000a0820000a2820000a4820000a6820000a8820000aa82000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1106,7 +1106,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000aa7100001e570000727e0000ba640000e0880000fc7300008ebb00006c710000bc250100467100009c7400004e0e0300c2e300009c720000b074000000760000ae740000c6750000c67b00001674000014bf00007876000004750000f8b90000967f0000386c0000dc6a000000000000527700009876000050760000f68000006a9b0000e8810000dc810000e08100007a78000082780000b87501005e9201005a9201007a7f0000da9e0000447e00005a7e0000
+    m_ExpandedInstanceIDs: c6230000aa7100001e570000727e0000ba640000e0880000fc7300008ebb00006c710000bc250100467100009c7400004e0e0300c2e300009c720000b074000000760000ae740000c6750000c67b00001674000014bf00007876000004750000f8b90000967f0000386c0000dc6a000000000000527700009876000050760000f68000006a9b0000e8810000dc810000e08100007a78000082780000b87501005e9201005a9201007a7f0000da9e0000447e00005a7e000044680000742901007aba0100f67600001277000014770000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
