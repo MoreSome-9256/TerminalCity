@@ -8,6 +8,9 @@ public class RoomManager : MonoBehaviour
     [Header("房间数据库（ScriptableObject）")]
     public RoomDatabase database;
 
+    [Header("区域编号")]
+    public int placeNumber;
+
     [Header("本区域包含的房间 ID 列表")]
     public List<int> roomIDsInArea = new List<int>();
 
