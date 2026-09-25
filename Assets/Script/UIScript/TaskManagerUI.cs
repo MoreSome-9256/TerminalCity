@@ -28,6 +28,8 @@ public class TaskManagerUI : MonoBehaviour
 
     private TaskItemSlot activeEditingSlot; // 当前正在原地输入的 Slot
 
+    public static event System.Action OnTaskListUpdated;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -120,6 +122,8 @@ public class TaskManagerUI : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentContainer.GetComponent<RectTransform>());
+
+        OnTaskListUpdated?.Invoke();
     }
 
     private void OnTaskStatusChanged(string taskID)
