@@ -23640,7 +23640,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &886488945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49342,7 +49342,7 @@ MonoBehaviour:
   database: {fileID: 11400000, guid: 3dbce3f0c01adbb49abbca7ce97329e3, type: 2}
   placeNumber: 1
   roomIDsInArea: 00000000010000000200000004000000050000000b0000000c000000
-  currentRoomID: -1
+  currentRoomID: 0
 --- !u!1 &2124818895
 GameObject:
   m_ObjectHideFlags: 0

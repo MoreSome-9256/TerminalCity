@@ -65,7 +65,7 @@ public class RoomManager : MonoBehaviour
         if (room0 != null)
         {
             room0.unlocked = true;
-            EnterRoom(0);
+            EnterRoom(currentRoomID);
         }
         //UpdateAreaInstability();
         FindObjectOfType<MapUIController>()?.RefreshMap();

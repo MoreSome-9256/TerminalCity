@@ -91,7 +91,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomID: 2
-  roomName: B6-10
   defaultPosition: {x: 0, y: 0, z: 0}
   connectedRoomIDs: 01000000
   onFirstEnter:
@@ -186,7 +185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 107e13a956d552a438d07250a79adcea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetImage: {fileID: 5202000052905655471}
+  targetImages:
+  - {fileID: 5202000052905655471}
   normalAlpha: 0.5
   hoverAlpha: 1
 --- !u!114 &821739188173002487

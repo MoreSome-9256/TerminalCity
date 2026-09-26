@@ -1207,7 +1207,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 107e13a956d552a438d07250a79adcea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetImage: {fileID: 4553225424017158848}
+  targetImages:
+  - {fileID: 4553225424017158848}
   normalAlpha: 0.5
   hoverAlpha: 1
 --- !u!114 &3224292777662322189
