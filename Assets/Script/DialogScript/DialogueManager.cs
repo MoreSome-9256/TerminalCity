@@ -154,6 +154,20 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue()
     {
+        // 1. 确保父节点开启（无论谁关了 DialogUI，这里都能拉起来）
+        if (charNameText != null && charNameText.transform.parent != null)
+        {
+            // 自动激活父级 (即 DialogUI)
+            charNameText.transform.parent.gameObject.SetActive(true);
+        }
+
+        // 2. 确保子 UI 开启
+        if (charNameText != null) charNameText.gameObject.SetActive(true);
+        if (dialogueText != null) dialogueText.gameObject.SetActive(true);
+        if (backgroundImage != null) backgroundImage.gameObject.SetActive(true);
+        if (nextButton != null) nextButton.gameObject.SetActive(true);
+        if (backgroundTransition != null) backgroundTransition.gameObject.SetActive(true);
+
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(OnButtonClick);
         dialogueEnded = false;

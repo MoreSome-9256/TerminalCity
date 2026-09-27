@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: 4de41ec9fb2c3bf4c8946ac0892b562b
+guid: c524dc8f485ed2640ad3800e7f02e085
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 21300000
-    second: Lyn1_normal_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -66,9 +63,9 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   swizzle: 50462976
-  cookieLightType: 1
+  cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -85,7 +82,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -100,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Lyn1_normal_0
+      name: Lyn1_scared2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -114,8 +111,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 672fb6f835cc11b4f860d969dc9b8da4
-      internalID: 21300000
+      spriteID: b90006497abd08442b6e851d08c5b4fd
+      internalID: -825709918
       vertices: []
       indices: 
       edges: []
@@ -123,7 +120,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: ca3b10e0a71374c4ead6b2b03e75a0b4
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -131,7 +128,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Lyn1_normal_0: 21300000
+      Lyn1_scared2_0: -825709918
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
