@@ -7,6 +7,8 @@ using UnityEngine.Events;
 
 public class ObjectFadeController : MonoBehaviour
 {
+    public static ObjectFadeController Instance { get; private set; }
+
     [Header("设置")]
     [SerializeField] private GameObject fadeObject;
     [SerializeField] private float fadeDuration = 1f;
@@ -20,13 +22,30 @@ public class ObjectFadeController : MonoBehaviour
     public bool isAuto = false;
     private void Awake()
     {
+        // 场景级单例管理
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         if (isAuto)
         {
             Fade(false);
         }
     }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
     public void Fade(bool isFadeIn)
     {
+        if (fadeObject != null) fadeObject.SetActive(true); // 确保黑屏物体处于激活状态
         Image image = fadeObject.GetComponent<Image>();
         Text text = fadeObject.GetComponent<Text>();
         TMP_Text tmpText = fadeObject.GetComponent<TMP_Text>();
@@ -59,6 +78,7 @@ public class ObjectFadeController : MonoBehaviour
     }
     public void FadeInAndOut()
     {
+        if (fadeObject != null) fadeObject.SetActive(true); // 确保黑屏物体处于激活状态
         StartCoroutine(FadeInOut());
     }
     IEnumerator FadeInOut()
