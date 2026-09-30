@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b8edb9298a199c346b51ecd663037671
+guid: 2bebdfd0c782ee847908248fc5824de9
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,9 +8,8 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Glow Sans J
   fontNames:
-  - Glow Sans J
+  - Glow Sans SC
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
