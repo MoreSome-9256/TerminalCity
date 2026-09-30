@@ -156,13 +156,24 @@ public class DialogForPrefab : MonoBehaviour
     private IEnumerator TypeText(string fullText)
     {
         isTyping = true;
-        if (dialogueText != null) dialogueText.text = "";
 
-        foreach (char letter in fullText)
+        if (dialogueText != null)
         {
-            if (dialogueText != null)
-                dialogueText.text += letter;
-            yield return new WaitForSeconds(typingSpeed);
+            // 1. 一次性赋值完整文本（包含标签）
+            dialogueText.text = fullText;
+            // 强制刷新网格信息，确保能准确解析字符总量与标签
+            dialogueText.ForceMeshUpdate();
+
+            // 2. 获取真正的纯文本可见字符总数（TMP 已自动过滤掉所有标签字符）
+            int totalVisibleCharacters = dialogueText.textInfo.characterCount;
+            dialogueText.maxVisibleCharacters = 0;
+
+            // 3. 逐个增加可见字符数量
+            for (int i = 0; i <= totalVisibleCharacters; i++)
+            {
+                dialogueText.maxVisibleCharacters = i;
+                yield return new WaitForSeconds(typingSpeed);
+            }
         }
 
         isTyping = false;
@@ -179,7 +190,10 @@ public class DialogForPrefab : MonoBehaviour
                 StopCoroutine(typingCoroutine);
 
             if (dialogueText != null)
-                dialogueText.text = dialogueSequence[currentIndex].LocalizedText;
+            {
+                // 直接拉满可见字符数，瞬间展示整句完整文本及样式
+                dialogueText.maxVisibleCharacters = dialogueText.textInfo.characterCount;
+            }
             isTyping = false;
         }
         else

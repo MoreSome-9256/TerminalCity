@@ -45,6 +45,11 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
     public UnityEvent OnBagClosed;
     public GameObject mask;
 
+    [Header("关闭后触发的单次事件（如对话）")]
+    public UnityEvent onClosedOnceEvent;
+    public bool triggerClosedEventOnce = true;
+    private bool hasTriggeredClosedEvent = false;
+
     void Start() {
         if (targetObject != null)
         {
@@ -228,6 +233,16 @@ public class SideScreenMove : MonoBehaviour, IPointerClickHandler
             mask.SetActive(false);
         isMoved = false;
         isAnimating = false;
+
+        // 全部状态与遮罩收尾完毕后，最后再呼出对话！
+        if (onClosedOnceEvent != null)
+        {
+            if (!triggerClosedEventOnce || !hasTriggeredClosedEvent)
+            {
+                hasTriggeredClosedEvent = true;
+                onClosedOnceEvent.Invoke();
+            }
+        }
     }
 
     public void ToggleInventory()

@@ -235,24 +235,19 @@ public class DialogueManager : MonoBehaviour
     IEnumerator TypeSentence(string sentence)
     {
         isTyping = true;
-        dialogueText.text = "";
-        int visibleCharacters = 0;
-        bool insideTag = false;
 
-        while (visibleCharacters < sentence.Length)
+        // 一次性赋予完整文本，包含所有富文本标签（TMP 底层能解析出完整合法的标签树）
+        dialogueText.text = sentence;
+        dialogueText.ForceMeshUpdate();
+
+        // 获取真实的纯文字字符数（不含任何标签代码）
+        int totalVisibleCharacters = dialogueText.textInfo.characterCount;
+        dialogueText.maxVisibleCharacters = 0;
+
+        for (int i = 0; i <= totalVisibleCharacters; i++)
         {
-            char currentChar = sentence[visibleCharacters];
-
-            if (currentChar == '<') insideTag = true;
-            else if (currentChar == '>') insideTag = false;
-
-            visibleCharacters++;
-            dialogueText.text = sentence.Substring(0, visibleCharacters);
-
-            if (!insideTag)
-            {
-                yield return new WaitForSeconds(typingSpeed);
-            }
+            dialogueText.maxVisibleCharacters = i;
+            yield return new WaitForSeconds(typingSpeed);
         }
 
         isTyping = false;
@@ -282,9 +277,17 @@ public class DialogueManager : MonoBehaviour
     {
         if (isTyping)
         {
-            StopCoroutine(typingCoroutine);
-            typingCoroutine = null;
-            dialogueText.text = dialogueSequence[currentIndex].LocalizedText;
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+            }
+
+            // 直接拉满，瞬间显示全部文本和样式
+            if (dialogueText != null)
+            {
+                dialogueText.maxVisibleCharacters = dialogueText.textInfo.characterCount;
+            }
             isTyping = false;
             return true;
         }

@@ -1,13 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-[RequireComponent(typeof(Button))]
 public class BagCloseDialogueManagerTrigger : MonoBehaviour
 {
-    [Header("绑定背包")]
-    [Tooltip("拖入移动的背包面板（带有 RectTransform）")]
-    [SerializeField] private RectTransform bagRect;
+    [Header("绑定背包滑动/开关控制器")]
+    [Tooltip("拖入带有 SideScreenMove 脚本的背包对象")]
+    [SerializeField] private SideScreenMove bagController;
+
+    [Header("背包开关键（确保恢复显示）")]
+    [Tooltip("拖入开关背包的 Button，解决对话结束后按钮不显示的 Bug")]
+    [SerializeField] private GameObject bagOpenButton;
 
     [Header("目标对话组件")]
     [Tooltip("拖入挂载了台词的 DialogueManager")]
@@ -17,62 +19,56 @@ public class BagCloseDialogueManagerTrigger : MonoBehaviour
     [Tooltip("是否只触发一次")]
     [SerializeField] private bool triggerOnce = true;
 
-    [Header("判定容差 (像素)")]
-    [Tooltip("当距离初始隐藏位置小于该距离时，判定为已完全关闭")]
-    [SerializeField] private float closeThreshold = 5f;
-
-    private Button button;
-    private Vector2 closedPosition; // 记录背包完全收回时的坐标
     private bool hasTriggered = false;
-    private Coroutine waitCoroutine;
-
-    private void Awake()
-    {
-        button = GetComponent<Button>();
-    }
 
     private void Start()
     {
-        if (bagRect != null)
+        if (bagController != null)
         {
-            // 记录游戏刚开始时，背包在屏幕外的初始收回坐标
-            closedPosition = bagRect.anchoredPosition;
+            // 直接监听背包完全关闭的官方事件！既准又稳，保证动画和Mask全部关完
+            bagController.OnBagClosed.AddListener(OnBagFullyClosed);
+        }
+        else
+        {
+            Debug.LogError("[BagTrigger] 请指定 Bag Controller (SideScreenMove)！");
         }
 
-        button.onClick.AddListener(OnBagButtonClicked);
+        // 监听对话结束事件，强制把开关键重新点亮显示出来[cite: 13]
+        if (targetDialogueManager != null)
+        {
+            targetDialogueManager.onDialogueEnd.AddListener(OnDialogueFinished);
+        }
     }
 
-    private void OnBagButtonClicked()
+    private void OnDestroy()
+    {
+        if (bagController != null)
+        {
+            bagController.OnBagClosed.RemoveListener(OnBagFullyClosed);
+        }
+
+        if (targetDialogueManager != null)
+        {
+            targetDialogueManager.onDialogueEnd.RemoveListener(OnDialogueFinished);
+        }
+    }
+
+    /// <summary>
+    /// 背包完全收回到屏幕外并处理完 Mask 之后触发[cite: 19]
+    /// </summary>
+    private void OnBagFullyClosed()
     {
         if (triggerOnce && hasTriggered) return;
 
-        // 如果已经在监听中，不重复开启协程
-        if (waitCoroutine != null)
+        // 补刀保险：确保 Mask 被彻底关闭[cite: 19]
+        if (bagController.mask != null && bagController.mask.activeSelf)
         {
-            StopCoroutine(waitCoroutine);
+            bagController.mask.SetActive(false);
         }
 
-        waitCoroutine = StartCoroutine(WaitBagCycleRoutine());
-    }
-
-    private IEnumerator WaitBagCycleRoutine()
-    {
-        // 1. 等待背包离开初始位置（确认开始向屏幕内滑出了）
-        while (Vector2.Distance(bagRect.anchoredPosition, closedPosition) <= closeThreshold)
-        {
-            yield return null;
-        }
-
-        // 2. 轮询等待背包重新滑回到初始位置（确认完全收回屏幕外了）
-        while (Vector2.Distance(bagRect.anchoredPosition, closedPosition) > closeThreshold)
-        {
-            yield return null;
-        }
-
-        // 3. 标记已触发并启动对话
         hasTriggered = true;
-        waitCoroutine = null;
 
+        // 启动对话[cite: 13]
         if (targetDialogueManager != null)
         {
             if (!targetDialogueManager.gameObject.activeInHierarchy)
@@ -81,9 +77,19 @@ public class BagCloseDialogueManagerTrigger : MonoBehaviour
             }
             targetDialogueManager.StartDialogue();
         }
-        else
+    }
+
+    /// <summary>
+    /// 对话完全结束时触发（解决问题一）
+    /// </summary>
+    private void OnDialogueFinished()
+    {
+        // 强制重新激活背包按钮，防止被 DialogueManager 藏起来后没恢复
+        if (bagOpenButton != null)
         {
-            Debug.LogError("[BagTrigger] 未绑定 targetDialogueManager！");
+            bagOpenButton.SetActive(true);
+            Button btn = bagOpenButton.GetComponent<Button>();
+            if (btn != null) btn.interactable = true;
         }
     }
 }
