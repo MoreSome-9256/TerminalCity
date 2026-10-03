@@ -6850,6 +6850,7 @@ MonoBehaviour:
   nextButton: {fileID: 836675854}
   dialogueBackground: {fileID: 364977688}
   selectionUI: {fileID: 255973334}
+  roomPanel: {fileID: 2122119471}
   roomInfoPanel: {fileID: 1745917686}
   instabilityText: {fileID: 1188359758}
   descriptionText: {fileID: 1746418265}
@@ -9193,6 +9194,10 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   mask: {fileID: 1546104434}
+  onClosedOnceEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  triggerClosedEventOnce: 1
 --- !u!114 &389512282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49305,6 +49310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2122119471}
   - component: {fileID: 2122119472}
+  - component: {fileID: 2122119473}
   m_Layer: 5
   m_Name: RoomManager
   m_TagString: Untagged
@@ -49347,6 +49353,18 @@ MonoBehaviour:
   placeNumber: 1
   roomIDsInArea: 00000000010000000200000004000000050000000b0000000c000000
   currentRoomID: 0
+--- !u!225 &2122119473
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2122119470}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2124818895
 GameObject:
   m_ObjectHideFlags: 0

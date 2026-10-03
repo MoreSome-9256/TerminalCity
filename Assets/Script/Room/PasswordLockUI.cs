@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class PasswordLockUI : MonoBehaviour
 {
     public static PasswordLockUI Instance;
 
     [Header("UI 容器与组件")]
-    [Tooltip("弹窗面板根节点，平时关闭，调用时开启")]
     [SerializeField] private GameObject windowRoot;
     [SerializeField] private TMP_InputField passwordInput;
     [SerializeField] private TMP_Text errorHintText;
     [SerializeField] private Button submitButton;
     [SerializeField] private Button closeButton;
 
+    // --- 补全缺失的字段 ---
     [Header("多语言错误提示 Key")]
     [SerializeField] private string errorHintLocalizationKey = "UI_PASS_DENIED";
     [SerializeField] private string defaultErrorMsg = "ACCESS DENIED / 认证失败";
@@ -23,6 +24,7 @@ public class PasswordLockUI : MonoBehaviour
     private List<string> acceptedPasscodes = new List<string>();
     private bool caseSensitive;
     private Action onSuccessCallback;
+    private Action onCloseCallback;
 
     private void Awake()
     {
@@ -33,28 +35,15 @@ public class PasswordLockUI : MonoBehaviour
         }
         Instance = this;
 
-        if (submitButton != null)
-        {
-            submitButton.onClick.AddListener(CheckInput);
-        }
+        if (submitButton != null) submitButton.onClick.AddListener(CheckInput);
+        if (closeButton != null) closeButton.onClick.AddListener(CloseWindow);
+        if (passwordInput != null) passwordInput.onSubmit.AddListener((val) => CheckInput());
 
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(CloseWindow);
-        }
-
-        if (passwordInput != null)
-        {
-            passwordInput.onSubmit.AddListener((val) => CheckInput());
-        }
-
-        // 确保启动时窗口处于关闭状态
         CloseWindow();
     }
 
     private void Update()
     {
-        // 窗口处于开启状态时，允许按 ESC 键快速退出输入
         if (windowRoot != null && windowRoot.activeSelf)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -64,42 +53,55 @@ public class PasswordLockUI : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 打开密码锁并传入多语言可用密码库
-    /// </summary>
-    public void OpenLock(List<string> validCodes, bool isCaseSensitive, Action onSuccess)
+    public void OpenLock(List<string> validCodes, bool isCaseSensitive, Action onSuccess, Action onClose = null)
     {
         acceptedPasscodes = validCodes ?? new List<string>();
         caseSensitive = isCaseSensitive;
         onSuccessCallback = onSuccess;
+        onCloseCallback = onClose;
 
-        if (errorHintText != null)
-        {
-            errorHintText.gameObject.SetActive(false);
-        }
+        if (errorHintText != null) errorHintText.gameObject.SetActive(false);
+        if (passwordInput != null) passwordInput.text = string.Empty;
 
-        if (passwordInput != null)
-        {
-            passwordInput.text = string.Empty;
-        }
-
-        // 激活弹窗面板
         if (windowRoot != null)
         {
             windowRoot.SetActive(true);
         }
 
-        // 自动聚焦并拉起闪烁光标
+        // 延迟到当前帧渲染更新后拉起光标，确保焦点稳定生效
+        StartCoroutine(FocusInputFieldNextFrame());
+    }
+
+    private IEnumerator FocusInputFieldNextFrame()
+    {
+        // 1. 等待直到该帧的所有 UI 布局与激活流程完成
+        yield return new WaitForEndOfFrame();
+
         if (passwordInput != null)
         {
+            // 2. 核心：强制让全局 EventSystem 选中并锁定该 InputField
+            if (UnityEngine.EventSystems.EventSystem.current != null)
+            {
+                UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(
+                    passwordInput.gameObject,
+                    new UnityEngine.EventSystems.BaseEventData(UnityEngine.EventSystems.EventSystem.current)
+                );
+            }
+
+            // 3. 原生唤起与聚焦
             passwordInput.Select();
             passwordInput.ActivateInputField();
+
+            // 4. 重置光标位置
+            passwordInput.caretPosition = 0;
+            passwordInput.selectionStringAnchorPosition = 0;
+            passwordInput.selectionStringFocusPosition = 0;
+
+            // 5. 强制刷新 TMP 内部组件与网格渲染，确保即便文本为空也绘制光标
+            passwordInput.ForceLabelUpdate();
         }
     }
 
-    /// <summary>
-    /// 校验输入内容
-    /// </summary>
     public void CheckInput()
     {
         if (passwordInput == null) return;
@@ -122,8 +124,9 @@ public class PasswordLockUI : MonoBehaviour
 
         if (isCorrect)
         {
+            Action success = onSuccessCallback;
             CloseWindow();
-            onSuccessCallback?.Invoke();
+            success?.Invoke();
         }
         else
         {
@@ -132,6 +135,7 @@ public class PasswordLockUI : MonoBehaviour
         }
     }
 
+    // --- 补全缺失的辅助方法 ---
     private void ShowErrorFeedback(string msg)
     {
         if (errorHintText != null)
@@ -147,20 +151,23 @@ public class PasswordLockUI : MonoBehaviour
         }
     }
 
+    private string GetLocalizedText(string key, string fallback)
+    {
+        if (string.IsNullOrEmpty(key)) return fallback;
+        // 如果接入了多语言系统，可在此调用：
+        // return LocalizationManager.Instance.Get(key);
+        return fallback;
+    }
+
     public void CloseWindow()
     {
         if (windowRoot != null)
         {
             windowRoot.SetActive(false);
         }
-        onSuccessCallback = null;
-    }
 
-    private string GetLocalizedText(string key, string fallback)
-    {
-        if (string.IsNullOrEmpty(key)) return fallback;
-        // 对接本地化系统：
-        // return LocalizationManager.Instance.Get(key);
-        return fallback;
+        onCloseCallback?.Invoke();
+        onCloseCallback = null;
+        onSuccessCallback = null;
     }
 }

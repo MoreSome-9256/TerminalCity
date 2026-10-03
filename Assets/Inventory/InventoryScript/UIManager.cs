@@ -22,6 +22,10 @@ public class UIManager : MonoBehaviour
     [Header("Selection UI")]
     public GameObject selectionUI;
 
+    [Header("Room Canvas")]
+    [Tooltip("场景中全局渲染 Room 的 Canvas 物体或根容器")]
+    public RectTransform roomPanel;
+
     [Header("Room Info UI")]
     public GameObject roomInfoPanel;
     public TMP_Text instabilityText;

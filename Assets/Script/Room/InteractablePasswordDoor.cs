@@ -41,28 +41,24 @@ public class InteractablePasswordDoor : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void InteractWithDoor()
     {
+
         if (isUnlocked)
         {
-            Debug.Log("[Door] 门已解锁，无需再次输入。");
             return;
         }
 
         if (PasswordLockUI.Instance == null)
         {
-            Debug.LogError("[Door] 场景中缺少 PasswordLockUI 实例！");
             return;
         }
 
-        // 收集所有合法的有效密码
         List<string> validCodes = new List<string>();
 
-        // 1. 加入默认密码
         if (!string.IsNullOrEmpty(defaultPasscode))
         {
             validCodes.Add(defaultPasscode);
         }
 
-        // 2. 如果配置了本地化 Key，获取当前语种下的翻译文本
         if (!string.IsNullOrEmpty(passcodeLocalizationKey))
         {
             string localizedPasscode = GetLocalizedText(passcodeLocalizationKey, string.Empty);
@@ -72,7 +68,6 @@ public class InteractablePasswordDoor : MonoBehaviour, IPointerClickHandler
             }
         }
 
-        // 3. 加入预设的多语言别名（如繁体、英文等）
         foreach (var alias in passcodeAliases)
         {
             if (!string.IsNullOrEmpty(alias) && !validCodes.Contains(alias))
@@ -83,12 +78,29 @@ public class InteractablePasswordDoor : MonoBehaviour, IPointerClickHandler
 
         // 打开弹窗输入框并传入密码集合
         PasswordLockUI.Instance.OpenLock(validCodes, caseSensitive, OnPasswordCorrect);
+
+        // 找到同 Prefab 下的对话组件（无论是挂在同级还是根物体）
+        DialogForPrefab dialog = GetComponentInParent<DialogForPrefab>();
+        if (dialog == null) dialog = GetComponent<DialogForPrefab>();
+
+        // 打开密码锁：传入成功回调，以及不论何种方式退出都会调用的 onClose 回调
+        PasswordLockUI.Instance.OpenLock(
+            validCodes,
+            caseSensitive,
+            OnPasswordCorrect,
+            onClose: () => {
+                if (dialog != null)
+                {
+                    dialog.EndDialogue();
+                }
+            }
+        );
     }
 
     private void OnPasswordCorrect()
     {
         isUnlocked = true;
-        Debug.Log("[Door] 密码校验通过，触发解锁事件。");
+
         OnUnlockSuccess?.Invoke();
     }
 

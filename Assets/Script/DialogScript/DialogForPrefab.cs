@@ -210,24 +210,25 @@ public class DialogForPrefab : MonoBehaviour
         }
     }
 
-    private void EndDialogue()
+    // 将 private 改为 public
+    public void EndDialogue()
     {
         isDialogueActive = false;
+
+        if (typingCoroutine != null)
+            StopCoroutine(typingCoroutine);
 
         if (nextButton != null) nextButton.onClick.RemoveAllListeners();
         if (charNameText != null) charNameText.text = string.Empty;
         if (dialogueText != null) dialogueText.text = string.Empty;
 
-        // 建议：如果后面还要无缝衔接 DialogueManager，这里不要直接关掉父节点 dialogueUI
-        // 而是让负责真正退出对话的逻辑/最后一个脚本去关，或者只隐藏内容：
         if (charNameText != null) charNameText.gameObject.SetActive(false);
         if (dialogueText != null) dialogueText.gameObject.SetActive(false);
         if (nextButton != null) nextButton.gameObject.SetActive(false);
         if (characterImage != null) characterImage.gameObject.SetActive(false);
         if (background != null) background.SetActive(false);
 
-        // 如果确定整套对话彻底结束了才关 dialogueUI：
-        // dialogueUI.SetActive(false); 
+        if (dialogueUI != null) dialogueUI.SetActive(false);
 
         if (RoomManager.Instance != null && RoomManager.Instance.currentRoomID == 0)
         {
@@ -235,7 +236,6 @@ public class DialogForPrefab : MonoBehaviour
                 UIManager.Instance.selectionUI.SetActive(true);
         }
 
-        // 务必放在最后触发：确保当前对话数据已清理干净，下一个 Manager 启动时不会被打架
         onDialogueEnd?.Invoke();
     }
 
