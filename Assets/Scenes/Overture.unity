@@ -46092,7 +46092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   database: {fileID: 11400000, guid: 3dbce3f0c01adbb49abbca7ce97329e3, type: 2}
   placeNumber: 0
-  roomIDsInArea: e8030000f2030000
+  roomIDsInArea: e8030000e9030000f2030000
   currentRoomID: 1010
 --- !u!114 &1832659341
 MonoBehaviour:
