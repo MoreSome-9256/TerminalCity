@@ -2176,6 +2176,7 @@ GameObject:
   - component: {fileID: 9076754849005739736}
   - component: {fileID: 7673708562320002673}
   - component: {fileID: 5405452327175647835}
+  - component: {fileID: 8372229095616594646}
   m_Layer: 5
   m_Name: Room5
   m_TagString: Untagged
@@ -2263,7 +2264,19 @@ MonoBehaviour:
   connectedRoomIDs: f2030000
   onFirstEnter:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8372229095616594646}
+        m_TargetAssemblyTypeName: DialogForPrefab, Assembly-CSharp
+        m_MethodName: StartDialogue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5405452327175647835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2280,3 +2293,37 @@ MonoBehaviour:
   customDuration: 0.35
   customMagnitude: 15
   customFrequency: 50
+--- !u!114 &8372229095616594646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8065441329860795962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68fe5c668e4fce4b9c4ec2f94108885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueSequence:
+  - charName: "\u51DB/Lyn"
+    dialogueText: "\uFF01\uFF01"
+    characterSprite: {fileID: 21300000, guid: 102d29e95f8c6b44cab7e3c6f8ba1690, type: 3}
+  - charName: "\u51DB/Lyn"
+    dialogueText: "\u7B49\u7B49\u2014\u2014\uFF01"
+    characterSprite: {fileID: 21300000, guid: daa73eb3adfe59f438de2d7a34d0dadc, type: 3}
+  - charName: "\u51DB/Lyn"
+    dialogueText: "\u8FD9\u662F\u8C01\uFF1F\u662F\u5176\u4ED6\u5FD7\u613F\u8005\u5417\uFF1F\u662F\u514B\u7D22\u91CC\u5417\uFF1F"
+    characterSprite: {fileID: 21300000, guid: 102d29e95f8c6b44cab7e3c6f8ba1690, type: 3}
+  - charName: "\u51DB/Lyn"
+    dialogueText: "\u2026\u2026\u4E0D\u7BA1\u662F\u8C01\u3002\u8FFD\u4E0A\u53BB\u3002"
+    characterSprite: {fileID: 21300000, guid: a426c59362994fc4d923ee8dbdf7aae7, type: 3}
+  typingSpeed: 0.05
+  onDialogueStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  triggerOnce: 0
+  clickSound: {fileID: 0}

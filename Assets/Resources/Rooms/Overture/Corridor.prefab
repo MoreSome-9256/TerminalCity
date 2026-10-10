@@ -2892,7 +2892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomID: 1010
   defaultPosition: {x: 500, y: 50, z: 0}
-  connectedRoomIDs: e9030000
+  connectedRoomIDs: e9030000ea030000eb030000ec030000ed030000
   onFirstEnter:
     m_PersistentCalls:
       m_Calls: []

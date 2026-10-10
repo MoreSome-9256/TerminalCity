@@ -46093,7 +46093,7 @@ MonoBehaviour:
   database: {fileID: 11400000, guid: 3dbce3f0c01adbb49abbca7ce97329e3, type: 2}
   placeNumber: 0
   roomIDsInArea: e8030000e9030000ea030000eb030000ec030000ed030000f2030000
-  currentRoomID: 1005
+  currentRoomID: 1004
 --- !u!114 &1832659341
 MonoBehaviour:
   m_ObjectHideFlags: 0
