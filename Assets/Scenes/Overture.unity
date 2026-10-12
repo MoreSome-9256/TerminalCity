@@ -11340,6 +11340,9 @@ MonoBehaviour:
   onDialogueEnd:
     m_PersistentCalls:
       m_Calls: []
+  onDialogueStep:
+    m_PersistentCalls:
+      m_Calls: []
   startDelay: 0
   endDelay: 0
   targetButton: {fileID: 0}
@@ -16948,6 +16951,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueStep:
     m_PersistentCalls:
       m_Calls: []
   startDelay: 0
@@ -26918,6 +26924,9 @@ MonoBehaviour:
   onDialogueEnd:
     m_PersistentCalls:
       m_Calls: []
+  onDialogueStep:
+    m_PersistentCalls:
+      m_Calls: []
   startDelay: 0
   endDelay: 0
   targetButton: {fileID: 0}
@@ -30700,7 +30709,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1215353784
 Transform:
   m_ObjectHideFlags: 0
@@ -30760,6 +30769,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueStep:
     m_PersistentCalls:
       m_Calls: []
   startDelay: 0
@@ -41572,6 +41584,7 @@ GameObject:
   - component: {fileID: 1639807900}
   - component: {fileID: 1639807902}
   - component: {fileID: 1639807901}
+  - component: {fileID: 1639807903}
   m_Layer: 5
   m_Name: ViewPanel
   m_TagString: Untagged
@@ -41636,6 +41649,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1639807899}
   m_CullTransparentMesh: 1
+--- !u!114 &1639807903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639807899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39777298907ec8a47965be1c62a753e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sequencePrefab: {fileID: 3433718306470675031, guid: 51b79e858036aee4a9d81409339f26cf,
+    type: 3}
+  parentPanel: {fileID: 1639807900}
 --- !u!1 &1655112100
 GameObject:
   m_ObjectHideFlags: 0
@@ -45566,6 +45594,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDialogueStep:
+    m_PersistentCalls:
+      m_Calls: []
   startDelay: 0
   endDelay: 0
   targetButton: {fileID: 0}
@@ -48423,6 +48454,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDialogueStep:
+    m_PersistentCalls:
+      m_Calls: []
   startDelay: 0
   endDelay: 0
   targetButton: {fileID: 0}

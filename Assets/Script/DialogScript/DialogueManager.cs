@@ -67,6 +67,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Events")]
     public UnityEvent onDialogueStart;
     public UnityEvent onDialogueEnd;
+    public UnityEvent<int> onDialogueStep;
 
     [Header("Delay Settings")]
     [SerializeField] public float startDelay = 2f;
@@ -189,6 +190,7 @@ public class DialogueManager : MonoBehaviour
 
     private void UpdateDialogueUI()
     {
+        //Debug.Log($"<color=cyan>[DialogueManager]</color> 真正进入 UpdateDialogueUI，当前 currentIndex = {currentIndex}");
         // 切换角色名、立绘等
         charNameText.text = dialogueSequence[currentIndex].LocalizedName;
 
@@ -230,6 +232,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         typingCoroutine = StartCoroutine(TypeSentence(dialogueSequence[currentIndex].LocalizedText));
+        // ✨ 触发事件
+        onDialogueStep?.Invoke(currentIndex);
     }
 
     IEnumerator TypeSentence(string sentence)
