@@ -1,71 +1,87 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class RoomGlitchController : MonoBehaviour
 {
-    [Header("Shader ²ÎÊı")]
+    [Header("UI åŸç”Ÿæ•…éšœå¼ºåº¦")]
     [Range(0f, 1f)] public float glitchIntensity = 0f;
 
-    [Header("»ù´¡²ÄÖÊÇò£¨Ê¹ÓÃÉÏÃæµÄ UIAnalogGlitch_Multi£©")]
-    [SerializeField] private Material baseGlitchMaterial;
+    [Header("æŒ‡å®šéœ€è¦æŠ–åŠ¨çš„ UI (ç›´æ¥æ‹–å…¥ RectTransform)")]
+    [SerializeField] private RectTransform[] targetRects;
 
-    private Material runtimeMaterial;
-    private Graphic[] childGraphics;
+    private Vector2[] originalPositions;
+    private CanvasGroup[] canvasGroups;
 
     private void Awake()
     {
-        if (baseGlitchMaterial == null) return;
+        if (targetRects == null) return;
 
-        // ´´½¨Ò»¸ö¹²ÏíµÄÔËĞĞÊ±²ÄÖÊÊµÀı£¬±ÜÃâÎÛÈ¾ Project ×ÊÔ´
-        runtimeMaterial = new Material(baseGlitchMaterial);
+        originalPositions = new Vector2[targetRects.Length];
+        canvasGroups = new CanvasGroup[targetRects.Length];
 
-        // ÅúÁ¿·Ö·¢¸ø·¿¼ä Prefab ÏÂµÄËùÓĞ Image / RawImage
-        childGraphics = GetComponentsInChildren<Graphic>(true);
-        foreach (var graphic in childGraphics)
+        for (int i = 0; i < targetRects.Length; i++)
         {
-            graphic.material = runtimeMaterial;
-        }
+            if (targetRects[i] != null)
+            {
+                // è®°å½•åˆå§‹ä½ç½®
+                originalPositions[i] = targetRects[i].anchoredPosition;
 
-        UpdateShaderProperties();
+                // è‡ªåŠ¨æŒ‚è½½ CanvasGroup ç”¨äºæ§åˆ¶ç”µå¹³é—ªçƒ
+                canvasGroups[i] = targetRects[i].GetComponent<CanvasGroup>();
+                if (canvasGroups[i] == null)
+                {
+                    canvasGroups[i] = targetRects[i].gameObject.AddComponent<CanvasGroup>();
+                }
+            }
+        }
     }
 
     private void Update()
     {
-        // Íâ²¿¸Ä¶¯ intensity Ê±ÊµÊ±Í¬²½µ½ Shader
-        UpdateShaderProperties();
+        UpdateGlitchEffect();
     }
 
     public void SetGlitchIntensity(float intensity)
     {
         glitchIntensity = Mathf.Clamp01(intensity);
-        UpdateShaderProperties();
+        UpdateGlitchEffect();
     }
 
-    private void UpdateShaderProperties()
+    private void UpdateGlitchEffect()
     {
-        if (runtimeMaterial == null) return;
+        if (targetRects == null) return;
 
-        if (glitchIntensity <= 0.001f)
+        for (int i = 0; i < targetRects.Length; i++)
         {
-            runtimeMaterial.SetVector("_ScanLineJitter", Vector4.zero);
-            runtimeMaterial.SetVector("_VerticalJump", Vector4.zero);
-            runtimeMaterial.SetFloat("_HorizontalShake", 0f);
-            runtimeMaterial.SetVector("_ColorDrift", Vector4.zero);
-            return;
-        }
+            if (targetRects[i] == null) continue;
 
-        // °´ÕÕ´«ÈëÇ¿¶È¶¯Ì¬Ëõ·Å¸÷Ïî¹ÊÕÏ²ÎÊı[cite: 8]
-        runtimeMaterial.SetVector("_ScanLineJitter", new Vector2(0.04f * glitchIntensity, 0.1f));
-        runtimeMaterial.SetVector("_VerticalJump", new Vector2(0.08f * glitchIntensity, 0f));
-        runtimeMaterial.SetFloat("_HorizontalShake", 0.05f * glitchIntensity);
-        runtimeMaterial.SetVector("_ColorDrift", new Vector2(0.06f * glitchIntensity, 0f)); 
-    }
+            if (glitchIntensity <= 0.001f)
+            {
+                // æ¢å¤åŸçŠ¶
+                targetRects[i].anchoredPosition = originalPositions[i];
+                if (canvasGroups[i] != null) canvasGroups[i].alpha = 1f;
+                continue;
+            }
 
-    private void OnDestroy()
-    {
-        if (runtimeMaterial != null)
-        {
-            Destroy(runtimeMaterial);
+            // 1. æ¨¡æ‹Ÿ Horizontal Shake & ScanLine Jitter (é«˜é¢‘æ°´å¹³ä¸å‚ç›´æ’•è£‚)
+            float shakeX = Random.Range(-45f, 45f) * glitchIntensity;
+            float shakeY = Random.Range(-10f, 10f) * glitchIntensity;
+
+            // æ¨¡æ‹Ÿ Vertical Jump (å¶å°”å‡ºç°å¤§å¹…åº¦è·³è·ƒä½ç§»)
+            if (Random.value < 0.15f * glitchIntensity)
+            {
+                shakeX *= 2.5f;
+                shakeY += Random.Range(-40f, 40f) * glitchIntensity;
+            }
+
+            targetRects[i].anchoredPosition = originalPositions[i] + new Vector2(shakeX, shakeY);
+
+            // 2. æ¨¡æ‹Ÿ CRT ç”µå‹ä¸ç¨³å¼•èµ·çš„é—ªçƒæ„Ÿ
+            if (canvasGroups[i] != null)
+            {
+                // å¼ºåº¦è¶Šå¤§ï¼Œé€æ˜åº¦è·Œè½å¾—è¶Šç‹ 
+                canvasGroups[i].alpha = Random.Range(1f - glitchIntensity * 0.8f, 1f);
+            }
         }
     }
 }

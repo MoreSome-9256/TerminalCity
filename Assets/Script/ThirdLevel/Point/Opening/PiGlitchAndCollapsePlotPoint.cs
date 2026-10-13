@@ -1,58 +1,70 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class PiGlitchAndCollapsePlotPoint : PlotPoint
 {
-    [Header("UI »ù´¡×é¼ş")]
+    [Header("UI åŸºç¡€ç»„ä»¶")]
     [SerializeField] private TextMeshProUGUI fullScreenText;
-    [SerializeField] private CanvasGroup openingCanvasGroup; // Õû¸ö Opening ½ÚµãµÄ CanvasGroup
+    [SerializeField] private CanvasGroup openingCanvasGroup; // æ•´ä¸ª Opening èŠ‚ç‚¹çš„ CanvasGroup
+    [Tooltip("éœ€è¦é»‘å±æ—¶ä¸€å¹¶éšè—çš„èƒŒæ™¯å’Œå¤šè¾¹å½¢")]
+    [SerializeField] private GameObject backgroundObj;
+    [SerializeField] private GameObject centerGraphicObj;
 
-    [Header("¹ÊÕÏÅ¤ÇúÓëÀÏ¾ÉÏÔÊ¾Æ÷Ï¨ÆÁ")]
-    [Tooltip("¹ÒÔÚ Opening ¸ù½ÚµãÉÏµÄ RoomGlitchController")]
+    [Header("æ•…éšœæ‰­æ›²ä¸è€æ—§æ˜¾ç¤ºå™¨ç†„å±")]
+    [Tooltip("æŒ‚åœ¨ Opening æ ¹èŠ‚ç‚¹ä¸Šçš„ RoomGlitchController")]
     [SerializeField] private RoomGlitchController glitchController;
-    [Tooltip("ÀÏ¾ÉµçÊÓÏ¨ÆÁÊ±µÄ´ÌÑÛ°×Ïß/¹âµã£¨Image£¬ÑÕÉ«ÉèÎª´¿°×£©")]
+    [Tooltip("è€æ—§ç”µè§†ç†„å±æ—¶çš„åˆºçœ¼ç™½çº¿/å…‰ç‚¹ï¼ˆImageï¼Œé¢œè‰²è®¾ä¸ºçº¯ç™½ï¼‰")]
     [SerializeField] private RectTransform crtFlashLine;
-    [Tooltip("´¿ºÚ¹ı¶ÉÕÚÕÖ²ã£¨ÓÃÓÚ¹Ø»úºóµÄËÀºÚÓëµ­³ö£©")]
+    [Tooltip("çº¯é»‘è¿‡æ¸¡é®ç½©å±‚ï¼ˆç”¨äºå…³æœºåçš„æ­»é»‘ä¸æ·¡å‡ºï¼‰")]
     [SerializeField] private CanvasGroup fadeBlackCover;
 
-    [Header("ÒôÆµÉèÖÃ")]
+    [Header("éŸ³é¢‘è®¾ç½®")]
     [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip staticNoiseClip;      // µçÁ÷ÔëÔÓÒô
-    [SerializeField] private AudioClip crtTurnOffClip;        // CRT ¹Ø»ú¶ÏµçÉù/Ïû´Å±¬Òô£¨¿É¿Õ£©
+    [SerializeField] private AudioClip staticNoiseClip;      // ç”µæµå™ªæ‚éŸ³
+    [SerializeField] private AudioClip crtTurnOffClip;        // CRT å…³æœºæ–­ç”µå£°/æ¶ˆç£çˆ†éŸ³ï¼ˆå¯ç©ºï¼‰
 
-    [Header("´ò×Ö»ú¼«ËÙĞ§¹û")]
+    [Header("æ‰“å­—æœºæé€Ÿæ•ˆæœ")]
     [SerializeField] private int charactersPerStep = 6;
     [SerializeField] private float stepInterval = 0.01f;
     [SerializeField] private int zeroCount = 2500;
 
-    [Header("Ê±¼äÓë½Ú×à¿ØÖÆ")]
-    [Tooltip("´ò×ÖÍê³ÉÖÁ¶¨¸ñµÄÈ«³¤£¨Ãë£©")]
+    [Header("æ—¶é—´ä¸èŠ‚å¥æ§åˆ¶")]
+    [Tooltip("æ‰“å­—å®Œæˆè‡³å®šæ ¼çš„å…¨é•¿ï¼ˆç§’ï¼‰")]
     [SerializeField] private float freezeDuration = 1.8f;
-    [Tooltip("¹ÊÕÏ±¬·¢¶¶¶¯µÄÊ±³¤£¨Ãë£©")]
+    [Tooltip("æ•…éšœçˆ†å‘æŠ–åŠ¨çš„æ—¶é•¿ï¼ˆç§’ï¼‰")]
     [SerializeField] private float glitchBurstDuration = 0.45f;
-    [Tooltip("CRT¹Ø»ú¶¯»­Ê±³¤£¨Ãë£©")]
+    [Tooltip("CRTå…³æœºåŠ¨ç”»æ—¶é•¿ï¼ˆç§’ï¼‰")]
     [SerializeField] private float crtAnimDuration = 0.28f;
-    [Tooltip("¹Ø»úºó´¿ºÚËÀ¼ÅÍ£ÁôÊ±¼ä£¨Ãë£©")]
+    [Tooltip("å…³æœºåçº¯é»‘æ­»å¯‚åœç•™æ—¶é—´ï¼ˆç§’ï¼‰")]
     [SerializeField] private float blackHoldDuration = 0.8f;
-    [Tooltip("ºÚÆÁµ­³ö»Øµ½³¡¾°µÄ¹ı¶ÉÊ±³¤£¨Ãë£©")]
+    [Tooltip("é»‘å±æ·¡å‡ºå›åˆ°åœºæ™¯çš„è¿‡æ¸¡æ—¶é•¿ï¼ˆç§’ï¼‰")]
     [SerializeField] private float fadeToSceneDuration = 1.2f;
+
+    [SerializeField] private BGMManager openingBGM;
 
     private const string PI_128_DIGITS =
         "3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196";
 
+    public static event System.Action OnOpeningFinished;
+
     public override IEnumerator Execute()
     {
-        // ³õÊ¼×´Ì¬Òş²ØÌØĞ§ÓëÖØÖÃ
+        // åˆå§‹çŠ¶æ€éšè—ç‰¹æ•ˆä¸é‡ç½®
         if (crtFlashLine != null) crtFlashLine.gameObject.SetActive(false);
-        if (fadeBlackCover != null) fadeBlackCover.alpha = 0f;
+        if (fadeBlackCover != null)
+        {
+            fadeBlackCover.gameObject.SetActive(true); // ğŸ‘ˆ åŒæ ·ç¡®ä¿å®ƒæ˜¯å¼€å¯çš„
+            fadeBlackCover.alpha = 0f; // åªæ˜¯è®©å®ƒå˜é€æ˜ï¼Œè€Œä¸æ˜¯å…³æ‰å®ƒ
+        }
         if (glitchController != null) glitchController.SetGlitchIntensity(0f);
 
         if (fullScreenText != null) fullScreenText.gameObject.SetActive(true);
 
-        // 1. ²¥·ÅµçÁ÷³ÖĞøÔÓÒô
+        // 1. æ’­æ”¾ç”µæµæŒç»­æ‚éŸ³
         if (audioSource != null && staticNoiseClip != null)
         {
             audioSource.clip = staticNoiseClip;
@@ -60,7 +72,7 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
             audioSource.Play();
         }
 
-        // 2. ¹àÂú´¿Êı×Ö
+        // 2. çŒæ»¡çº¯æ•°å­—
         string fullContent = BuildTargetPiString();
         if (fullScreenText != null)
         {
@@ -69,7 +81,7 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
             fullScreenText.maxVisibleCharacters = 0;
         }
 
-        // 3. ¼«ËÙ´ò×Ö»ú¹àÈë£¨Ö±½ÓÊ¹ÓÃ×Ö·û´®³¤¶È£¬±ÜÃâ TMP textInfo Î´¾ÍĞ÷µ¼ÖÂËÀËø£©
+        // 3. æé€Ÿæ‰“å­—æœºçŒå…¥ï¼ˆç›´æ¥ä½¿ç”¨å­—ç¬¦ä¸²é•¿åº¦ï¼Œé¿å… TMP textInfo æœªå°±ç»ªå¯¼è‡´æ­»é”ï¼‰
         int totalChars = fullContent.Length;
         int currentVisible = 0;
 
@@ -84,7 +96,7 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
             if (stepInterval > 0.001f)
                 yield return new WaitForSeconds(stepInterval);
             else
-                yield return null; // Ã¿Ö¡¹àÈë
+                yield return null; // æ¯å¸§çŒå…¥
         }
 
         if (fullScreenText != null)
@@ -92,39 +104,55 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
             fullScreenText.maxVisibleCharacters = totalChars;
         }
 
-        //Debug.Log("<color=green>[PiGlitch]</color> ´ò×ÖÍê³É£¬½øÈë¶¨¸ñµ¹¼ÆÊ±£¡");
+        //Debug.Log("<color=green>[PiGlitch]</color> æ‰“å­—å®Œæˆï¼Œè¿›å…¥å®šæ ¼å€’è®¡æ—¶ï¼");
 
-        // 4. ¶¨¸ñÍ£Áô
+        // æ­¥éª¤ 2ï¼šæ•…éšœçˆ†å‘æˆ–å‡†å¤‡ CRT å…³æœºæ—¶ï¼Œåœæ‰èƒŒæ™¯éŸ³ä¹
+        if (openingBGM != null)
+        {
+            openingBGM.FadeOutBGM(0.3f); // å¿«é€Ÿæ·¡å‡ºï¼Œæˆ–è€…ç›´æ¥ openingBGM.StopBGM();
+        }
+
+        // 4. å®šæ ¼åœç•™
         yield return new WaitForSeconds(freezeDuration);
 
-        //Debug.Log("<color=yellow>[PiGlitch]</color> ¿ªÊ¼ Glitch ±¬·¢Óë CRT Ï¨ÆÁ£¡");
-
-        // 4. ¡¾½×¶ÎÒ»¡¿Shader ¹ÊÕÏ¾çÁÒ±¬·¢£¨ÕûÆÁÅ¤Çú¡¢É«²î¶¶¶¯£©
+        Debug.Log("<color=yellow>[PiGlitch]</color> æ­¥éª¤1ï¼šå¼€å§‹ Glitch çˆ†å‘ï¼");
+        // 4. ã€é˜¶æ®µä¸€ã€‘Shader æ•…éšœå‰§çƒˆçˆ†å‘
         yield return StartCoroutine(PlayShaderGlitchBurst());
 
-        // Í£Ö¹ÔÓÒô²¢²¥·Å CRT ¹Ø»úÒôĞ§
+        Debug.Log("<color=yellow>[PiGlitch]</color> æ­¥éª¤2ï¼šGlitch ç»“æŸï¼Œåœæ­¢éŸ³é¢‘ï¼Œå‡†å¤‡ CRT å…³æœºï¼");
         if (audioSource != null)
         {
             audioSource.Stop();
-            if (crtTurnOffClip != null)
-            {
-                audioSource.PlayOneShot(crtTurnOffClip);
-            }
+            if (crtTurnOffClip != null) audioSource.PlayOneShot(crtTurnOffClip);
         }
 
-        // 5. ¡¾½×¶Î¶ş¡¿ÀÏ¾É CRT ÏÔÊ¾Æ÷¹Ø»ú¶¯»­£¨´¹Ö±Ñ¹±â³ÉÁÁÏß -> Ë®Æ½ËõÎªµãÏûÊ§£©
+        Debug.Log("<color=yellow>[PiGlitch]</color> æ­¥éª¤3ï¼šå¼€å§‹æ’­æ”¾ CRT å…³æœºåŠ¨ç”»ï¼");
+        // 5. ã€é˜¶æ®µäºŒã€‘è€æ—§ CRT æ˜¾ç¤ºå™¨å…³æœºåŠ¨ç”»
         yield return StartCoroutine(PlayCrtTurnOffRoutine());
 
-        // 6. ¡¾½×¶ÎÈı¡¿´¿ºÚËÀ¼ÅÍ£Áô
+        Debug.Log("<color=yellow>[PiGlitch]</color> æ­¥éª¤4ï¼šCRT ç»“æŸï¼Œå…¨å±ç½®é»‘ï¼Œéšè—æ‰€æœ‰åº•å±‚å†…å®¹ï¼");
+        // 6. ã€é˜¶æ®µä¸‰ã€‘çº¯é»‘æ­»å¯‚åœç•™
         if (glitchController != null) glitchController.SetGlitchIntensity(0f);
-        if (fadeBlackCover != null) fadeBlackCover.alpha = 1f;
-        // °Ñµ×ÏÂµÄÎÄ×ÖºÍÍ¼ĞÎÒş²Ø£¬±ÜÃâµ­³öºÚÆÁÊ±Â©ÏÚ
-        if (fullScreenText != null) fullScreenText.gameObject.SetActive(false);
 
+        if (fadeBlackCover != null)
+        {
+            fadeBlackCover.gameObject.SetActive(true);
+            fadeBlackCover.alpha = 1f; // é»‘å±æ‹‰æ»¡
+        }
+
+        // âœ¨ æ ¸å¿ƒæ“ä½œï¼šå½»åº•é»‘å±ç¬é—´ï¼ŒæŠŠåº•ä¸‹çš„èƒŒæ™¯ã€å¤šè¾¹å½¢ã€æ–‡å­—å…¨éƒ¨å…³æ‰ï¼
+        if (fullScreenText != null) fullScreenText.gameObject.SetActive(false);
+        if (backgroundObj != null) backgroundObj.SetActive(false);
+        if (centerGraphicObj != null) centerGraphicObj.SetActive(false);
+
+        // æ­»å¯‚çº¯é»‘åœç•™ï¼ˆé»˜è®¤ 0.8sï¼‰
         yield return new WaitForSeconds(blackHoldDuration);
 
-        // 7. ¡¾½×¶ÎËÄ¡¿´¿ºÚÕÚÕÖÂıÂıµ­³ö£¬ÏÔÂ¶³ö±³ºóµÄÈ«¾Ö Scene
+        Debug.Log("<color=yellow>[PiGlitch]</color> æ­¥éª¤5ï¼šå¼€å§‹çº¯é»‘å¹•å¸ƒæ·¡å‡ºï¼Œå›åˆ°å¤§åœºæ™¯ï¼");
+        // 7. ã€é˜¶æ®µå››ã€‘æ•´ä½“æ·¡å‡ºï¼ˆæ­¤æ—¶åªæœ‰çº¯é»‘é®ç½©åœ¨æ·¡å‡ºï¼‰
         yield return StartCoroutine(FadeOutToGameScene());
+
+        Debug.Log("<color=green>[PiGlitch]</color> å…¨éƒ¨æ¼”å‡ºå®Œæ¯•ï¼");
     }
 
     private string BuildTargetPiString()
@@ -139,27 +167,37 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
     }
 
     /// <summary>
-    /// ½×¶ÎÒ»£ºµ÷ÓÃ RoomGlitchController ±¬·¢Å¤Çú
+    /// é˜¶æ®µä¸€ï¼šè°ƒç”¨ RoomGlitchController çˆ†å‘æ‰­æ›²ï¼ˆä½¿ç”¨ç»å¯¹æ—¶é—´ï¼Œé˜²æ­»é”ï¼‰
     /// </summary>
     private IEnumerator PlayShaderGlitchBurst()
     {
-        float elapsed = 0f;
-        while (elapsed < glitchBurstDuration)
+        // âœ¨ æ ¸å¿ƒæ”¹åŠ¨ï¼šç›´æ¥è®¡ç®—ç»“æŸæ—¶é—´ï¼Œä¸ç®¡ä¸­é—´ yield æ€ä¹ˆè·‘ï¼Œæ—¶é—´ä¸€åˆ°å¿…å‡ºå¾ªç¯ï¼
+        float endTime = Time.time + glitchBurstDuration;
+
+        while (Time.time < endTime)
         {
-            elapsed += Time.deltaTime;
-            // ÔÚ 0.4 ~ 1.0 Ö®¼ä¸ßÆµÌø¶¯Ç¿¶È£¬³ÊÏÖµçÆ½Ê§ÎÈµÄ¸ßÆµËºÁÑ
-            float currentIntensity = Random.Range(0.45f, 1.0f);
+            float currentIntensity = Random.Range(0.3f, 0.6f);
+
             if (glitchController != null)
             {
-                glitchController.SetGlitchIntensity(currentIntensity);
+                try
+                {
+                    glitchController.SetGlitchIntensity(currentIntensity);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"[PiGlitch] å¿½ç•¥å¼‚å¸¸: {e.Message}");
+                }
             }
 
             yield return new WaitForSeconds(0.04f);
         }
+
+        yield return null;
     }
 
     /// <summary>
-    /// ½×¶Î¶ş£ºÀÏ¾É CRT ¹Ø»úÊÕËõ¶¯»­
+    /// é˜¶æ®µäºŒï¼šè€æ—§ CRT å…³æœºæ”¶ç¼©åŠ¨ç”»
     /// </summary>
     private IEnumerator PlayCrtTurnOffRoutine()
     {
@@ -171,17 +209,17 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
         float t = 0f;
         float halfDuration = crtAnimDuration * 0.5f;
 
-        // 1. ´¹Ö±Ñ¹Ëõ£ºÉÏÏÂÑ¸ËÙÌ®Ëõ³ÉÒ»Ìõ¼«Õ­µÄ¸ßÁÁË®Æ½°×Ïß£¨Y ÖáËõĞ¡£¬X ±£³ÖÈ«ÆÁ£©
+        // 1. å‚ç›´å‹ç¼©ï¼šä¸Šä¸‹è¿…é€Ÿåç¼©æˆä¸€æ¡æçª„çš„é«˜äº®æ°´å¹³ç™½çº¿ï¼ˆY è½´ç¼©å°ï¼ŒX ä¿æŒå…¨å±ï¼‰
         while (t < halfDuration)
         {
             t += Time.deltaTime;
             float p = Mathf.Clamp01(t / halfDuration);
-            float curvedP = Mathf.Pow(p, 2); // µç×ÓÊø¶ÏµçµÄ¶ş´Î¼ÓËÙÖèËõ¸Ğ
+            float curvedP = Mathf.Pow(p, 2); // ç”µå­æŸæ–­ç”µçš„äºŒæ¬¡åŠ é€Ÿéª¤ç¼©æ„Ÿ
             crtFlashLine.localScale = new Vector3(1f, Mathf.Lerp(1f, 0.003f, curvedP), 1f);
             yield return null;
         }
 
-        // 2. Ë®Æ½ÊÕËõ£º°×ÏßÏòÖĞÑë¼²ËÙÌ®ËõÎªÒ»¸ö¹âµãËæÖ®Ï¨Ãğ£¨X ÖáËõĞ¡£©
+        // 2. æ°´å¹³æ”¶ç¼©ï¼šç™½çº¿å‘ä¸­å¤®ç–¾é€Ÿåç¼©ä¸ºä¸€ä¸ªå…‰ç‚¹éšä¹‹ç†„ç­ï¼ˆX è½´ç¼©å°ï¼‰
         t = 0f;
         while (t < halfDuration)
         {
@@ -195,22 +233,30 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
     }
 
     /// <summary>
-    /// ½×¶ÎËÄ£º´Ó´¿ºÚÆ½»¬µ­³ö£¬»Øµ½ÓÎÏ·´ó³¡¾°
+    /// é˜¶æ®µå››ï¼šæ•´ä¸ª Opening Prefab æ•´ä½“å¹³æ»‘æ·¡å‡ºï¼Œå½»åº•å›å½’ä¸»åœºæ™¯
     /// </summary>
     private IEnumerator FadeOutToGameScene()
     {
-        CanvasGroup targetGroup = fadeBlackCover != null ? fadeBlackCover : openingCanvasGroup;
-
-        if (targetGroup != null)
+        // æ ¸å¿ƒæ”¹åŠ¨ï¼šç›´æ¥æ·¡å‡ºæ•´ä¸ª Opening Prefab çš„æ ¹èŠ‚ç‚¹ CanvasGroup
+        if (openingCanvasGroup != null)
         {
             float elapsed = 0f;
+            float startAlpha = openingCanvasGroup.alpha;
+
             while (elapsed < fadeToSceneDuration)
             {
                 elapsed += Time.deltaTime;
-                targetGroup.alpha = Mathf.Lerp(1f, 0f, elapsed / fadeToSceneDuration);
+                openingCanvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsed / fadeToSceneDuration);
                 yield return null;
             }
-            targetGroup.alpha = 0f;
+
+            openingCanvasGroup.alpha = 0f;
+
+            // âœ¨ æ”¶å°¾ï¼šå½»åº•å…³é—­æ•´ä¸ª Opening Prefabï¼Œä¸ç•™ä»»ä½•èƒŒæ™¯æˆ–æ®‹ç•™ UI
+            openingCanvasGroup.gameObject.SetActive(false);
+            //Debug.Log("<color=green>[PiGlitch]</color> Opening Prefab å·²å®Œå…¨æ·¡å‡ºå¹¶å…³é—­ï¼Œåœºæ™¯æ— ç¼äº¤æ¥ï¼");
+            // å¹¿æ’­å¼€åœºå®Œæ¯•
+            OnOpeningFinished?.Invoke();
         }
     }
 }
