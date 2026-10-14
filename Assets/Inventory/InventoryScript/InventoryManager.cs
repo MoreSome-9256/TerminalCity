@@ -243,13 +243,14 @@ public class InventoryManager : MonoBehaviour
 
         // --- 对话逻辑 ---
         int itemID = slot.slotItem.itemNum;
-        if (itemDialogMap.TryGetValue(itemID, out UnityEvent dialogEvent))
+        if (dialogTriggerAfterInventory != null && bagController != null)
         {
-            pendingDialogEvent = dialogEvent;
+            // 直接把请求派发给 DialogTriggerAfterInventory
+            dialogTriggerAfterInventory.RequestTriggerByItemID(itemID, bagController);
         }
         else
         {
-            pendingDialogEvent = null;
+            Debug.LogWarning("[InventoryManager] dialogTriggerAfterInventory 或 bagController 未在 Inspector 赋值！");
         }
     }
 

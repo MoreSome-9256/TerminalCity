@@ -61,21 +61,38 @@ public class InventoryManager2 : MonoBehaviour
     /// </summary>
     public void AddItemToInventory(Item item)
     {
-        if (item == null || IsItemDisplayed(item)) return;
+        if (item == null) return;
 
-        // 统一通过 Inventory 添加
+        // 统一通过 Inventory 添加到数据层，确保任务和全局系统能查到
         myBag?.AddItem(item);
+
+        // 如果是特殊非合成物品，不生成合成背包的 UI
+        if (ShouldHideFromInventory(item)) return;
+
+        // 如果已经显示在 UI 上，不重复创建
+        if (IsItemDisplayed(item)) return;
 
         // 创建 UI
         CreateNewItem(item);
     }
 
     /// <summary>
-    /// 创建 UI slot
+    /// 判断物品是否应当在此合成背包中隐藏
+    /// （如果该物品是 Level1Data 且 itemType == 10，则不显示）
     /// </summary>
+    private bool ShouldHideFromInventory(Item item)
+    {
+        if (item is Level1Data l1Data && l1Data.itemType == 10)
+        {
+            return true;
+        }
+        return false;
+    }
+
     private void CreateNewItem(Item item)
     {
-        if (item == null || instance == null) return;
+        // 关键改动：如果为空，或者属于 itemType == 10 的特殊物品，直接拦截
+        if (item == null || instance == null || ShouldHideFromInventory(item)) return;
 
         Slot2 newSlot = Instantiate(slotPrefab, slotGrid.transform);
         newSlot.transform.SetParent(slotGrid.transform, false);
@@ -107,12 +124,17 @@ public class InventoryManager2 : MonoBehaviour
     {
         if (myBag == null) return;
 
-        // 获取当前背包实际存在的物品
+        // 获取当前背包实际存在的【非 10 类型】物品
         HashSet<int> currentItems = new HashSet<int>();
         foreach (var item in myBag.GetPickedItems())
-            currentItems.Add(item.itemNum);
+        {
+            if (item != null && !ShouldHideFromInventory(item))
+            {
+                currentItems.Add(item.itemNum);
+            }
+        }
 
-        // 1️⃣ 移除已经不在背包的 UI
+        // 1️⃣ 移除已经不在背包（或者变成了隐藏类型）的 UI
         for (int i = inventoryItems.Count - 1; i >= 0; i--)
         {
             Slot2 slot = inventoryItems[i].GetComponent<Slot2>();
@@ -124,11 +146,14 @@ public class InventoryManager2 : MonoBehaviour
             }
         }
 
-        // 2️⃣ 添加新增的 UI
+        // 2️⃣ 添加新增的 UI（跳过隐藏物品）
         foreach (var item in myBag.GetPickedItems())
         {
-            if (!displayedItemIds.Contains(item.itemNum))
-                CreateNewItem(item);
+            if (item != null && !ShouldHideFromInventory(item))
+            {
+                if (!displayedItemIds.Contains(item.itemNum))
+                    CreateNewItem(item);
+            }
         }
     }
 

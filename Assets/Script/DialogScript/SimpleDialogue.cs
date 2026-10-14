@@ -115,6 +115,12 @@ public class SimpleDialogue : MonoBehaviour
     }
     public void StartDialogue()
     {
+        // 0. 确保自身 GameObject 是激活的（防止协程无法启动）
+        if (!gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(true);
+        }
+
         bool hasButton = TryFindButton();
         nextButton.onClick.RemoveAllListeners();
         nextButton.onClick.AddListener(() =>
@@ -130,7 +136,6 @@ public class SimpleDialogue : MonoBehaviour
         }
         if (triggerOnce && hasTriggered)
         {
-            // 不再播放对话，但仍调用结束逻辑
             Debug.Log("Dialogue already triggered, skipping dialogue content.");
             EndDialogue();
             return;
@@ -140,14 +145,23 @@ public class SimpleDialogue : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(null);
 
-        charNameText.gameObject.SetActive(true);
-        dialogueText.gameObject.SetActive(true);
-        nextButton.gameObject.SetActive(true);
-        characterImage?.gameObject.SetActive(true);
+        // ✨ 核心修复 1：把对话框的父级节点拉起来（防止被 DialogueManager 随手关掉）
+        if (charNameText != null && charNameText.transform.parent != null)
+        {
+            charNameText.transform.parent.gameObject.SetActive(true);
+        }
+
+        // ✨ 核心修复 2：如果背景有单独的父节点或自身，一并确保开启
         if (background != null)
         {
             background.SetActive(true);
         }
+
+        // 激活子 UI
+        if (charNameText != null) charNameText.gameObject.SetActive(true);
+        if (dialogueText != null) dialogueText.gameObject.SetActive(true);
+        if (nextButton != null) nextButton.gameObject.SetActive(true);
+        if (characterImage != null) characterImage.gameObject.SetActive(true);
 
         onDialogueStart?.Invoke();
         isDialogueActive = true;
@@ -156,7 +170,6 @@ public class SimpleDialogue : MonoBehaviour
 
         hasTriggered = true;
     }
-
 
     private void ShowDialogueSegment(DialogueSegment segment)
     {
