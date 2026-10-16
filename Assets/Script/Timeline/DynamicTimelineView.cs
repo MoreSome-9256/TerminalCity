@@ -16,6 +16,9 @@ public class DynamicTimelineView : MonoBehaviour
     [SerializeField] private float maxItemSpacing = 220f;
     [SerializeField] private float timeElasticFactor = 35f;
 
+    [Header("主轴竖线两端外延长度 (像素)")]
+    [SerializeField] private float axisCapPadding = 25f; // 竖线在首尾节点各往外多冒出的长度
+
     /// <summary>
     /// 清空所有动态生成的节点（保留主竖线）
     /// </summary>
@@ -103,26 +106,30 @@ public class DynamicTimelineView : MonoBehaviour
             }
         }
 
-        // 7️⃣ 调整主轴竖线位置和长度
+        // 6. 调整主轴竖线位置和长度
         if (mainAxisLine != null)
         {
             mainAxisLine.gameObject.SetActive(true);
             mainAxisLine.SetAsFirstSibling();
 
-            float startY = yPositions[0];
-            float endY = yPositions[yPositions.Count - 1];
-            float lineHeight = Mathf.Abs(endY - startY);
+            float startY = yPositions[0];                  // 第一个节点中心 Y
+            float endY = yPositions[yPositions.Count - 1]; // 最后一个节点中心 Y
+            float distance = Mathf.Abs(endY - startY);
 
             if (sortedList.Count == 1)
             {
-                lineHeight = 60f;
-                mainAxisLine.sizeDelta = new Vector2(mainAxisLine.sizeDelta.x, lineHeight);
-                mainAxisLine.anchoredPosition = new Vector2(mainAxisLine.anchoredPosition.x, startY + 30f);
+                // 只有 1 个条目时的保底短竖线
+                float singleLineHeight = axisCapPadding * 2f;
+                mainAxisLine.sizeDelta = new Vector2(mainAxisLine.sizeDelta.x, singleLineHeight);
+                mainAxisLine.anchoredPosition = new Vector2(mainAxisLine.anchoredPosition.x, startY + axisCapPadding);
             }
             else
             {
-                mainAxisLine.sizeDelta = new Vector2(mainAxisLine.sizeDelta.x, lineHeight + 30f);
-                mainAxisLine.anchoredPosition = new Vector2(mainAxisLine.anchoredPosition.x, startY + 15f);
+                // 确保 MainAxisLine 的 Pivot Y 为 1（顶对齐）
+                // 竖线总长 = 节点跨度 + 上方外延 + 下方外延
+                mainAxisLine.sizeDelta = new Vector2(mainAxisLine.sizeDelta.x, distance + (axisCapPadding * 2f));
+                // 竖线顶部 Y = 第一个节点 Y + 上方外延
+                mainAxisLine.anchoredPosition = new Vector2(mainAxisLine.anchoredPosition.x, startY + axisCapPadding);
             }
         }
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class TimelineEventData
 {
-    [Tooltip("全局唯一事件ID，如 EV_IRIS_BUILD_TC")]
+    [Tooltip("全局唯一事件ID，如 EV_001")]
     public string id;
 
     [Tooltip("界面显示的日期文本，如 恒元216年4月13日")]
@@ -31,14 +31,18 @@ public class TimelineManager : MonoBehaviour
 {
     public static TimelineManager Instance { get; private set; }
 
-    [Header("UI 视图组件")]
-    [SerializeField] private DynamicTimelineView timelineView;
-
-    [Header("静态数据引用")]
-    [Tooltip("拖入刚才创建的 TimelineDatabase.asset")]
+    [Header("静态数据资产")]
+    [Tooltip("拖入 TimelineDatabase.asset")]
     [SerializeField] private TimelineDatabase database;
 
-    // 运行时状态管理（存档依然管玩家解锁了哪些）
+    [Header("主视图（可选）")]
+    [Tooltip("主界面 Scroll View 上的 DynamicTimelineView")]
+    [SerializeField] private DynamicTimelineView mainTimelineView;
+
+    // 所有当前活跃的视图列表（主视图、合成页小窗等）
+    private readonly List<DynamicTimelineView> registeredViews = new List<DynamicTimelineView>();
+
+    // 状态集合
     private HashSet<string> unlockedEventIds = new HashSet<string>();
     private HashSet<string> unreadEventIds = new HashSet<string>();
 
@@ -53,24 +57,64 @@ public class TimelineManager : MonoBehaviour
         }
         Instance = this;
 
-        // 可选：如果忘拖了，自动从 Resources 加载
+        // 如果 Inspector 没拖，自动尝试从 Resources 加载
         if (database == null)
         {
             database = Resources.Load<TimelineDatabase>("TimelineDatabase");
         }
 
         LoadData();
+
+        // 默认将主视图加入管理
+        if (mainTimelineView != null)
+        {
+            RegisterView(mainTimelineView);
+        }
     }
 
     private void OnEnable()
     {
-        // 打开面板时自动刷新 UI 渲染
-        RefreshView();
+        // 激活时刷新所有活跃视图
+        RefreshAllViews();
+    }
+
+    private void OnDisable()
+    {
+        // 离开面板时标记所有红点为已读
+        MarkAllAsRead();
+    }
+
+    #region 视图注册机制（供合成页小窗等动态挂载）
+
+    /// <summary>
+    /// 注册视图并立即刷新该视图
+    /// </summary>
+    public void RegisterView(DynamicTimelineView view)
+    {
+        if (view != null && !registeredViews.Contains(view))
+        {
+            registeredViews.Add(view);
+            RefreshSingleView(view);
+        }
     }
 
     /// <summary>
-    /// ✨ 外部核心调用：解锁一个新事件
-    /// 无论在哪捡到线索/合成成功，直接 TimelineManager.Instance.UnlockEvent("EV_XXX");
+    /// 注销视图
+    /// </summary>
+    public void UnregisterView(DynamicTimelineView view)
+    {
+        if (view != null && registeredViews.Contains(view))
+        {
+            registeredViews.Remove(view);
+        }
+    }
+
+    #endregion
+
+    #region 核心业务与刷新接口
+
+    /// <summary>
+    /// ✨ 外部核心调用：解锁一个新事件并广播刷新所有窗口
     /// </summary>
     public void UnlockEvent(string eventId)
     {
@@ -79,27 +123,52 @@ public class TimelineManager : MonoBehaviour
         if (!unlockedEventIds.Contains(eventId))
         {
             unlockedEventIds.Add(eventId);
-            unreadEventIds.Add(eventId); // 标记为未读（显示 NewPrompt）
+            unreadEventIds.Add(eventId);
             SaveData();
 
-            // 若当前时间轴界面正开着，立刻重画
-            if (gameObject.activeInHierarchy)
+            // 广播刷新大屏和小屏
+            RefreshAllViews();
+        }
+    }
+
+    /// <summary>
+    /// 保持旧方法名兼容，功能等同于刷新所有视图
+    /// </summary>
+    public void RefreshView()
+    {
+        RefreshAllViews();
+    }
+
+    /// <summary>
+    /// 刷新所有已注册的视图
+    /// </summary>
+    public void RefreshAllViews()
+    {
+        for (int i = registeredViews.Count - 1; i >= 0; i--)
+        {
+            if (registeredViews[i] != null)
             {
-                RefreshView();
+                RefreshSingleView(registeredViews[i]);
+            }
+            else
+            {
+                registeredViews.RemoveAt(i);
             }
         }
     }
 
-    public void RefreshView()
+    /// <summary>
+    /// 刷新单个视图渲染
+    /// </summary>
+    public void RefreshSingleView(DynamicTimelineView view)
     {
-        if (timelineView == null || database == null) return;
+        if (view == null || database == null) return;
 
-        // 统一从 ScriptableObject 数据库中读取
         var currentUnlocked = database.allEvents
             .Where(e => unlockedEventIds.Contains(e.id))
             .ToList();
 
-        timelineView.BuildTimeline(currentUnlocked, unreadEventIds);
+        view.BuildTimeline(currentUnlocked, unreadEventIds);
     }
 
     public void MarkAllAsRead()
@@ -110,6 +179,10 @@ public class TimelineManager : MonoBehaviour
             SaveData();
         }
     }
+
+    #endregion
+
+    #region 存档与读档
 
     private void SaveData()
     {
@@ -135,5 +208,54 @@ public class TimelineManager : MonoBehaviour
         }
     }
 
-    
+    #endregion
+
+    #region 编辑器测试
+
+    [ContextMenu("🗑️ 清空存档数据")]
+    public void ClearTestData()
+    {
+        unlockedEventIds.Clear();
+        unreadEventIds.Clear();
+        PlayerPrefs.DeleteKey(SAVE_KEY);
+        PlayerPrefs.Save();
+        RefreshAllViews();
+        Debug.Log("时间轴存档已重置清空！");
+    }
+
+    #endregion
+
+    [ContextMenu("🧪 预览当前 Database 中前 3 条事件")]
+    public void PreviewDatabaseFirstFew()
+    {
+        if (database == null || database.allEvents == null || database.allEvents.Count == 0)
+        {
+            Debug.LogWarning("请先在 TimelineDatabase.asset 里面手动添加至少 1 条事件！");
+            return;
+        }
+
+        int count = Mathf.Min(3, database.allEvents.Count);
+        var previewList = database.allEvents.Take(count).ToList();
+
+        unlockedEventIds.Clear();
+        unreadEventIds.Clear();
+        foreach (var ev in previewList)
+        {
+            unlockedEventIds.Add(ev.id);
+        }
+        unreadEventIds.Add(previewList[previewList.Count - 1].id);
+
+        // 🌟 关键优化：如果是编辑器模式，直接查找场景里所有的 DynamicTimelineView 一起画！
+        DynamicTimelineView[] allViewsInScene = FindObjectsOfType<DynamicTimelineView>(true);
+        foreach (var view in allViewsInScene)
+        {
+            if (!registeredViews.Contains(view))
+            {
+                registeredViews.Add(view);
+            }
+        }
+
+        RefreshAllViews();
+        Debug.Log($"成功在所有时间轴（主轴和小轴）上预览了 Database 中的前 {count} 条数据！");
+    }
 }
