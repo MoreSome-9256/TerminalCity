@@ -90,9 +90,18 @@ public class ItemOnWorld : MonoBehaviour, IPointerClickHandler
     }
     private void AddGraph()
     {
-        if (item != null && relationshipGraph != null)
+        // 改用静态单例，且打印一条明确的调试日志！
+        if (item != null)
         {
-            relationshipGraph.UnlockCharacterByLevel1Data(item);
+            if (RelationshipGraph.Instance != null)
+            {
+                Debug.Log($"[ItemOnWorld] 拾取了 {item.Name}，正在通知关系图解锁关联角色: {item.linkedCharacterName}");
+                RelationshipGraph.Instance.UnlockCharacterByLevel1Data(item);
+            }
+            else
+            {
+                Debug.LogError("[ItemOnWorld] 拾取物品时未找到 RelationshipGraph.Instance 单例！请确认场景中挂有 RelationshipGraph 且已激活。");
+            }
         }
     }
     private void AddDictionaryEntries()

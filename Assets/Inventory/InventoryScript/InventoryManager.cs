@@ -144,6 +144,11 @@ public class InventoryManager : MonoBehaviour
 
             // 保底把 isPicked 设 true（通常 AddItemToInventory 已设）
             level1Data.isPicked = true;
+            // 🌟 自动同步：只要加入背包且关联了角色，立即通知关系图解锁
+            if (RelationshipGraph.Instance != null && !string.IsNullOrEmpty(level1Data.linkedCharacterName))
+            {
+                RelationshipGraph.Instance.UnlockCharacterByLevel1Data(level1Data);
+            }
         }
 
         newItem.slotSynopsis.text = item.LocalizedItemInfo;
@@ -316,7 +321,20 @@ public class InventoryManager : MonoBehaviour
         foreach (var item in myBag.GetPickedItems())
         {
             if (!displayedItemIds.Contains(item.itemNum))
+            {
                 CreateNewItem(item);
+            }
+            else
+            {
+                // 🌟 如果背包已有该物品且是 Level1Data，保底确保关系图已解锁该角色
+                if (item is Level1Data level1Data && !string.IsNullOrEmpty(level1Data.linkedCharacterName))
+                {
+                    if (RelationshipGraph.Instance != null)
+                    {
+                        RelationshipGraph.Instance.UnlockCharacterByLevel1Data(level1Data);
+                    }
+                }
+            }
         }
     }
     public void RemoveItem(Item item)

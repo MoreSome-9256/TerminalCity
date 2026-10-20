@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,74 +7,103 @@ public class RelationshipGraph : MonoBehaviour
 {
     private LineManager lineManager;
 
-    [Header("È«¾ÖÊı¾İ")]
+    [Header("å…¨å±€æ•°æ®")]
     public GameData gameData;
 
-    [Header("½Úµã¸¸ÎïÌå")]
+    [Header("èŠ‚ç‚¹çˆ¶ç‰©ä½“")]
     public Transform nodesParent;
 
-    [Header("½ÚµãPrefab")]
+    [Header("èŠ‚ç‚¹Prefab")]
     public GameObject nodePrefab;
 
-    // ´æËùÓĞÒÑÉú³É½Úµã£¬±ÜÃâÖØ¸´Éú³É
     private Dictionary<string, CharacterNode> nodes = new Dictionary<string, CharacterNode>();
-    private static RelationshipGraph instance;
+    public static RelationshipGraph Instance { get; private set; }
 
     public List<CharacterNode> selectedNodes = new List<CharacterNode>();
     private HashSet<string> connectedPairs = new HashSet<string>();
+    private HashSet<string> unlockedCharacters = new HashSet<string>();
 
+    public IEnumerable<string> GetUnlockedCharacters() => unlockedCharacters;
+    public IEnumerable<string> GetConnectedPairs() => connectedPairs;
+
+    private const string SAVE_KEY_CHARS = "TC_RelGraph_UnlockedChars";
+    private const string SAVE_KEY_PAIRS = "TC_RelGraph_ConnectedPairs";
 
     private void Awake()
     {
         lineManager = FindObjectOfType<LineManager>();
-        if (instance != null)
+
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
+        Instance = this;
+    }
 
-        instance = this;
-        DontDestroyOnLoad(gameObject);
+    private void Start()
+    {
+        // å°è¯•ä»å­˜æ¡£æ¢å¤ä¹‹å‰è§£é”çš„è§’è‰²ä¸è¿çº¿
+        LoadGraphData();
     }
 
     /// <summary>
-    /// ¸ù¾İÍæ¼ÒÊ°È¡µ½µÄ Level1Data ½âËø½ÇÉ«½Úµã
+    /// æ ¹æ®ç©å®¶æ‹¾å–åˆ°çš„ Level1Data è§£é”è§’è‰²èŠ‚ç‚¹
     /// </summary>
-    /// <param name="data">Íæ¼ÒÊ°È¡µ½µÄ×ÊÁÏ</param>
     public void UnlockCharacterByLevel1Data(Level1Data data)
     {
-        if (string.IsNullOrEmpty(data.linkedCharacterName))
+        if (data == null || string.IsNullOrEmpty(data.linkedCharacterName))
         {
-            Debug.Log($"×ÊÁÏ¡¾{data.Name}¡¿²»¹ØÁªÈÎºÎ½ÇÉ«£¬ÎŞĞèÉú³É½Úµã¡£");
             return;
         }
 
-        if (nodes.ContainsKey(data.linkedCharacterName))
+        UnlockCharacterDirectly(data.linkedCharacterName);
+    }
+
+    /// <summary>
+    /// ç›´æ¥æ ¹æ®è§’è‰²åå­—è§£é”ç”ŸæˆèŠ‚ç‚¹ï¼ˆæ”¯æŒè¯»æ¡£ä¸å¤–éƒ¨è°ƒç”¨ï¼‰
+    /// </summary>
+    public void UnlockCharacterDirectly(string characterName)
+    {
+        if (string.IsNullOrEmpty(characterName) || nodes.ContainsKey(characterName)) return;
+
+        if (gameData == null || gameData.AllCharacters == null)
         {
-            Debug.Log($"½ÇÉ«¡¾{data.linkedCharacterName}¡¿½ÚµãÒÑ¾­Éú³É£¬ÎŞĞèÖØ¸´Éú³É¡£");
+            Debug.LogWarning("[RelationshipGraph] GameData æœªé…ç½®æˆ–ä¸ºç©ºï¼");
             return;
         }
 
-        // ´Ó GameData Àï²éÕÒ½ÇÉ«ĞÅÏ¢
-        CharacterInfo info = gameData.AllCharacters.Find(c => c.Name == data.linkedCharacterName);
+        CharacterInfo info = gameData.AllCharacters.Find(c => c.Name == characterName);
         if (info == null)
         {
-            Debug.LogWarning($"Î´ÔÚ GameData ÖĞÕÒµ½½ÇÉ«¡¾{data.linkedCharacterName}¡¿£¬Çë¼ì²é GameData ÉèÖÃ£¡");
+            Debug.LogWarning($"æœªåœ¨ GameData ä¸­æ‰¾åˆ°è§’è‰²ã€{characterName}ã€‘ï¼Œè¯·æ£€æŸ¥ GameData è®¾ç½®ï¼");
             return;
         }
 
-        // ÊµÀı»¯½Úµã
-        GameObject obj = Instantiate(nodePrefab, nodesParent);
-        var node = obj.GetComponent<CharacterNode>();
+        // è®°å½•å·²è§£é”
+        unlockedCharacters.Add(info.Name);
+        SaveGraphData();
 
-        // ³õÊ¼»¯½ÚµãĞÅÏ¢
-        node.Init(info);
+        // å®ä¾‹åŒ–èŠ‚ç‚¹
+        if (nodePrefab != null && nodesParent != null)
+        {
+            GameObject obj = Instantiate(nodePrefab, nodesParent);
+            var node = obj.GetComponent<CharacterNode>();
+            if (node != null)
+            {
+                node.Init(info);
+            }
+            nodes.Add(info.Name, node);
+        }
 
-        // °ÑĞÂ½Úµã¼ÓÈëÒÑÉú³É×Öµä
-        nodes.Add(info.Name, node);
-
-        //Debug.Log($"³É¹¦Éú³É½ÇÉ«½Úµã£º¡¾{info.Name}¡¿");
+        // é€šçŸ¥å°å›¾
+        var miniGraph = FindObjectOfType<MiniRelationshipGraph>();
+        if (miniGraph != null && miniGraph.gameObject.activeInHierarchy)
+        {
+            miniGraph.CreateMiniNodeIfNotExist(info.Name);
+        }
     }
+
     public void OnNodeClicked(CharacterNode node, bool isSelected)
     {
         if (isSelected)
@@ -88,13 +117,13 @@ public class RelationshipGraph : MonoBehaviour
         {
             selectedNodes.Remove(node);
         }
-
-        //Debug.Log($"µ±Ç°Ñ¡ÖĞµÄ½ÚµãÊı£º{selectedNodes.Count}");
     }
+
     private string GetPairKey(string a, string b)
     {
         return string.Compare(a, b) < 0 ? $"{a}|{b}" : $"{b}|{a}";
     }
+
     public void TryConnectSelectedNodes()
     {
         if (selectedNodes.Count != 2) return;
@@ -107,26 +136,35 @@ public class RelationshipGraph : MonoBehaviour
 
         if (connectedPairs.Contains(key))
         {
-            Debug.Log("Õâ¶Ô½ÇÉ«ÒÑ¾­Á¬½Ó¹ıÁË£¡");
+            Debug.Log("è¿™å¯¹è§’è‰²å·²ç»è¿æ¥è¿‡äº†ï¼");
             return;
         }
 
-        if (gameData.HasRelationship(nameA, nameB))
+        if (gameData != null && gameData.HasRelationship(nameA, nameB))
         {
-            // »ñÈ¡½ÚµãÊµ¼ÊµÄRectTransformÊµÀı
             RectTransform rtA = nodeA.GetComponent<RectTransform>();
             RectTransform rtB = nodeB.GetComponent<RectTransform>();
 
-            lineManager.DrawLineBetween(rtA, rtB);
+            if (lineManager != null)
+            {
+                lineManager.DrawLineBetween(rtA, rtB);
+            }
+
             connectedPairs.Add(key);
-            Debug.Log("Á¬½Ó³É¹¦£¡");
+            SaveGraphData();
+            Debug.Log("è¿æ¥æˆåŠŸï¼");
+
+            var miniGraph = FindObjectOfType<MiniRelationshipGraph>();
+            if (miniGraph != null && miniGraph.gameObject.activeInHierarchy)
+            {
+                miniGraph.CreateMiniLineIfNotExist(key);
+            }
         }
         else
         {
-            Debug.Log("Á¬½Ó´íÎó£¡´¥·¢³Í·£");
+            Debug.Log("è¿æ¥é”™è¯¯ï¼è§¦å‘æƒ©ç½š");
         }
 
-        // Çå³ıÑ¡Ôñ×´Ì¬...
         foreach (var node in selectedNodes)
         {
             node.SetSelectedVisual(false);
@@ -134,4 +172,66 @@ public class RelationshipGraph : MonoBehaviour
         }
         selectedNodes.Clear();
     }
+
+    #region å­˜æ¡£ä¸è¯»æ¡£
+
+    private void SaveGraphData()
+    {
+        PlayerPrefs.SetString(SAVE_KEY_CHARS, string.Join(",", unlockedCharacters));
+        PlayerPrefs.SetString(SAVE_KEY_PAIRS, string.Join(",", connectedPairs));
+        PlayerPrefs.Save();
+    }
+
+    private void LoadGraphData()
+    {
+        string charsStr = PlayerPrefs.GetString(SAVE_KEY_CHARS, "");
+        if (!string.IsNullOrEmpty(charsStr))
+        {
+            string[] charArray = charsStr.Split(',');
+            foreach (var charName in charArray)
+            {
+                if (!string.IsNullOrEmpty(charName))
+                {
+                    UnlockCharacterDirectly(charName);
+                }
+            }
+        }
+
+        string pairsStr = PlayerPrefs.GetString(SAVE_KEY_PAIRS, "");
+        if (!string.IsNullOrEmpty(pairsStr))
+        {
+            string[] pairArray = pairsStr.Split(',');
+            foreach (var pair in pairArray)
+            {
+                if (!string.IsNullOrEmpty(pair) && !connectedPairs.Contains(pair))
+                {
+                    connectedPairs.Add(pair);
+                    string[] parts = pair.Split('|');
+                    if (parts.Length == 2 && nodes.ContainsKey(parts[0]) && nodes.ContainsKey(parts[1]))
+                    {
+                        if (lineManager != null)
+                        {
+                            lineManager.DrawLineBetween(
+                                nodes[parts[0]].GetComponent<RectTransform>(),
+                                nodes[parts[1]].GetComponent<RectTransform>()
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [ContextMenu("ğŸ—‘ï¸ æ¸…ç©ºäººç‰©å…³ç³»å­˜æ¡£")]
+    public void ClearGraphSave()
+    {
+        PlayerPrefs.DeleteKey(SAVE_KEY_CHARS);
+        PlayerPrefs.DeleteKey(SAVE_KEY_PAIRS);
+        PlayerPrefs.Save();
+        unlockedCharacters.Clear();
+        connectedPairs.Clear();
+        Debug.Log("äººç‰©å…³ç³»å­˜æ¡£å·²é‡ç½®ï¼");
+    }
+
+    #endregion
 }
