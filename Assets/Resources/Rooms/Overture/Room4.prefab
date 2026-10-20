@@ -1197,7 +1197,7 @@ MonoBehaviour:
   OnUnlockSuccess:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5405452327175647835}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: RoomShakeTrigger, Assembly-CSharp
         m_MethodName: TriggerCanvasShake
         m_Mode: 1
@@ -2102,7 +2102,6 @@ GameObject:
   - component: {fileID: 861661400524278192}
   - component: {fileID: 9076754849005739736}
   - component: {fileID: 7673708562320002673}
-  - component: {fileID: 5405452327175647835}
   m_Layer: 5
   m_Name: Room4
   m_TagString: Untagged
@@ -2191,22 +2190,6 @@ MonoBehaviour:
   onFirstEnter:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5405452327175647835
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8065441329860795962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bdb70642a13f73459199cb5265a723f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useCustomSettings: 0
-  customDuration: 0.35
-  customMagnitude: 15
-  customFrequency: 50
 --- !u!1 &8157382327672210861
 GameObject:
   m_ObjectHideFlags: 0

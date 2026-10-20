@@ -247,10 +247,10 @@ TextureImporter:
       name: corridor3_7
       rect:
         serializedVersion: 2
-        x: 25
-        y: 19
-        width: 2629
-        height: 807
+        x: 746
+        y: 1019
+        width: 80
+        height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -260,6 +260,27 @@ TextureImporter:
       bones: []
       spriteID: 6778d2a1a057bbb41885cbd177e0e2b0
       internalID: -1595715754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: corridor3_8
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 19
+        width: 2648
+        height: 807
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7487fc5992bed74086e9893824d132f
+      internalID: -1241205272
       vertices: []
       indices: 
       edges: []
@@ -283,6 +304,7 @@ TextureImporter:
       corridor3_5: -1496599186
       corridor3_6: -1439702081
       corridor3_7: -1595715754
+      corridor3_8: -1241205272
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

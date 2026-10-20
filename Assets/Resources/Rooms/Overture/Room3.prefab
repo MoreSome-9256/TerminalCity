@@ -210,8 +210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f59a34881ee6734a979f55845da3782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minAlpha: 0.271
-  maxAlpha: 0.603
+  minAlpha: 0.289
+  maxAlpha: 0.625
   flickerSpeed: 1
   enableSpike: 0
   spikeChance: 0.05
@@ -1203,23 +1203,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueSequence:
   - charName: "\u3010\u5C4F\u5E55\u4FE1\u606F\u3011"
-    dialogueText: "\u5FD7\u613F\u8005 #404 \u4EFB\u52A1\u5931\u8D25\uFF0C\u5DF2\u6E05\u9664"
+    dialogueText: "\u5FD7\u613F\u8005 #402 \u8BB0\u5FC6\u6E05\u9664\u73AF\u8282\u672A\u5B8C\u5168\u6267\u884C\uFF0C\u73B0\u5DF2\u6267\u884C\u6E05\u9664\u7A0B\u5E8F"
     characterSprite: {fileID: 21300000, guid: 1e06dafc025147649a9a324a83f7048f, type: 3}
-  - charName: "\u51DB/Lyn"
-    dialogueText: "\uFF01\u4EC0\u4E48\u53EB\u201C\u5DF2\u6E05\u9664\u201D\u2026\u2026"
-    characterSprite: {fileID: 21300000, guid: b672f5c51e6213143bab79dd1117a2f2, type: 3}
-  - charName: "\u51DB/Lyn"
-    dialogueText: "\u4EFB\u52A1\u5931\u8D25\u7684\u8BDD\u5C31\u4F1A\u6B7B\u5417\uFF1F"
-    characterSprite: {fileID: 21300000, guid: cb1c6b2aeff36b247b9956134f3f4ff2, type: 3}
-  - charName: "\u51DB/Lyn"
-    dialogueText: "\u786E\u8BA4\u4E66\u4E0A\u2026\u2026\u53EA\u5B57\u4E0D\u63D0\u5931\u8D25\u7684\u4EE3\u4EF7\u3002"
-    characterSprite: {fileID: 21300000, guid: ee72c6fba5af9fa4e9c48f4aa13c7526, type: 3}
-  - charName: "\u51DB/Lyn"
-    dialogueText: "\u8FD9\u6839\u672C\u5C31\u662F\u9677\u9631\u3002\u4ECE\u5934\u5230\u5C3E\u90FD\u662F\u3002"
-    characterSprite: {fileID: 21300000, guid: ee72c6fba5af9fa4e9c48f4aa13c7526, type: 3}
-  - charName: "\u51DB/Lyn"
-    dialogueText: "\u5982\u679C\u5931\u8D25\u5C31\u662F\u6B7B\u2026\u2026\u90A3\u900F\u955C\u884C\u52A8\u5230\u5E95\u627F\u8BFA\u4E86\u4EC0\u4E48\uFF1F\u53C8\u5230\u5E95\u9690\u7792\u4E86\u591A\u5C11\uFF1F"
-    characterSprite: {fileID: 21300000, guid: 4472346d125dec64a8b9bea4b332bb28, type: 3}
   typingSpeed: 0.05
   onDialogueStart:
     m_PersistentCalls:
@@ -2043,7 +2028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   glitchIntensity: 0.019
-  baseGlitchMaterial: {fileID: 2100000, guid: a68ab677f7d526246a5babd23669ae2c, type: 2}
+  targetRects: []
 --- !u!1 &8157382327672210861
 GameObject:
   m_ObjectHideFlags: 0
