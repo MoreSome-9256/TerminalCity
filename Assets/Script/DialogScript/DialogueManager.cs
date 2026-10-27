@@ -102,13 +102,19 @@ public class DialogueManager : MonoBehaviour
     {
         charNameText.gameObject.SetActive(true);
         backgroundImage.gameObject.SetActive(true);
-        if(backgroundTransition != null)
+        if (backgroundTransition != null)
         {
             backgroundTransition.gameObject.SetActive(true);
         }
         dialogueText.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
-        characterImage.gameObject.SetActive(true);
+
+        // 🌟 修复：初始时先隐藏并置空立绘，防止上一句或预制体残留立绘在延迟期间闪现
+        if (characterImage != null)
+        {
+            characterImage.sprite = null;
+            characterImage.gameObject.SetActive(false);
+        }
 
         StartCoroutine(StartDialogueWithDelay());
     }
@@ -339,6 +345,13 @@ public class DialogueManager : MonoBehaviour
         charNameText.gameObject.SetActive(true);
         dialogueText.gameObject.SetActive(true);
         nextButton.gameObject.SetActive(true);
+
+        // 🌟 同样先重置立绘
+        if (characterImage != null)
+        {
+            characterImage.sprite = null;
+            characterImage.gameObject.SetActive(false);
+        }
 
         StartDialogue();
     }

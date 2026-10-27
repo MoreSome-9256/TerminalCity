@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c327de79474f9774a9351d6401ee079a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -941,7 +941,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &4006957819679552414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,7 +1175,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 1
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &5975318286567283972
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,7 +1564,7 @@ GameObject:
   - component: {fileID: 861661400524278192}
   - component: {fileID: 9076754849005739736}
   - component: {fileID: 7673708562320002673}
-  - component: {fileID: 6675558241813782357}
+  - component: {fileID: 7902761836365132486}
   m_Layer: 5
   m_Name: Room2
   m_TagString: Untagged
@@ -1650,7 +1652,10 @@ MonoBehaviour:
   onFirstEnter:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6675558241813782357
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &7902761836365132486
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1659,11 +1664,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8065441329860795962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e8eec270c25c5e4b8525bc1eb66ba11, type: 3}
+  m_Script: {fileID: 11500000, guid: de2b568d4aea3874dbeb4c08e0d9c9b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  glitchIntensity: 0.249
-  targetRects: []
+  intensity: 0.193
+  targetGraphics:
+  - {fileID: 4052593561387546610}
+  maxChromaticDisp: 0.025
 --- !u!1 &8157382327672210861
 GameObject:
   m_ObjectHideFlags: 0
@@ -1821,7 +1828,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &8780888341450358572
 GameObject:
   m_ObjectHideFlags: 0
@@ -1994,7 +2002,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 1
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &8895314336472424933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,7 +2180,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!114 &3241260305436944001
 MonoBehaviour:
   m_ObjectHideFlags: 0

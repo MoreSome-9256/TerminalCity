@@ -15,6 +15,8 @@ public class Room : MonoBehaviour
     public List<int> connectedRoomIDs = new List<int>();
     [Header("首次进入触发的事件列表")]
     public UnityEvent onFirstEnter;
+    [Header("离开房间时触发的事件列表")]
+    public UnityEvent onLeave; // ? 新增离开事件
 
     /// <summary>
     /// 点击房间内的门时调用
@@ -34,5 +36,12 @@ public class Room : MonoBehaviour
     public void TriggerGlobalDialog(string dialogID)
     {
         GlobalDialogManager.Instance?.TriggerDialogue(dialogID);
+    }
+    /// <summary>
+    /// 离开房间时调用
+    /// </summary>
+    public void LeaveRoom()
+    {
+        onLeave?.Invoke();
     }
 }

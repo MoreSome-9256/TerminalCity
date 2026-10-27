@@ -1037,8 +1037,6 @@ GameObject:
   - component: {fileID: 6134538033794965799}
   - component: {fileID: 6180648035728274822}
   - component: {fileID: 6682485338964480265}
-  - component: {fileID: 5002851883235062529}
-  - component: {fileID: 7696710860636435577}
   m_Layer: 5
   m_Name: Door1
   m_TagString: Untagged
@@ -1148,7 +1146,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7696710860636435577}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DialogForPrefab, Assembly-CSharp
         m_MethodName: StartDialogue
         m_Mode: 1
@@ -1177,87 +1175,6 @@ MonoBehaviour:
   - {fileID: 3214452456674007160}
   normalAlpha: 0.5
   hoverAlpha: 1
---- !u!114 &5002851883235062529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4004971833280950885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a05adc6eace99a4c8311569629414ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  passcodeLocalizationKey: 
-  defaultPasscode: "\u829D\u9EBB\u5F00\u95E8"
-  passcodeAliases: []
-  caseSensitive: 0
-  isUnlocked: 0
-  OnUnlockSuccess:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RoomShakeTrigger, Assembly-CSharp
-        m_MethodName: TriggerCanvasShake
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: DialogForPrefab, Assembly-CSharp
-        m_MethodName: StartDialogue
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
---- !u!114 &7696710860636435577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4004971833280950885}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e68fe5c668e4fce4b9c4ec2f94108885, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueSequence:
-  - charName: "\u3010\u7CFB\u7EDF\u63D0\u793A\u3011"
-    dialogueText: "\u8BF7\u8F93\u5165\u8BA4\u77E5\u5BC6\u94A5\uFF1A"
-    characterSprite: {fileID: 21300000, guid: 1e06dafc025147649a9a324a83f7048f, type: 3}
-  typingSpeed: 0.05
-  onDialogueStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onDialogueEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  triggerOnce: 0
-  clickSound: {fileID: 0}
 --- !u!1 &4006957819679552414
 GameObject:
   m_ObjectHideFlags: 0
@@ -2089,7 +2006,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 1
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
 --- !u!1 &8065441329860795962
 GameObject:
   m_ObjectHideFlags: 0
@@ -2188,6 +2105,9 @@ MonoBehaviour:
   defaultPosition: {x: -150, y: 650, z: 0}
   connectedRoomIDs: f2030000
   onFirstEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  onLeave:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &8157382327672210861

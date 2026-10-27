@@ -71,6 +71,7 @@ public class DialogForPrefab : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioClip clickSound;
+    [SerializeField] private float clickVolume = 0.3f;
     private AudioSource audioSource;
 
     private void Awake()
@@ -241,9 +242,11 @@ public class DialogForPrefab : MonoBehaviour
 
     private void PlayClickSound()
     {
+        if (!audioSource.enabled || !audioSource.gameObject.activeInHierarchy)
+            return;
         if (audioSource != null && clickSound != null)
         {
-            audioSource.PlayOneShot(clickSound);
+            audioSource.PlayOneShot(clickSound, clickVolume);
         }
     }
 }

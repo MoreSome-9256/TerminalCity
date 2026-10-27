@@ -692,7 +692,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1595715754, guid: 235b0491f3cded44eab39cf23a758fff, type: 3}
+  m_Sprite: {fileID: -1241205272, guid: 235b0491f3cded44eab39cf23a758fff, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -845,7 +845,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1595715754, guid: 235b0491f3cded44eab39cf23a758fff, type: 3}
+  m_Sprite: {fileID: -1241205272, guid: 235b0491f3cded44eab39cf23a758fff, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -983,7 +983,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1003
+          m_IntArgument: 1005
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1056,7 +1056,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1595715754, guid: 235b0491f3cded44eab39cf23a758fff, type: 3}
+  m_Sprite: {fileID: -1241205272, guid: 235b0491f3cded44eab39cf23a758fff, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2226,7 +2226,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
 --- !u!114 &7939394850877833766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2501,7 +2501,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1002
+          m_IntArgument: 1004
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2896,6 +2896,9 @@ MonoBehaviour:
   onFirstEnter:
     m_PersistentCalls:
       m_Calls: []
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7854622601859138874
 GameObject:
   m_ObjectHideFlags: 0
@@ -3241,7 +3244,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
 --- !u!114 &615362888861536586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3720,4 +3723,4 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}

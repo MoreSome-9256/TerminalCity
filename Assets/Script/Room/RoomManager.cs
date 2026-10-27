@@ -1,20 +1,20 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
     public static RoomManager Instance;
 
-    [Header("·¿¼äÊı¾İ¿â£¨ScriptableObject£©")]
+    [Header("æˆ¿é—´æ•°æ®åº“ï¼ˆScriptableObjectï¼‰")]
     public RoomDatabase database;
 
-    [Header("ÇøÓò±àºÅ")]
+    [Header("åŒºåŸŸç¼–å·")]
     public int placeNumber;
 
-    [Header("±¾ÇøÓò°üº¬µÄ·¿¼ä ID ÁĞ±í")]
+    [Header("æœ¬åŒºåŸŸåŒ…å«çš„æˆ¿é—´ ID åˆ—è¡¨")]
     public List<int> roomIDsInArea = new List<int>();
 
-    // ´æ´¢ÔËĞĞÊ±·¿¼äÊı¾İ
+    // å­˜å‚¨è¿è¡Œæ—¶æˆ¿é—´æ•°æ®
     private Dictionary<int, RoomState> roomStates = new Dictionary<int, RoomState>();
     //private Dictionary<int, Room> roomDict = new Dictionary<int, Room>();
 
@@ -24,7 +24,7 @@ public class RoomManager : MonoBehaviour
     public int currentRoomID = -1;
 
     private float chaosTickTimer = 0f;
-    // ¼ÇÂ¼×ßÀÈÉÏ´ÎÊÓ½ÇÎ»ÖÃ
+    // è®°å½•èµ°å»Šä¸Šæ¬¡è§†è§’ä½ç½®
     private Dictionary<int, Vector2> lastCorridorViewPositions = new Dictionary<int, Vector2>();
 
     private void Awake()
@@ -38,7 +38,7 @@ public class RoomManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        // ³õÊ¼»¯ÇøÓòÄÚËùÓĞ·¿¼äµÄÔËĞĞÊ±×´Ì¬
+        // åˆå§‹åŒ–åŒºåŸŸå†…æ‰€æœ‰æˆ¿é—´çš„è¿è¡Œæ—¶çŠ¶æ€
         /*foreach (int id in roomIDsInArea)
         {
             if (!roomStates.ContainsKey(id))
@@ -53,14 +53,14 @@ public class RoomManager : MonoBehaviour
                 int defaultInstability = 9500;
                 int threshold = 10000;
 
-                // Äã¿ÉÒÔÔÚÕâÀï×ö²îÒì»¯³õÊ¼»¯
+                // ä½ å¯ä»¥åœ¨è¿™é‡Œåšå·®å¼‚åŒ–åˆå§‹åŒ–
                 if (id == 11) defaultInstability = 9700;
                 if (id == 2) defaultInstability = 9900;
 
                 roomStates[id] = new RoomState(id, defaultInstability, threshold);
             }
         }
-        // Ä¬ÈÏ½âËø·¿¼ä 0
+        // é»˜è®¤è§£é”æˆ¿é—´ 0
         RoomInfo room0 = database.GetRoomInfo(0);
         if (room0 != null)
         {
@@ -75,7 +75,7 @@ public class RoomManager : MonoBehaviour
         if (currentRoomID >= 0 && PlayerChaos.Instance != null)
         {
             chaosTickTimer += Time.deltaTime;
-            if (chaosTickTimer >= 1f) // Ã¿ÃëÖ´ĞĞÒ»´Î
+            if (chaosTickTimer >= 1f) // æ¯ç§’æ‰§è¡Œä¸€æ¬¡
             {
                 chaosTickTimer = 0f;
                 int growth = PlayerChaos.Instance.GetRoomInstabilityGrowth();
@@ -85,79 +85,85 @@ public class RoomManager : MonoBehaviour
                     if (state != null)
                     {
                         state.instability += growth;
-                        Debug.Log($"·¿¼ä {state.roomID} Òò»ìÂÒ¶ÈÉÏÉı£¬+{growth} ¡ú {state.instability}");
-                        UpdateAreaInstability(); // ÇøÓòÆ½¾ùÄæºãÒ²¸üĞÂ
+                        Debug.Log($"æˆ¿é—´ {state.roomID} å› æ··ä¹±åº¦ä¸Šå‡ï¼Œ+{growth} â†’ {state.instability}");
+                        UpdateAreaInstability(); // åŒºåŸŸå¹³å‡é€†æ’ä¹Ÿæ›´æ–°
                     }
                 }
             }
         }
     }
     /// <summary>
-    /// ½øÈëÖ¸¶¨·¿¼ä
+    /// è¿›å…¥æŒ‡å®šæˆ¿é—´
     /// </summary>
     public void EnterRoom(int roomID)
     {
         RoomInfo info = database.GetRoomInfo(roomID);
         RoomState state = GetRoomState(roomID);
-        // ¼ì²éÄæºãÖµÊÇ·ñ´ïµ½ÁÙ½ç
+        // æ£€æŸ¥é€†æ’å€¼æ˜¯å¦è¾¾åˆ°ä¸´ç•Œ
         if (state != null && state.instability >= state.instabilityThreshold)
         {
-            Debug.Log($"·¿¼ä {roomID} ÒÑ´ïµ½ÁÙ½çÖµ£¬ÎŞ·¨½øÈë£¡");
+            Debug.Log($"æˆ¿é—´ {roomID} å·²è¾¾åˆ°ä¸´ç•Œå€¼ï¼Œæ— æ³•è¿›å…¥ï¼");
             if (GlobalDialogManager.Instance != null)
             {
                 GlobalDialogManager.Instance.TriggerDialogue("1000");
             }
-            return; // ×èÖ¹½øÈë
+            return; // é˜»æ­¢è¿›å…¥
         }
 
         if (info == null || info.prefab == null)
         {
-            //Debug.LogError($"·¿¼ä {roomID} ÔÚÊı¾İ¿âÖĞÃ»ÓĞÅäÖÃ prefab£¡");
+            //Debug.LogError($"æˆ¿é—´ {roomID} åœ¨æ•°æ®åº“ä¸­æ²¡æœ‰é…ç½® prefabï¼");
             return;
         }
 
         if (!info.unlocked)
         {
-            Debug.Log($"·¿¼ä {roomID} Î´½âËø£¬ÎŞ·¨½øÈë£¡");
+            Debug.Log($"æˆ¿é—´ {roomID} æœªè§£é”ï¼Œæ— æ³•è¿›å…¥ï¼");
             return;
         }
 
-        // Ğ¶ÔØµ±Ç°·¿¼ä
+        // å¸è½½å½“å‰æˆ¿é—´
         if (currentRoom != null)
         {
-            // Èç¹ûµ±Ç°·¿¼äÊÇ×ßÀÈ ¡ú ¼ÇÂ¼ UI ÊÓ½ÇÎ»ÖÃ
+            // ğŸŒŸ ç¦»å¼€æ—§æˆ¿é—´å‰ï¼Œè§¦å‘æ—§æˆ¿é—´çš„ onLeave äº‹ä»¶
+            Room oldRoomScript = currentRoom.GetComponent<Room>();
+            if (oldRoomScript != null)
+            {
+                oldRoomScript.LeaveRoom();
+            }
+            // å¦‚æœå½“å‰æˆ¿é—´æ˜¯èµ°å»Š â†’ è®°å½• UI è§†è§’ä½ç½®
             if (IsCorridor(currentRoomID))
             {
                 MapRoomNavigator nav = currentRoom.GetComponentInChildren<MapRoomNavigator>();
                 if (nav != null)
                 {
                     lastCorridorViewPositions[currentRoomID] = nav.GetCurrentTargetPosition();
-                    Debug.Log($"¼ÇÂ¼×ßÀÈ {currentRoomID} µÄ targetPosition£º{lastCorridorViewPositions[currentRoomID]}");
+                    Debug.Log($"è®°å½•èµ°å»Š {currentRoomID} çš„ targetPositionï¼š{lastCorridorViewPositions[currentRoomID]}");
                 }
             }
             Destroy(currentRoom);
         }
 
-        // ÊµÀı»¯ĞÂ·¿¼ä
+        // å®ä¾‹åŒ–æ–°æˆ¿é—´
         currentRoom = Instantiate(info.prefab, transform);
         Room roomScript = currentRoom.GetComponent<Room>();
         currentRoom.transform.localPosition = roomScript.defaultPosition;
         currentRoomID = roomID;
-        // Èç¹ûÊÇ×ßÀÈ£¬²¢ÇÒÖ®Ç°¼ÇÂ¼¹ı ¡ú »Ö¸´Î»ÖÃ
+        // å¦‚æœæ˜¯èµ°å»Šï¼Œå¹¶ä¸”ä¹‹å‰è®°å½•è¿‡ â†’ æ¢å¤ä½ç½®
         if (IsCorridor(roomID) && lastCorridorViewPositions.TryGetValue(roomID, out Vector2 savedPos))
         {
             MapRoomNavigator nav = currentRoom.GetComponentInChildren<MapRoomNavigator>();
             if (nav != null)
             {
-                nav.hasRestoredPosition = true;   // ¸æËßËü±ğÔÙ×ßÄ¬ÈÏ startPosition
+                nav.hasRestoredPosition = true;   // å‘Šè¯‰å®ƒåˆ«å†èµ°é»˜è®¤ startPosition
                 nav.MoveToPosition(savedPos, immediate: true);
-                Debug.Log($"»Ö¸´×ßÀÈ {roomID} µÄ targetPosition£º{savedPos}");
+                Debug.Log($"æ¢å¤èµ°å»Š {roomID} çš„ targetPositionï¼š{savedPos}");
             }
         }
 
         else
         {
-            // ×ßÄ¬ÈÏ³õÊ¼»¯Âß¼­
+            // èµ°é»˜è®¤åˆå§‹åŒ–é€»è¾‘
             currentRoom.transform.localPosition = roomScript.defaultPosition;
         }
         ItemOnWorld[] items = currentRoom.GetComponentsInChildren<ItemOnWorld>(true);
@@ -165,24 +171,24 @@ public class RoomManager : MonoBehaviour
         {
             if (worldItem.item is Level1Data level1Data)
             {
-                // ¸ù¾İÊı¾İ¶ÔÏóµÄ isPicked À´¾ö¶¨ÊÇ·ñÏÔÊ¾
+                // æ ¹æ®æ•°æ®å¯¹è±¡çš„ isPicked æ¥å†³å®šæ˜¯å¦æ˜¾ç¤º
                 worldItem.gameObject.SetActive(!level1Data.isPicked);
             }
         }
 
-        //Debug.Log($"½øÈë·¿¼ä {roomID}");
-        // ¸üĞÂ»ìÂÒ¶ÈÂß¼­
+        //Debug.Log($"è¿›å…¥æˆ¿é—´ {roomID}");
+        // æ›´æ–°æ··ä¹±åº¦é€»è¾‘
         if (state != null)
         {
             PlayerChaos.Instance.OnEnterRoom(state);
-            // ¼ì²éÊÇ·ñÊ×´Î½øÈë
+            // æ£€æŸ¥æ˜¯å¦é¦–æ¬¡è¿›å…¥
             if (!state.hasEntered)
             {
                 state.hasEntered = true;
                 TriggerRoomFirstEnterEvent(roomID);
             }
         }
-        // ·¿¼äÇĞ»»Ê±¸üĞÂ selectionUI
+        // æˆ¿é—´åˆ‡æ¢æ—¶æ›´æ–° selectionUI
         if (GlobalDialogManager.Instance != null && GlobalDialogManager.Instance.selectionUI != null)
         {
             GlobalDialogManager.Instance.selectionUI.SetActive(roomID == 0);
@@ -191,12 +197,12 @@ public class RoomManager : MonoBehaviour
     private bool IsCorridor(int roomID)
     {
         RoomInfo info = database.GetRoomInfo(roomID);
-        return info != null && info.isCorridor; // ÄãĞèÒªÔÚ RoomInfo Àï¼Ó¸ö bool ±ê¼Ç×ßÀÈ
+        return info != null && info.isCorridor; // ä½ éœ€è¦åœ¨ RoomInfo é‡ŒåŠ ä¸ª bool æ ‡è®°èµ°å»Š
     }
     private void TriggerRoomFirstEnterEvent(int roomID)
     {
-        Debug.Log($"·¿¼ä {roomID} Ê×´Î½øÈë£¬´¥·¢ÊÂ¼ş£¡");
-        // Èç¹ûÒªÔÚ·¿¼ä prefab Àï¶¨ÒåÊÂ¼ş£¬¿ÉÒÔÕâÑù£º
+        Debug.Log($"æˆ¿é—´ {roomID} é¦–æ¬¡è¿›å…¥ï¼Œè§¦å‘äº‹ä»¶ï¼");
+        // å¦‚æœè¦åœ¨æˆ¿é—´ prefab é‡Œå®šä¹‰äº‹ä»¶ï¼Œå¯ä»¥è¿™æ ·ï¼š
         Room room = currentRoom.GetComponent<Room>();
         if (room != null)
         {
@@ -205,7 +211,7 @@ public class RoomManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ½âËø·¿¼ä
+    /// è§£é”æˆ¿é—´
     /// </summary>
     public void UnlockRoom(int roomID)
     {
@@ -213,12 +219,12 @@ public class RoomManager : MonoBehaviour
         if (info != null && !info.unlocked)
         {
             info.unlocked = true;
-            Debug.Log($"·¿¼ä {roomID} ÒÑ½âËø£¡");
+            Debug.Log($"æˆ¿é—´ {roomID} å·²è§£é”ï¼");
         }
     }
 
     /// <summary>
-    /// ¼ì²é·¿¼äÊÇ·ñ½âËø
+    /// æ£€æŸ¥æˆ¿é—´æ˜¯å¦è§£é”
     /// </summary>
     public bool IsUnlocked(int roomID)
     {
@@ -226,7 +232,7 @@ public class RoomManager : MonoBehaviour
         return info != null && info.unlocked;
     }
     /// <summary>
-    /// Ìá¸ßÄ³¸ö·¿¼äµÄÄæºãÖµ
+    /// æé«˜æŸä¸ªæˆ¿é—´çš„é€†æ’å€¼
     /// </summary>
     public void IncreaseInstability(int roomID, int value)
     {
@@ -235,15 +241,15 @@ public class RoomManager : MonoBehaviour
             state.instability += value;
             if (state.instability >= state.instabilityThreshold)
             {
-                Debug.Log($"·¿¼ä {roomID} ÒÑ´ïµ½ÁÙ½çÖµ£¬ÎŞ·¨ÔÙ´Î½øÈë£¡");
+                Debug.Log($"æˆ¿é—´ {roomID} å·²è¾¾åˆ°ä¸´ç•Œå€¼ï¼Œæ— æ³•å†æ¬¡è¿›å…¥ï¼");
             }
             UpdateAreaInstability();
-            // Ë¢ĞÂµØÍ¼ UI
+            // åˆ·æ–°åœ°å›¾ UI
             FindObjectOfType<MapUIController>()?.RefreshMap();
         }
     }
     /// <summary>
-    /// ¼ÆËã±¾ÇøÓòµÄÆ½¾ùÄæºãÖµ
+    /// è®¡ç®—æœ¬åŒºåŸŸçš„å¹³å‡é€†æ’å€¼
     /// </summary>
     public void UpdateAreaInstability()
     {
@@ -260,7 +266,7 @@ public class RoomManager : MonoBehaviour
         }
 
         AreaInstability = (count > 0) ? total / count : 0f;
-        Debug.Log($"ÇøÓòÆ½¾ùÄæºãÖµ: {AreaInstability}");
+        Debug.Log($"åŒºåŸŸå¹³å‡é€†æ’å€¼: {AreaInstability}");
     }
     public RoomState GetRoomState(int roomID)
     {
@@ -271,10 +277,10 @@ public class RoomManager : MonoBehaviour
         //Debug.Log("GetInstabilityColor");
         int tmp = (instability - 9500) > 0 ? (instability - 9500) : 0;
         tmp = tmp > 500 ? 500 : tmp;
-        // ¹éÒ»»¯ 0~1
+        // å½’ä¸€åŒ– 0~1
         float t = Mathf.Clamp01((float)tmp / 500);
 
-        // À¶µ½ºìµÄ½¥±ä
+        // è“åˆ°çº¢çš„æ¸å˜
         Color low = Color.white;
         Color high = Color.red;
 
@@ -282,15 +288,15 @@ public class RoomManager : MonoBehaviour
     }
     public string GetRoomName(int roomID)
     {
-        // ÓÅÏÈ´ÓÊı¾İ¿âÀïÈ¡
+        // ä¼˜å…ˆä»æ•°æ®åº“é‡Œå–
         RoomInfo info = database.GetRoomInfo(roomID);
         if (info != null && !string.IsNullOrEmpty(info.roomName))
             return info.roomName;
 
-        // Èç¹ûÊı¾İ¿âÀïÃ»Åä£¬¾ÍÍË»Øµ½³¡¾°µÄ Room
+        // å¦‚æœæ•°æ®åº“é‡Œæ²¡é…ï¼Œå°±é€€å›åˆ°åœºæ™¯çš„ Room
         //if (roomDict.TryGetValue(roomID, out Room room))
         //    return room.roomName;
 
-        return $"·¿¼ä{roomID}"; // fallback
+        return $"æˆ¿é—´{roomID}"; // fallback
     }
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 471108068879476332}
   - component: {fileID: 5751356124939773834}
   - component: {fileID: 4052593561387546610}
+  - component: {fileID: 6273367733103671381}
   m_Layer: 5
   m_Name: Ground
   m_TagString: Untagged
@@ -68,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c327de79474f9774a9351d6401ee079a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -86,6 +87,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6273367733103671381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226471128514983080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de2b568d4aea3874dbeb4c08e0d9c9b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intensity: 0.152
+  targetGraphics:
+  - {fileID: 4052593561387546610}
+  maxChromaticDisp: 0.0254
 --- !u!1 &908512206110280325
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f59a34881ee6734a979f55845da3782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minAlpha: 0.271
+  minAlpha: 0.256
   maxAlpha: 0.603
   flickerSpeed: 1
   enableSpike: 0
@@ -271,7 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c327de79474f9774a9351d6401ee079a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -394,7 +411,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &2674966339491958842
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,7 +1142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueSequence:
   - charName: "\u3010\u5C4F\u5E55\u4FE1\u606F\u3011"
-    dialogueText: "\u5FD7\u613F\u8005 #404 \u4EFB\u52A1\u5931\u8D25\uFF0C\u5DF2\u6E05\u9664"
+    dialogueText: "\u5FD7\u613F\u8005 #404 \u4EFB\u52A1\u5931\u8D25\uFF0C\u5DF2\u6E05\u9664\u3002"
     characterSprite: {fileID: 21300000, guid: 1e06dafc025147649a9a324a83f7048f, type: 3}
   - charName: "\u51DB/Lyn"
     dialogueText: "\uFF01\u4EC0\u4E48\u53EB\u201C\u5DF2\u6E05\u9664\u201D\u2026\u2026"
@@ -1149,7 +1167,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 1
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &5046866528359387984
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,7 +1626,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &6814152486825763241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1845,7 +1865,7 @@ GameObject:
   - component: {fileID: 861661400524278192}
   - component: {fileID: 9076754849005739736}
   - component: {fileID: 7673708562320002673}
-  - component: {fileID: 5405452327175647835}
+  - component: {fileID: 2254532558389812343}
   m_Layer: 5
   m_Name: Room1
   m_TagString: Untagged
@@ -1934,7 +1954,10 @@ MonoBehaviour:
   onFirstEnter:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5405452327175647835
+  onLeave:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2254532558389812343
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1943,13 +1966,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8065441329860795962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bdb70642a13f73459199cb5265a723f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e8eec270c25c5e4b8525bc1eb66ba11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useCustomSettings: 0
-  customDuration: 0.35
-  customMagnitude: 15
-  customFrequency: 50
+  glitchIntensity: 0
+  targetRects: []
 --- !u!1 &8157382327672210861
 GameObject:
   m_ObjectHideFlags: 0
