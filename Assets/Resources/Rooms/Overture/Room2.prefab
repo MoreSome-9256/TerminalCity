@@ -1843,6 +1843,7 @@ GameObject:
   - component: {fileID: 7968701827413760566}
   - component: {fileID: 8975692792071472278}
   - component: {fileID: 1541594723306763449}
+  - component: {fileID: 6877199011066119698}
   m_Layer: 5
   m_Name: Paper
   m_TagString: Untagged
@@ -2004,6 +2005,20 @@ MonoBehaviour:
   triggerOnce: 1
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
   clickVolume: 0.3
+--- !u!114 &6877199011066119698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8780888341450358572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b174b7a3ab20f2145bf5204fcb210a83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flagToSet: EXPLORED_ROOM_403
+  triggerOnce: 1
 --- !u!1 &8895314336472424933
 GameObject:
   m_ObjectHideFlags: 0

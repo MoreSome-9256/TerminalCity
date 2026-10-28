@@ -1,49 +1,64 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events; // å¼•å…¥ UnityEvent
 
 public class MapMoveButton : MonoBehaviour
 {
-    [Header("Î¨Ò»¼ÇÒä Key")]
-    [Tooltip("Îªµ±Ç°×ßÀÈ/µØÍ¼ÆğÒ»¸öÎ¨Ò»Ãû×Ö£¨ÀıÈç Corridor_4F£©£¬ÓÃÓÚ¼ÇÂ¼ÉÏ´ÎÀë¿ªÊ±µÄÎ»ÖÃ")]
+    public enum MoveAxis
+    {
+        XAxis,
+        YAxis
+    }
+
+    [Header("ç§»åŠ¨è½´å‘è®¾ç½®")]
+    [Tooltip("é€‰æ‹©æœ¬æ¬¡å¹³ç§»æ§åˆ¶çš„æ˜¯ X è½´è¿˜æ˜¯ Y è½´ï¼Œæœªé€‰ä¸­çš„è½´å°†ä¸¥æ ¼ä¿æŒå½“å‰å€¼ä¸å˜")]
+    [SerializeField] private MoveAxis moveAxis = MoveAxis.XAxis;
+
+    [Header("å”¯ä¸€è®°å¿† Key")]
+    [Tooltip("ä¸ºå½“å‰èµ°å»Š/åœ°å›¾èµ·ä¸€ä¸ªå”¯ä¸€åå­—ï¼ˆä¾‹å¦‚ Corridor_4Fï¼‰ï¼Œç”¨äºè®°å½•ä¸Šæ¬¡ç¦»å¼€æ—¶çš„ä½ç½®")]
     [SerializeField] private string mapMemoryKey = "Corridor_Default";
 
-    [Header("ÒÆ¶¯Ä¿±ê")]
-    [Tooltip("ÍÏÈëÒªÆ½ÒÆµÄ×ßÀÈ/µØÍ¼ Content£¨RectTransform£©")]
-    [SerializeField] private RectTransform mapContent; 
+    [Header("ç§»åŠ¨ç›®æ ‡")]
+    [Tooltip("æ‹–å…¥è¦å¹³ç§»çš„èµ°å»Š/åœ°å›¾ Contentï¼ˆRectTransformï¼‰")]
+    [SerializeField] private RectTransform mapContent;
 
-    [Header("×ø±êÉèÖÃ")]
-    [Tooltip("Ä¿±ê X ¾ø¶Ô×ø±ê£¨ÏñËØ£¬ÀıÈç 1100£©")]
-    [SerializeField] private float targetXPosition = 1100f; 
+    [Header("åæ ‡è®¾ç½®")]
+    [Tooltip("ç›®æ ‡ X ç»å¯¹åæ ‡ï¼ˆåƒç´ ï¼Œä¾‹å¦‚ 1100ï¼‰")]
+    [SerializeField] private float targetXPosition = 1100f;
+    [Tooltip("ç›®æ ‡ Y ç»å¯¹åæ ‡ï¼ˆåƒç´ ï¼Œå‘ä¸‹å¹³ç§»å¡«æ­£å€¼ï¼Œä»£ç ä¼šè‡ªåŠ¨è½¬ä¸º -Yï¼‰")]
+    [SerializeField] private float targetYPosition = 800f;
 
-    [Header("Æ½»¬Æ½ÒÆ²ÎÊı")]
+    [Header("å¹³æ»‘å¹³ç§»å‚æ•°")]
     [SerializeField] private float moveDuration = 0.5f;
 
-    [Header("X Öá±ß½çÏŞÖÆ (ÏñËØ)")]
+    [Header("è¾¹ç•Œé™åˆ¶ (åƒç´ )")]
     [SerializeField] private float leftMoveX = 0f;
     [SerializeField] private float rightMoveX = 3000f;
+    [SerializeField] private float bottomMoveY = 0f;
+    [SerializeField] private float topMoveY = 3000f;
 
-    // ¾²Ì¬×Öµä£º¼ÇÂ¼Ã¿¸ö×ßÀÈ×îºóÍ£¿¿µÄ anchoredPosition
+    [Header("ç§»åŠ¨ç»“æŸè§¦å‘çš„äº‹ä»¶åˆ—è¡¨")]
+    public UnityEvent onMoveEnd; // âœ¨ æ–°å¢ï¼šç§»åŠ¨å½»åº•åœæ­¢åçš„äº‹ä»¶å›è°ƒ
+
+    // é™æ€å­—å…¸ï¼šè®°å½•æ¯ä¸ªèµ°å»Šæœ€ååœé çš„ anchoredPosition
     private static readonly Dictionary<string, Vector2> savedPositions = new Dictionary<string, Vector2>();
 
     private static Coroutine activeMoveCoroutine;
 
     private void OnEnable()
     {
-        // ²»ÒªÖ±½Óµ÷ÓÃ£¬¶øÊÇ¿ªÆôĞ­³ÌµÈµ±Ç°Ö¡µÄ³õÊ¼»¯Âß¼­È«ÅÜÍê
         StartCoroutine(DeferredRestorePosition());
     }
 
     private IEnumerator DeferredRestorePosition()
     {
-        // µÈ´ıµ±Ç°Ö¡ËùÓĞ½Å±¾µÄ Start / Update / RoomManager ³õÊ¼»¯È«²¿Ö´ĞĞÍê±Ï
         yield return new WaitForEndOfFrame();
-
         RestoreSavedPosition();
     }
 
     /// <summary>
-    /// »Ö¸´ÉÏ´ÎÀë¿ªÊ±µÄÎ»ÖÃ
+    /// æ¢å¤ä¸Šæ¬¡ç¦»å¼€æ—¶çš„ä½ç½®
     /// </summary>
     public void RestoreSavedPosition()
     {
@@ -51,32 +66,38 @@ public class MapMoveButton : MonoBehaviour
 
         if (savedPositions.TryGetValue(mapMemoryKey, out Vector2 lastPos))
         {
-            // Ë²¼ä»Ö¸´µ½ÉÏ´ÎÀë¿ªÊ±µÄ¾ø¶ÔÎ»ÖÃ
             mapContent.anchoredPosition = lastPos;
         }
     }
 
     /// <summary>
-    /// ¹«¿ªÆ½ÒÆ·½·¨£º¹Ò½ø StateGateInteractable µÄ OnSuccessInteract ¼´¿É
+    /// å…¬å¼€å¹³ç§»æ–¹æ³•
     /// </summary>
     public void ExecuteMove()
     {
         if (mapContent == null)
         {
-            Debug.LogError($"[{gameObject.name}] MapMoveButton Î´°ó¶¨ mapContent£¡");
+            Debug.LogError($"[{gameObject.name}] MapMoveButton æœªç»‘å®š mapContentï¼");
             return;
         }
 
-        // 1. ½ö¶Ô X Öá½øĞĞ±ß½çÏŞÖÆ²Ã¼ô
-        float clampedX = Mathf.Clamp(targetXPosition, leftMoveX, rightMoveX);
+        Vector2 finalAnchoredPos;
 
-        // 2. X Öá×ªÎª UGUI µÄ¸ºÖµ¾ø¶Ô×ø±ê£»Y ÖáÖ±½Ó±£³Öµ±Ç°µÄ anchoredPosition.y ¾ø²»ĞŞ¸Ä£¡
-        Vector2 finalAnchoredPos = new Vector2(-clampedX, mapContent.anchoredPosition.y);
+        if (moveAxis == MoveAxis.XAxis)
+        {
+            // 1. ä»…å¯¹ X è½´è£å‰ªï¼ŒY è½´ä¿æŒä¸åŠ¨
+            float clampedX = Mathf.Clamp(targetXPosition, leftMoveX, rightMoveX);
+            finalAnchoredPos = new Vector2(-clampedX, mapContent.anchoredPosition.y);
+        }
+        else
+        {
+            // 2. ä»…å¯¹ Y è½´è£å‰ªï¼ŒX è½´ä¿æŒä¸åŠ¨ï¼ˆå‘ä¸‹å¹³ç§»é‡‡ç”¨ -clampedYï¼‰
+            float clampedY = Mathf.Clamp(targetYPosition, bottomMoveY, topMoveY);
+            finalAnchoredPos = new Vector2(mapContent.anchoredPosition.x, -clampedY);
+        }
 
-        // 3. ¼ÇÂ¼µ½¾²Ì¬×ÖµäÖĞ
         SaveCurrentPosition(finalAnchoredPos);
 
-        // 4. Æô¶¯Æ½ÒÆ
         if (activeMoveCoroutine != null)
         {
             StopCoroutine(activeMoveCoroutine);
@@ -100,24 +121,34 @@ public class MapMoveButton : MonoBehaviour
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration); 
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / duration);
 
-            // X Æ½»¬¹ı¶É£¬Y Ê¼ÖÕËø¶¨ÎªÄ¿±ê¸ß¶È
-            mapContent.anchoredPosition = new Vector2(
-                Mathf.Lerp(startPos.x, targetPos.x, t),
-                targetPos.y
-            );
+            if (moveAxis == MoveAxis.XAxis)
+            {
+                mapContent.anchoredPosition = new Vector2(
+                    Mathf.Lerp(startPos.x, targetPos.x, t),
+                    targetPos.y
+                );
+            }
+            else
+            {
+                mapContent.anchoredPosition = new Vector2(
+                    startPos.x,
+                    Mathf.Lerp(startPos.y, targetPos.y, t)
+                );
+            }
+
             yield return null;
         }
 
         mapContent.anchoredPosition = targetPos;
-        SaveCurrentPosition(targetPos); // È·±£ÒÆ¶¯ÍêÈ«Í£Ö¹Ê±´æÈë×îÖÕÎ»ÖÃ
+        SaveCurrentPosition(targetPos);
         activeMoveCoroutine = null;
+
+        // âœ¨ è§¦å‘ç§»åŠ¨ç»“æŸäº‹ä»¶
+        onMoveEnd?.Invoke();
     }
 
-    /// <summary>
-    /// Ìá¹©Íâ²¿ÊÖ¶¯ÖØÖÃ×ø±ê¼ÇÒäµÄ·½·¨£¨ÀıÈçÖØĞÂ¿ªÊ¼¹Ø¿¨/ĞÂÖÜÄ¿Ê±Ê¹ÓÃ£©
-    /// </summary>
     public static void ClearSavedPosition(string memoryKey)
     {
         if (savedPositions.ContainsKey(memoryKey))

@@ -457,6 +457,7 @@ MonoBehaviour:
         m_CallState: 2
   triggerOnce: 1
   clickSound: {fileID: 0}
+  clickVolume: 0.3
 --- !u!114 &6598019840808830128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1211,19 +1212,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6134538033794965799}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7673708562320002673}
-        m_TargetAssemblyTypeName: Room, Assembly-CSharp
-        m_MethodName: OnDoorClicked
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1010
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &6682485338964480265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1428,6 +1417,7 @@ MonoBehaviour:
       m_Calls: []
   triggerOnce: 1
   clickSound: {fileID: 0}
+  clickVolume: 0.3
 --- !u!1 &5975318286567283972
 GameObject:
   m_ObjectHideFlags: 0
@@ -2177,6 +2167,7 @@ GameObject:
   - component: {fileID: 7673708562320002673}
   - component: {fileID: 5405452327175647835}
   - component: {fileID: 8372229095616594646}
+  - component: {fileID: 6454813436770090316}
   m_Layer: 5
   m_Name: Room5
   m_TagString: Untagged
@@ -2261,7 +2252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomID: 1005
   defaultPosition: {x: -150, y: 650, z: 0}
-  connectedRoomIDs: f2030000
+  connectedRoomIDs: f2030000f3030000
   onFirstEnter:
     m_PersistentCalls:
       m_Calls:
@@ -2327,6 +2318,56 @@ MonoBehaviour:
       m_Calls: []
   onDialogueEnd:
     m_PersistentCalls:
-      m_Calls: []
-  triggerOnce: 0
+      m_Calls:
+      - m_Target: {fileID: 6454813436770090316}
+        m_TargetAssemblyTypeName: MapMoveButton, Assembly-CSharp
+        m_MethodName: ExecuteMove
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  triggerOnce: 1
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
+--- !u!114 &6454813436770090316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8065441329860795962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec740b7b47619b4abfa666fdc849bc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveAxis: 1
+  mapMemoryKey: Room5
+  mapContent: {fileID: 7438966200511763858}
+  targetXPosition: 1100
+  targetYPosition: 800
+  moveDuration: 0.5
+  leftMoveX: 0
+  rightMoveX: 3000
+  bottomMoveY: 0
+  topMoveY: 3000
+  onMoveEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7673708562320002673}
+        m_TargetAssemblyTypeName: Room, Assembly-CSharp
+        m_MethodName: OnDoorClicked
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1011
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

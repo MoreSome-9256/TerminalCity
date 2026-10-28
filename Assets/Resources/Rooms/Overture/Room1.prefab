@@ -1639,6 +1639,7 @@ GameObject:
   - component: {fileID: 7639378407561848883}
   - component: {fileID: 7211424387595423751}
   - component: {fileID: 2111345656691630298}
+  - component: {fileID: 1569544775721421703}
   m_Layer: 5
   m_Name: Light
   m_TagString: Untagged
@@ -1703,6 +1704,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1569544775721421703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6814152486825763241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f59a34881ee6734a979f55845da3782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAlpha: 0.801
+  maxAlpha: 0.783
+  flickerSpeed: 5
+  enableSpike: 1
+  spikeChance: 0.05
 --- !u!1 &7392456235450584381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2639,4 +2657,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: 59564b2845ce1914b916b08d056068ce, type: 3}

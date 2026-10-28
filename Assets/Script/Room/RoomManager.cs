@@ -181,6 +181,11 @@ public class RoomManager : MonoBehaviour
         if (state != null)
         {
             PlayerChaos.Instance.OnEnterRoom(state);
+            // 🌟 在这里直接通知序章控制器（无论是否首次，进房就同步）
+            if (PrologueChaosUIController.Instance != null)
+            {
+                PrologueChaosUIController.Instance.OnRoomExplored(roomID);
+            }
             // 检查是否首次进入
             if (!state.hasEntered)
             {

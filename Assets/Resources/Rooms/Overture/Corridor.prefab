@@ -232,7 +232,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &2016520486215704343
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,7 +391,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &2583763397929458344
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +550,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &2661119960353324238
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,6 +870,8 @@ GameObject:
   - component: {fileID: 1881220236090906508}
   - component: {fileID: 8106788755696955518}
   - component: {fileID: 3879311191217217592}
+  - component: {fileID: 4649618908219018294}
+  - component: {fileID: 1123801533367451017}
   m_Layer: 5
   m_Name: 400
   m_TagString: Untagged
@@ -975,6 +980,25 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8106788755696955518}
   m_OnClick:
     m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &4649618908219018294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3913743989515968502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e02d6278dec07e4cb9a79dfba3132bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  requiredFlags:
+  - EXPLORED_ROOM_401
+  flagToSetOnSuccess: 
+  interactOnce: 0
+  onSuccessInteract:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6541722674956018433}
         m_TargetAssemblyTypeName: Room, Assembly-CSharp
@@ -988,6 +1012,47 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onFailInteract:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1123801533367451017}
+        m_TargetAssemblyTypeName: DialogForPrefab, Assembly-CSharp
+        m_MethodName: StartDialogue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1123801533367451017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3913743989515968502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e68fe5c668e4fce4b9c4ec2f94108885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueSequence:
+  - charName: "\u51DB/Lyn"
+    dialogueText: "\u8FD9\u4E2A\u95E8\u4E3A\u4EC0\u4E48\u6253\u4E0D\u5F00\uFF1F\u5148\u53BB401\u770B\u4E00\u4E0B\u597D\u4E86\u3002"
+    characterSprite: {fileID: 21300000, guid: a426c59362994fc4d923ee8dbdf7aae7, type: 3}
+  typingSpeed: 0.05
+  onDialogueStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  triggerOnce: 0
+  clickSound: {fileID: 0}
+  clickVolume: 0.3
 --- !u!1 &4038624964728259310
 GameObject:
   m_ObjectHideFlags: 0
@@ -1299,6 +1364,7 @@ MonoBehaviour:
       m_Calls: []
   triggerOnce: 0
   clickSound: {fileID: 0}
+  clickVolume: 0.3
 --- !u!1 &4793804020831935678
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,7 +1512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueSequence:
   - charName: "\u3010\u5C4F\u5E55\u5185\u5BB9\u3011"
-    dialogueText: 403
+    dialogueText: 401
     characterSprite: {fileID: 21300000, guid: 1e06dafc025147649a9a324a83f7048f, type: 3}
   typingSpeed: 0.05
   onDialogueStart:
@@ -1456,7 +1522,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &5169621637904943090
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,7 +1681,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &5431064809531445952
 GameObject:
   m_ObjectHideFlags: 0
@@ -2169,7 +2237,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e02d6278dec07e4cb9a79dfba3132bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredFlags: []
+  requiredFlags:
+  - EXPLORED_ROOM_403
+  - EXPLORED_ROOM_402
   flagToSetOnSuccess: 
   interactOnce: 0
   onSuccessInteract:
@@ -2190,9 +2260,9 @@ MonoBehaviour:
   onFailInteract:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7939394850877833766}
-        m_TargetAssemblyTypeName: MapMoveButton, Assembly-CSharp
-        m_MethodName: ExecuteMove
+      - m_Target: {fileID: 7234588359446159891}
+        m_TargetAssemblyTypeName: DialogForPrefab, Assembly-CSharp
+        m_MethodName: StartDialogue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2227,6 +2297,7 @@ MonoBehaviour:
       m_Calls: []
   triggerOnce: 0
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!114 &7939394850877833766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2653,7 +2724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueSequence:
   - charName: "\u3010\u5C4F\u5E55\u5185\u5BB9\u3011"
-    dialogueText: 402
+    dialogueText: 400
     characterSprite: {fileID: 21300000, guid: 1e06dafc025147649a9a324a83f7048f, type: 3}
   typingSpeed: 0.05
   onDialogueStart:
@@ -2663,7 +2734,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   triggerOnce: 0
-  clickSound: {fileID: 0}
+  clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &7168075346302765695
 GameObject:
   m_ObjectHideFlags: 0
@@ -3245,6 +3317,7 @@ MonoBehaviour:
       m_Calls: []
   triggerOnce: 0
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!114 &615362888861536586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3724,3 +3797,4 @@ MonoBehaviour:
       m_Calls: []
   triggerOnce: 0
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3

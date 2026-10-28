@@ -5546,7 +5546,7 @@ MonoBehaviour:
         m_MethodName: ShowPanel
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1149534249}
+          m_ObjectArgument: {fileID: 762232434}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -5852,7 +5852,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &242374193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14229,7 +14229,7 @@ MonoBehaviour:
   - {fileID: 1959170823}
   - {fileID: 1785223285}
   - {fileID: 2083274770}
-  - {fileID: 1149534249}
+  - {fileID: 762232434}
   - {fileID: 1547823825}
   - {fileID: 1018705491}
   - {fileID: 1360877836}
@@ -16936,7 +16936,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &762232435
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21646,6 +21646,7 @@ GameObject:
   m_Component:
   - component: {fileID: 893079864}
   - component: {fileID: 893079865}
+  - component: {fileID: 893079866}
   m_Layer: 0
   m_Name: PlayerChaos
   m_TagString: Untagged
@@ -21669,6 +21670,38 @@ Transform:
   m_Father: {fileID: 1060603952}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &893079865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 893079863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6548dd870d6dee42a8df40821912283, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialMinRatio: 0.1
+  initialMaxRatio: 0.12
+  fluctuationSpeed: 0.8
+  transitionSpeed: 1
+  roomDisplayConfigs:
+  - roomID: 1001
+    minRatio: 0.15
+    maxRatio: 0.3
+  - roomID: 1002
+    minRatio: 0.35
+    maxRatio: 0.5
+  - roomID: 1003
+    minRatio: 0.5
+    maxRatio: 0.6
+  - roomID: 1004
+    minRatio: 0.6
+    maxRatio: 0.75
+  - roomID: 1005
+    minRatio: 0.75
+    maxRatio: 0.9
+--- !u!114 &893079866
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -29404,7 +29437,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00036621094, y: 0.00012207031}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1134839968
@@ -29793,7 +29826,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1149534250
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31595,7 +31628,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1215353784
 Transform:
   m_ObjectHideFlags: 0
@@ -42804,6 +42837,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
+  - itemID: 100002
+    dialogEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2594638}
+          m_TargetAssemblyTypeName: SimpleDialogue, Assembly-CSharp
+          m_MethodName: StartDialogue
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
 --- !u!1 &1623710408
 GameObject:
   m_ObjectHideFlags: 0
@@ -47933,8 +47982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   database: {fileID: 11400000, guid: 3dbce3f0c01adbb49abbca7ce97329e3, type: 2}
   placeNumber: 0
-  roomIDsInArea: e8030000e9030000ea030000eb030000ec030000ed030000f2030000
-  currentRoomID: 1003
+  roomIDsInArea: e8030000e9030000ea030000eb030000ec030000ed030000ee030000f2030000f3030000
+  currentRoomID: 1005
 --- !u!114 &1832659341
 MonoBehaviour:
   m_ObjectHideFlags: 0
