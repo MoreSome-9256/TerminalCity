@@ -44,7 +44,7 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
     [Tooltip("黑屏淡出回到场景的过渡时长（秒）")]
     [SerializeField] private float fadeToSceneDuration = 1.2f;
 
-    [SerializeField] private BGMManager openingBGM;
+    // [SerializeField] private BGMManager openingBGM;
 
     private const string PI_128_DIGITS =
         "3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196";
@@ -106,10 +106,10 @@ public class PiGlitchAndCollapsePlotPoint : PlotPoint
 
         //Debug.Log("<color=green>[PiGlitch]</color> 打字完成，进入定格倒计时！");
 
-        // 步骤 2：故障爆发或准备 CRT 关机时，停掉背景音乐
-        if (openingBGM != null)
+        // ✨ 修改点 2：直接通过单例调用全局淡出
+        if (BGMManager.Instance != null)
         {
-            openingBGM.FadeOutBGM(0.3f); // 快速淡出，或者直接 openingBGM.StopBGM();
+            BGMManager.Instance.FadeOutBGM(0.3f);
         }
 
         // 4. 定格停留

@@ -1250,7 +1250,7 @@ MonoBehaviour:
       m_Calls: []
   dialogueManagerObj: {fileID: 9196622809827793528}
   visualController: {fileID: 3116631132404862997}
-  openingBGM: {fileID: 5415493881219874472}
+  openingBGMTrigger: {fileID: 3536218938079982325}
 --- !u!1 &8354363373307489438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1325,7 +1325,6 @@ MonoBehaviour:
   crtAnimDuration: 0.28
   blackHoldDuration: 0.8
   fadeToSceneDuration: 1.2
-  openingBGM: {fileID: 5415493881219874472}
 --- !u!114 &6423333480166868672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1449,6 +1448,7 @@ GameObject:
   - component: {fileID: 449586241282998031}
   - component: {fileID: 945012149919922197}
   - component: {fileID: 5415493881219874472}
+  - component: {fileID: 3536218938079982325}
   m_Layer: 5
   m_Name: OpeningBGMPlayer
   m_TagString: Untagged
@@ -1485,7 +1485,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 00d7ec6ec154bc242bd1890a077689f5, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.772
   m_Pitch: 1
@@ -1583,7 +1583,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 877a7bd52ad81fd4381be026066caaac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialClip: {fileID: 8300000, guid: 00d7ec6ec154bc242bd1890a077689f5, type: 3}
+--- !u!114 &3536218938079982325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8763055542125716753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9e3382a98cc43444ae13c09abc20d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackToPlay: {fileID: 11400000, guid: 288568ba2b2082f47bb493be64b06a84, type: 2}
+  defaultFadeDuration: 0
 --- !u!1 &8987332640727842299
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,12 @@ public class AlarmLightAutoOff : MonoBehaviour
     [Tooltip("例如第一个房间的 roomID 为 1")]
     [SerializeField] private int targetRoomID = 1;
 
+    [Header("音频控制")]
+    [Tooltip("挂载了 BGMTrigger 的引用")]
+    [SerializeField] private BGMTrigger bgmTrigger;
+    [Tooltip("离开房间时要关停的分轨名称，例如 'Guitar' 或 'Alarm'")]
+    [SerializeField] private string trackToDisable;
+
     private int boundRoomID = -1;
 
     private void OnEnable()
@@ -24,7 +30,13 @@ public class AlarmLightAutoOff : MonoBehaviour
         {
             if (RoomManager.Instance.currentRoomID != boundRoomID)
             {
-                // 离开房间，自动关闭自身
+                // 1. 离开房间时，通知 BGMTrigger 关停指定分轨
+                if (bgmTrigger != null && !string.IsNullOrEmpty(trackToDisable))
+                {
+                    bgmTrigger.DisableTrack(trackToDisable);
+                }
+
+                // 2. 离开房间，自动关闭自身
                 gameObject.SetActive(false);
                 boundRoomID = -1;
             }

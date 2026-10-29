@@ -6,14 +6,15 @@ public class OpeningDialoguePlotPoint : PlotPoint
     [Tooltip("挂有 DialogueManager 的 GameObject，默认在 Hierarchy 中保持 Inactive")]
     [SerializeField] private GameObject dialogueManagerObj;
     [SerializeField] private CenterGraphicVisualController visualController;
-    [SerializeField] private BGMManager openingBGM;
+    // ✨ 修改点 1：将 BGMManager 换成 BGMTrigger
+    [SerializeField] private BGMTrigger openingBGMTrigger;
 
     public override IEnumerator Execute()
     {
-        // 0. 画圆前或画圆开始时起播 BGM（画圆伴随音乐，代入感极强）
-        if (openingBGM != null)
+        // ✨ 修改点 2：调用 Trigger 代理的播放方法
+        if (openingBGMTrigger != null)
         {
-            openingBGM.PlayBGM(); // 调用你写好的播放方法
+            openingBGMTrigger.PlayThisTrack();
         }
         // 确保初始处于未激活状态
         if (dialogueManagerObj != null)
