@@ -1,40 +1,48 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class PrologueChaosUIController : MonoBehaviour
 {
     public static PrologueChaosUIController Instance { get; private set; }
 
+    [Header("ç»‘å®šçš„åŠ¨æ€éŸ³è½¨è®¾ç½®")]
+    [Tooltip("è¦æ§åˆ¶çš„åŠ¨æ€åˆ†è½¨åç§° (å¦‚ 'Guitar' æˆ– 'Noise')")]
+    [SerializeField] private string targetTrackName = "Guitar";
+
     [System.Serializable]
     public class RoomUIConfig
     {
         public int roomID;
-        [Header("»ìÂÒ¶ÈÕ¹Ê¾Çø¼ä (ÈôÎŞ²¨¶¯ĞèÇó£¬ÉÏÏÂÏŞÉèÎªÒ»ÖÂ¼´¿É)")]
+        [Header("æ··ä¹±åº¦å±•ç¤ºåŒºé—´ (è‹¥æ— æ³¢åŠ¨éœ€æ±‚ï¼Œä¸Šä¸‹é™è®¾ä¸ºä¸€è‡´å³å¯)")]
         [Range(0f, 1f)] public float minRatio = 0.5f;
         [Range(0f, 1f)] public float maxRatio = 0.6f;
+
+        [Header("å½“å‰æˆ¿é—´è¯¥åˆ†è½¨çš„ç›®æ ‡éŸ³é‡")]
+        [Range(0f, 1f)] public float targetTrackVolume = 0f;
     }
 
-    [Header("ĞòÕÂ¿ª¾Ö UI Ä¬ÈÏÕ¹Ê¾Çø¼ä")]
+    [Header("åºç« å¼€å±€ UI é»˜è®¤å±•ç¤ºåŒºé—´")]
     [Range(0f, 1f)][SerializeField] private float initialMinRatio = 0.1f;
     [Range(0f, 1f)][SerializeField] private float initialMaxRatio = 0.12f;
 
-    [Header("²¨¶¯ÉèÖÃ")]
-    [Tooltip("²¨¶¯±ä»¯µÄ¿ìÂıÆµÂÊ£¬ÊıÖµÔ½´óÊı×ÖÌø¶¯/ÓÎ×ßÔ½¿ì")]
+    [Header("æ³¢åŠ¨è®¾ç½®")]
+    [Tooltip("æ³¢åŠ¨å˜åŒ–çš„å¿«æ…¢é¢‘ç‡ï¼Œæ•°å€¼è¶Šå¤§æ•°å­—è·³åŠ¨/æ¸¸èµ°è¶Šå¿«")]
     [SerializeField] private float fluctuationSpeed = 0.8f;
-    [Tooltip("ÇĞ»»·¿¼äÊ±»ù×¼¹ı¶Éµ½ĞÂÇø¼äµÄÆ½»¬ËÙ¶È")]
+    [Tooltip("åˆ‡æ¢æˆ¿é—´æ—¶åŸºå‡†è¿‡æ¸¡åˆ°æ–°åŒºé—´çš„å¹³æ»‘é€Ÿåº¦")]
     [SerializeField] private float transitionSpeed = 1.0f;
 
-    [Header("Ã¿¸ö·¿¼ä¶ÔÓ¦µÄ UI Ñİ³öÄ¿±ê")]
+    [Header("æ¯ä¸ªæˆ¿é—´å¯¹åº”çš„ UI æ¼”å‡ºç›®æ ‡")]
     [SerializeField] private List<RoomUIConfig> roomDisplayConfigs = new List<RoomUIConfig>();
 
-    private Dictionary<int, Vector2> roomRangeMap = new Dictionary<int, Vector2>();
+    // âœ¨ ä¿®æ”¹ï¼šç›´æ¥æŠŠæ•´ä¸ª Config å­˜è¿›å­—å…¸ï¼Œæ–¹ä¾¿åŒæ—¶æ‹¿å– UI åŒºé—´å’ŒéŸ³é‡
+    private Dictionary<int, RoomUIConfig> roomConfigMap = new Dictionary<int, RoomUIConfig>();
     private HashSet<int> visitedRooms = new HashSet<int>();
 
-    // µ±Ç°´¦ÓÚµÄÄ¿±êÇø¼ä
+    // å½“å‰å¤„äºçš„ç›®æ ‡åŒºé—´
     private float targetMin;
     private float targetMax;
 
-    // Æ½»¬²åÖµÖĞµÄ»ù×¼Çø¼ä
+    // å¹³æ»‘æ’å€¼ä¸­çš„åŸºå‡†åŒºé—´
     private float currentMin;
     private float currentMax;
 
@@ -45,15 +53,12 @@ public class PrologueChaosUIController : MonoBehaviour
         Instance = this;
         noiseSeed = Random.Range(0f, 100f);
 
-        roomRangeMap.Clear();
+        roomConfigMap.Clear();
         foreach (var config in roomDisplayConfigs)
         {
-            if (!roomRangeMap.ContainsKey(config.roomID))
+            if (!roomConfigMap.ContainsKey(config.roomID))
             {
-                // È·±£ min <= max
-                float min = Mathf.Min(config.minRatio, config.maxRatio);
-                float max = Mathf.Max(config.minRatio, config.maxRatio);
-                roomRangeMap.Add(config.roomID, new Vector2(min, max));
+                roomConfigMap.Add(config.roomID, config);
             }
         }
     }
@@ -71,7 +76,7 @@ public class PrologueChaosUIController : MonoBehaviour
 
     private void Update()
     {
-        // 1. »ù×¼Çø¼äÏòÄ¿±êÇø¼äÆ½»¬¿¿½ü£¨ÇĞ·¿¼äÊ±Ë³»¬¹ı¶É£¬±ÜÃâË²¼äÌø±ä£©
+        // 1. åŸºå‡†åŒºé—´å‘ç›®æ ‡åŒºé—´å¹³æ»‘é è¿‘ï¼ˆåˆ‡æˆ¿é—´æ—¶é¡ºæ»‘è¿‡æ¸¡ï¼Œé¿å…ç¬é—´è·³å˜ï¼‰
         currentMin = Mathf.MoveTowards(currentMin, targetMin, transitionSpeed * Time.deltaTime);
         currentMax = Mathf.MoveTowards(currentMax, targetMax, transitionSpeed * Time.deltaTime);
 
@@ -82,19 +87,19 @@ public class PrologueChaosUIController : MonoBehaviour
     {
         float finalRatio;
 
-        // Èç¹ûÉÏÏÂÏŞÏàÍ¬£¬ÔòÎŞ²¨¶¯£¬Ö±½ÓÊ¹ÓÃ¹Ì¶¨Öµ
+        // å¦‚æœä¸Šä¸‹é™ç›¸åŒï¼Œåˆ™æ— æ³¢åŠ¨ï¼Œç›´æ¥ä½¿ç”¨å›ºå®šå€¼
         if (Mathf.Approximately(currentMin, currentMax))
         {
             finalRatio = currentMin;
         }
         else
         {
-            // Ê¹ÓÃ°ØÁÖÔëÉùÊµÏÖ×ÔÈ»Æ½»¬µÄÓÎ×ß²¨¶¯£¬±ÜÃâ Random.Range Ôì³ÉµÄ¾çÁÒÉÁË¸³é´¤
+            // ä½¿ç”¨æŸæ—å™ªå£°å®ç°è‡ªç„¶å¹³æ»‘çš„æ¸¸èµ°æ³¢åŠ¨ï¼Œé¿å… Random.Range é€ æˆçš„å‰§çƒˆé—ªçƒæŠ½æ
             float t = Mathf.PerlinNoise(Time.time * fluctuationSpeed, noiseSeed);
             finalRatio = Mathf.Lerp(currentMin, currentMax, t);
         }
 
-        // ÍÆËÍ¸øÇ°¶Ë ChaosUI
+        // æ¨é€ç»™å‰ç«¯ ChaosUI
         if (ChaosUI.Instance != null)
         {
             ChaosUI.Instance.SetOverrideChaos(finalRatio);
@@ -102,7 +107,7 @@ public class PrologueChaosUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// ½øÈëĞÂ·¿¼äÊ±µ÷ÓÃ
+    /// è¿›å…¥æ–°æˆ¿é—´æ—¶è°ƒç”¨
     /// </summary>
     public void OnRoomExplored(int roomID)
     {
@@ -110,14 +115,23 @@ public class PrologueChaosUIController : MonoBehaviour
         {
             visitedRooms.Add(roomID);
 
-            if (roomRangeMap.TryGetValue(roomID, out Vector2 range))
+            if (roomConfigMap.TryGetValue(roomID, out RoomUIConfig config))
             {
-                // ½öµ±ĞÂ·¿¼äµÄÉÏÏŞ´óÓÚµÈÓÚµ±Ç°ÉÏÏŞÊ±²Å¸üĞÂ£¬·ÀÖ¹ÏòºóÌ½Ë÷Ê±µ¹ÍË
-                if (range.y >= targetMax)
+                float configMin = Mathf.Min(config.minRatio, config.maxRatio);
+                float configMax = Mathf.Max(config.minRatio, config.maxRatio);
+
+                // ä»…å½“æ–°æˆ¿é—´çš„ä¸Šé™å¤§äºç­‰äºå½“å‰ä¸Šé™æ—¶æ‰æ›´æ–°ï¼Œé˜²æ­¢å‘åæ¢ç´¢æ—¶å€’é€€
+                if (configMax >= targetMax)
                 {
-                    targetMin = range.x;
-                    targetMax = range.y;
-                    Debug.Log($"<color=#00FFB2>[ĞòÕÂUI] Æ¥Åä·¿¼ä {roomID}£¬Õ¹Ê¾Çø¼äÉè¶¨Îª: [{targetMin * 100}% ~ {targetMax * 100}%]</color>");
+                    targetMin = configMin;
+                    targetMax = configMax;
+                    Debug.Log($"<color=#00FFB2>[åºç« UI] åŒ¹é…æˆ¿é—´ {roomID}ï¼Œå±•ç¤ºåŒºé—´è®¾å®šä¸º: [{targetMin * 100}% ~ {targetMax * 100}%]</color>");
+
+                    // âœ¨ æ–°å¢ï¼šåŒæ­¥æ§åˆ¶ BGM åˆ†è½¨éŸ³é‡
+                    if (BGMManager.Instance != null && !string.IsNullOrEmpty(targetTrackName))
+                    {
+                        BGMManager.Instance.SetTrackVolume(targetTrackName, config.targetTrackVolume);
+                    }
                 }
             }
         }

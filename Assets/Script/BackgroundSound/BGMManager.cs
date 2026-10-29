@@ -206,4 +206,24 @@ public class BGMManager : MonoBehaviour
     }
 
     #endregion
+    /// <summary>
+    /// 将指定分轨平滑渐变到具体的音量值 (0f ~ 1f)
+    /// </summary>
+    public void SetTrackVolume(string trackName, float targetVolume)
+    {
+        if (!activeStems.TryGetValue(trackName, out ActiveStem stem))
+        {
+            Debug.LogWarning($"[BGMManager] 当前播放的曲目未包含分轨: {trackName}");
+            return;
+        }
+
+        // 确保不超过该分轨设置的最大限制
+        targetVolume = Mathf.Clamp(targetVolume, 0f, stem.config.maxVolume);
+
+        if (Mathf.Approximately(stem.currentTargetVolume, targetVolume)) return;
+
+        stem.currentTargetVolume = targetVolume;
+        if (stem.fadeCoroutine != null) StopCoroutine(stem.fadeCoroutine);
+        stem.fadeCoroutine = StartCoroutine(FadeStemRoutine(stem, targetVolume, stem.config.fadeDuration));
+    }
 }

@@ -21979,6 +21979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6548dd870d6dee42a8df40821912283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTrackName: noise
   initialMinRatio: 0.1
   initialMaxRatio: 0.12
   fluctuationSpeed: 0.8
@@ -21987,18 +21988,31 @@ MonoBehaviour:
   - roomID: 1001
     minRatio: 0.15
     maxRatio: 0.3
+    targetTrackVolume: 0
   - roomID: 1002
     minRatio: 0.35
     maxRatio: 0.5
+    targetTrackVolume: 0.19
   - roomID: 1003
     minRatio: 0.5
     maxRatio: 0.6
+    targetTrackVolume: 0.345
   - roomID: 1004
     minRatio: 0.6
     maxRatio: 0.75
+    targetTrackVolume: 0.481
   - roomID: 1005
     minRatio: 0.75
     maxRatio: 0.9
+    targetTrackVolume: 0.795
+  - roomID: 1011
+    minRatio: 1
+    maxRatio: 1
+    targetTrackVolume: 1
+  - roomID: 1006
+    minRatio: 0.9
+    maxRatio: 0.99
+    targetTrackVolume: 1
 --- !u!114 &893079866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31928,7 +31942,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1215353784
 Transform:
   m_ObjectHideFlags: 0
@@ -39036,7 +39050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1459798360
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48297,7 +48311,7 @@ MonoBehaviour:
   database: {fileID: 11400000, guid: 3dbce3f0c01adbb49abbca7ce97329e3, type: 2}
   placeNumber: 0
   roomIDsInArea: e8030000e9030000ea030000eb030000ec030000ed030000ee030000f2030000f3030000
-  currentRoomID: 1005
+  currentRoomID: 1000
 --- !u!114 &1832659341
 MonoBehaviour:
   m_ObjectHideFlags: 0

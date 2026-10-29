@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -11,17 +11,17 @@ public class PrologueVideoEnding : MonoBehaviour
 {
     public static PrologueVideoEnding Instance { get; private set; }
 
-    [Header("ÊÓÆµÅäÖÃ")]
-    [Tooltip("·ÅÔÚ StreamingAssets ÎÄ¼ş¼ĞÏÂµÄÊÓÆµÍêÕû´øºó×ºÃû³Æ")]
+    [Header("è§†é¢‘é…ç½®")]
+    [Tooltip("æ”¾åœ¨ StreamingAssets æ–‡ä»¶å¤¹ä¸‹çš„è§†é¢‘å®Œæ•´å¸¦åç¼€åç§°")]
     [SerializeField] private string videoFileName = "video1.mp4";
 
-    [Header("Á÷³Ì¿ØÖÆ")]
-    [Tooltip("ÊÓÆµ²¥ÍêºóÒª¼ÓÔØµÄ³¡¾°Ãû×Ö£¬Áô¿ÕÔò²»Ìø×ª")]
+    [Header("æµç¨‹æ§åˆ¶")]
+    [Tooltip("è§†é¢‘æ’­å®Œåè¦åŠ è½½çš„åœºæ™¯åå­—ï¼Œç•™ç©ºåˆ™ä¸è·³è½¬")]
     [SerializeField] private string nextSceneName = "Chapter1";
-    [Tooltip("ÊÇ·ñÔÊĞíÍæ¼Ò°´¿Õ¸ñ¼üÌø¹ı¹ı³¡")]
+    [Tooltip("æ˜¯å¦å…è®¸ç©å®¶æŒ‰ç©ºæ ¼é”®è·³è¿‡è¿‡åœº")]
     [SerializeField] private bool canSkip = true;
 
-    [Header("²¥·Å½áÊø»Øµ÷ÊÂ¼ş")]
+    [Header("æ’­æ”¾ç»“æŸå›è°ƒäº‹ä»¶")]
     public UnityEvent onVideoFinished;
 
     private VideoPlayer videoPlayer;
@@ -35,10 +35,10 @@ public class PrologueVideoEnding : MonoBehaviour
         videoPlayer = GetComponent<VideoPlayer>();
         videoRawImage = GetComponent<RawImage>();
 
-        // °ó¶¨²¥·Å½áÊøµÄÊÂ¼ş¼àÌı
+        // ç»‘å®šæ’­æ”¾ç»“æŸçš„äº‹ä»¶ç›‘å¬
         videoPlayer.loopPointReached += OnVideoEndReached;
 
-        // ?? ºËĞÄĞŞ¸Ä£ºÍê³Éµ¥Àı×¢²áºó£¬ÔÚµÚÒ»Ö¡»­ÃæäÖÈ¾Ç°Á¢¿Ì°Ñ×Ô¼ºÒş²Øµô
+        // æ ¸å¿ƒä¿®æ”¹ï¼šå®Œæˆå•ä¾‹æ³¨å†Œåï¼Œåœ¨ç¬¬ä¸€å¸§ç”»é¢æ¸²æŸ“å‰ç«‹åˆ»æŠŠè‡ªå·±éšè—æ‰
         gameObject.SetActive(false);
     }
 
@@ -54,24 +54,32 @@ public class PrologueVideoEnding : MonoBehaviour
     }
 
     /// <summary>
-    /// Íâ²¿µ÷ÓÃ£º¿ªÊ¼²¥·ÅÊÓÆµ
+    /// å¤–éƒ¨è°ƒç”¨ï¼šå¼€å§‹æ’­æ”¾è§†é¢‘
     /// </summary>
     public void PlayEndingVideo()
     {
         gameObject.SetActive(true);
-        transform.SetAsLastSibling(); // È·±£ÊÓÆµ²ã¼¶ÔÚ×îÉÏ·½ÕÚµ²ËùÓĞUI
+        transform.SetAsLastSibling(); // ç¡®ä¿è§†é¢‘å±‚çº§åœ¨æœ€ä¸Šæ–¹é®æŒ¡æ‰€æœ‰UI
 
-        // 1. ¶¯Ì¬´´½¨¸ßÇå RenderTexture
+        // âœ¨ æ–°å¢ï¼šè§†é¢‘èµ·æ’­æ—¶ï¼Œæ·¡å‡ºæˆ–ç¬é—´åœæ‰åœºæ™¯é‡Œæ‰€æœ‰çš„åŸºç¡€æ›²ç›®ä¸åˆ†è½¨
+        if (BGMManager.Instance != null)
+        {
+            BGMManager.Instance.FadeOutBGM(0.5f); // åŠç§’å†…å¿«é€Ÿæ·¡å‡º
+            // å¦‚æœå¸Œæœ›è§†é¢‘å‡ºæ¥çš„ç¬é—´ç«‹åˆ»å®Œå…¨é™éŸ³ï¼Œå¯ä»¥æ”¹ä¸ºï¼š
+            // BGMManager.Instance.StopBGM();
+        }
+
+        // 1. åŠ¨æ€åˆ›å»ºé«˜æ¸… RenderTexture
         if (renderTexture == null)
         {
             renderTexture = new RenderTexture(Screen.width, Screen.height, 0);
         }
 
-        // 2. ½« VideoPlayer Óë RawImage ÇÅ½Ó
+        // 2. å°† VideoPlayer ä¸ RawImage æ¡¥æ¥
         videoPlayer.targetTexture = renderTexture;
         videoRawImage.texture = renderTexture;
 
-        // 3. ÅäÖÃ URL Â·¾¶²¢²¥·Å
+        // 3. é…ç½® URL è·¯å¾„å¹¶æ’­æ”¾
         videoPlayer.source = VideoSource.Url;
         videoPlayer.url = Path.Combine(Application.streamingAssetsPath, videoFileName);
 
@@ -91,7 +99,7 @@ public class PrologueVideoEnding : MonoBehaviour
 
         videoPlayer.Stop();
 
-        // ÊÍ·ÅÄÚ´æÓëÌùÍ¼×ÊÔ´
+        // é‡Šæ”¾å†…å­˜ä¸è´´å›¾èµ„æº
         if (renderTexture != null)
         {
             videoPlayer.targetTexture = null;
