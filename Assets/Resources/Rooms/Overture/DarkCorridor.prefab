@@ -561,7 +561,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveAxis: 1
-  mapMemoryKey: Corridor_Default
+  mapMemoryKey: 1
   mapContent: {fileID: 7438966200511763858}
   targetXPosition: 1100
   targetYPosition: -500
@@ -768,7 +768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveAxis: 1
-  mapMemoryKey: Corridor_Default
+  mapMemoryKey: Corridor_Dark
   mapContent: {fileID: 7438966200511763858}
   targetXPosition: 1100
   targetYPosition: 1000

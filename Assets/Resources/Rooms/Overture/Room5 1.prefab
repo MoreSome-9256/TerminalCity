@@ -65,7 +65,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c327de79474f9774a9351d6401ee079a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 1409482235031538152}
   - component: {fileID: 2540786903090875654}
   - component: {fileID: 6931139662400603947}
+  - component: {fileID: 4810185709131578993}
   m_Layer: 5
   m_Name: Light
   m_TagString: Untagged
@@ -177,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3679245, g: 0.06768423, b: 0.06768423, a: 0.38039216}
+  m_Color: {r: 0.24528301, g: 0.052064795, b: 0.052064795, a: 0.56078434}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -206,11 +207,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f59a34881ee6734a979f55845da3782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minAlpha: 0.271
-  maxAlpha: 0.603
-  flickerSpeed: 1
-  enableSpike: 0
-  spikeChance: 0.05
+  minAlpha: 0.31
+  maxAlpha: 0.653
+  flickerSpeed: 1.5
+  enableSpike: 1
+  spikeChance: 0.0022
+--- !u!114 &4810185709131578993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1340314395279447109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de2b568d4aea3874dbeb4c08e0d9c9b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intensity: 0.322
+  targetGraphics:
+  - {fileID: 4052593561387546610}
+  - {fileID: 2467190747868262784}
+  - {fileID: 8759497413007966105}
+  maxChromaticDisp: 0.0218
 --- !u!1 &1534944775502101552
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,7 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c327de79474f9774a9351d6401ee079a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -991,6 +1010,7 @@ GameObject:
   - component: {fileID: 6134538033794965799}
   - component: {fileID: 6180648035728274822}
   - component: {fileID: 6682485338964480265}
+  - component: {fileID: 4126273189555406819}
   m_Layer: 5
   m_Name: Door1
   m_TagString: Untagged
@@ -1098,7 +1118,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6134538033794965799}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4126273189555406819}
+        m_TargetAssemblyTypeName: EndingVideoTrigger, Assembly-CSharp
+        m_MethodName: PlayVideo
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &6682485338964480265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1115,6 +1147,18 @@ MonoBehaviour:
   - {fileID: 6134538033794965799}
   normalAlpha: 0.5
   hoverAlpha: 1
+--- !u!114 &4126273189555406819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4004971833280950885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3385c772d69c5644484e885e78aa8edf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4624312254345816012
 GameObject:
   m_ObjectHideFlags: 0
@@ -1796,7 +1840,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c327de79474f9774a9351d6401ee079a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -2146,10 +2190,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveAxis: 1
-  mapMemoryKey: Room5
+  mapMemoryKey: Room6
   mapContent: {fileID: 7438966200511763858}
   targetXPosition: 1100
-  targetYPosition: -1300
+  targetYPosition: -800
   moveDuration: 0.5
   leftMoveX: 0
   rightMoveX: 3000
