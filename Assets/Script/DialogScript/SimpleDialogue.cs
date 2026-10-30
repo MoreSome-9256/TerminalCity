@@ -187,11 +187,19 @@ public class SimpleDialogue : MonoBehaviour
     private IEnumerator TypeText(string fullText)
     {
         isTyping = true;
-        dialogueText.text = "";
 
-        foreach (char letter in fullText)
+        // 1. 一次性填入全部文本，让 TMP 瞬间计算好所有的换行、自动撑开高度
+        dialogueText.text = fullText;
+        dialogueText.maxVisibleCharacters = 0; // 初始全隐身
+
+        // 2. 强制更新网格以解析富文本，获取准确的真实字符总数
+        dialogueText.ForceMeshUpdate();
+        int totalVisibleCharacters = dialogueText.textInfo.characterCount;
+
+        // 3. 通过增加可见数量来实现打字效果
+        for (int i = 0; i <= totalVisibleCharacters; i++)
         {
-            dialogueText.text += letter;
+            dialogueText.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
         }
 
@@ -205,11 +213,12 @@ public class SimpleDialogue : MonoBehaviour
 
         if (isTyping)
         {
-            // Fast forward typing
+            // 玩家按下空格，快进打字效果
             if (typingCoroutine != null)
                 StopCoroutine(typingCoroutine);
 
             dialogueText.text = dialogueSequence[currentIndex].LocalizedText;
+            dialogueText.maxVisibleCharacters = 99999; // 🌟 瞬间显示全部字符
             isTyping = false;
         }
         else
@@ -234,8 +243,11 @@ public class SimpleDialogue : MonoBehaviour
             targetButton.gameObject.SetActive(true);
         }
         nextButton.onClick.RemoveAllListeners();
-        charNameText.text = string.Empty;     // 清空角色名称
-        dialogueText.text = string.Empty;     // 清空对话内容
+
+        dialogueText.maxVisibleCharacters = 99999; // 🌟 恢复默认状态
+        charNameText.text = string.Empty;
+        dialogueText.text = string.Empty;
+
         charNameText.gameObject.SetActive(false);
         dialogueText.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);

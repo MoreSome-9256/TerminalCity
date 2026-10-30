@@ -4923,7 +4923,7 @@ MonoBehaviour:
   nextMessageButton: {fileID: 1986207625}
   closeChatButton: {fileID: 403045913}
   chatScrollRect: {fileID: 1655112104}
-  conversationEndMessage: "\u5BF9\u8BDD\u7ED3\u675F"
+  conversationEndMessage: 
 --- !u!1 &206831291
 GameObject:
   m_ObjectHideFlags: 0
@@ -43663,7 +43663,7 @@ MonoBehaviour:
     dialogEvent:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2594638}
+        - m_Target: {fileID: 2594640}
           m_TargetAssemblyTypeName: SimpleDialogue, Assembly-CSharp
           m_MethodName: StartDialogue
           m_Mode: 1
