@@ -17,7 +17,10 @@ public class PrologueChaosUIController : MonoBehaviour
         [Range(0f, 1f)] public float minRatio = 0.5f;
         [Range(0f, 1f)] public float maxRatio = 0.6f;
 
-        [Header("当前房间该分轨的目标音量")]
+        [Header("当前房间主音轨(Base)的目标音量")]
+        [Range(0f, 1f)] public float targetBaseVolume = 1f; // 默认 1，即正常播放
+
+        [Header("当前房间附加分轨(Stem)的目标音量")]
         [Range(0f, 1f)] public float targetTrackVolume = 0f;
     }
 
@@ -34,7 +37,6 @@ public class PrologueChaosUIController : MonoBehaviour
     [Header("每个房间对应的 UI 演出目标")]
     [SerializeField] private List<RoomUIConfig> roomDisplayConfigs = new List<RoomUIConfig>();
 
-    // ✨ 修改：直接把整个 Config 存进字典，方便同时拿取 UI 区间和音量
     private Dictionary<int, RoomUIConfig> roomConfigMap = new Dictionary<int, RoomUIConfig>();
     private HashSet<int> visitedRooms = new HashSet<int>();
 
@@ -127,10 +129,17 @@ public class PrologueChaosUIController : MonoBehaviour
                     targetMax = configMax;
                     Debug.Log($"<color=#00FFB2>[序章UI] 匹配房间 {roomID}，展示区间设定为: [{targetMin * 100}% ~ {targetMax * 100}%]</color>");
 
-                    // ✨ 新增：同步控制 BGM 分轨音量
-                    if (BGMManager.Instance != null && !string.IsNullOrEmpty(targetTrackName))
+                    // ✨ 同步控制 BGM 音轨交替
+                    if (BGMManager.Instance != null)
                     {
-                        BGMManager.Instance.SetTrackVolume(targetTrackName, config.targetTrackVolume);
+                        // 1. 控制主音轨音量
+                        BGMManager.Instance.SetBaseTrackVolume(config.targetBaseVolume);
+
+                        // 2. 控制附加音轨音量
+                        if (!string.IsNullOrEmpty(targetTrackName))
+                        {
+                            BGMManager.Instance.SetTrackVolume(targetTrackName, config.targetTrackVolume);
+                        }
                     }
                 }
             }

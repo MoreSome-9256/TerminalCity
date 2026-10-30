@@ -908,6 +908,7 @@ MonoBehaviour:
         m_CallState: 2
   triggerOnce: 1
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!114 &6598019840808830128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1447,6 +1448,7 @@ MonoBehaviour:
       m_Calls: []
   triggerOnce: 0
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &3790013668258063975
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,6 +1638,7 @@ MonoBehaviour:
         m_CallState: 2
   triggerOnce: 1
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!114 &7673840752559408663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1858,7 +1861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   passcodeLocalizationKey: 
-  defaultPasscode: "\u829D\u9EBB\u5F00\u95E8"
+  defaultPasscode: "\u5B58\u5728\u5373\u4E0D\u5408\u7406"
   passcodeAliases: []
   caseSensitive: 0
   isUnlocked: 0
@@ -1926,6 +1929,7 @@ MonoBehaviour:
       m_Calls: []
   triggerOnce: 0
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &4006957819679552414
 GameObject:
   m_ObjectHideFlags: 0
@@ -2403,6 +2407,7 @@ MonoBehaviour:
         m_CallState: 2
   triggerOnce: 1
   clickSound: {fileID: 8300000, guid: cadbc5e9639fa6543bc25f4d1222f6ea, type: 3}
+  clickVolume: 0.3
 --- !u!1 &4763297716851710785
 GameObject:
   m_ObjectHideFlags: 0

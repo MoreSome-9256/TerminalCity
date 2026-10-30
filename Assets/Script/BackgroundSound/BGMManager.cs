@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,12 +6,14 @@ public class BGMManager : MonoBehaviour
 {
     public static BGMManager Instance { get; private set; }
 
-    [Header("Ö÷²¥·ÅÆ÷")]
+    [Header("ä¸»æ’­æ”¾å™¨")]
     private AudioSource baseSource;
 
-    [Header("¶¯Ì¬·Ö¹ì³Ø")]
+    [Header("åŠ¨æ€åˆ†è½¨æ± ")]
     private List<AudioSource> stemSourcePool = new List<AudioSource>();
     private Dictionary<string, ActiveStem> activeStems = new Dictionary<string, ActiveStem>();
+
+    private Coroutine baseFadeCoroutine;
 
     private class ActiveStem
     {
@@ -29,7 +31,7 @@ public class BGMManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            // DontDestroyOnLoad(gameObject); // ÈôĞèÒª¿ç³¡¾°±£Áô¿ÉÈ¡Ïû×¢ÊÍ
+            // DontDestroyOnLoad(gameObject); // è‹¥éœ€è¦è·¨åœºæ™¯ä¿ç•™å¯å–æ¶ˆæ³¨é‡Š
         }
         else
         {
@@ -42,7 +44,7 @@ public class BGMManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ºËĞÄ½Ó¿Ú£ºÆ½»¬ÇĞ»»µ½ĞÂµÄ BGM ×Ê²ú
+    /// æ ¸å¿ƒæ¥å£ï¼šå¹³æ»‘åˆ‡æ¢åˆ°æ–°çš„ BGM èµ„äº§
     /// </summary>
     public void SwitchBGM(BGMTrackData newTrack, float crossfadeDuration = 1.0f)
     {
@@ -52,7 +54,7 @@ public class BGMManager : MonoBehaviour
             return;
         }
 
-        if (CurrentTrackData == newTrack) return; // ÒÑ¾­ÔÚ²¥µ±Ç°ÇúÄ¿ÔòºöÂÔ
+        if (CurrentTrackData == newTrack) return; // å·²ç»åœ¨æ’­å½“å‰æ›²ç›®åˆ™å¿½ç•¥
 
         if (songSwitchCoroutine != null) StopCoroutine(songSwitchCoroutine);
         songSwitchCoroutine = StartCoroutine(CrossfadeSongRoutine(newTrack, crossfadeDuration));
@@ -60,7 +62,7 @@ public class BGMManager : MonoBehaviour
 
     private IEnumerator CrossfadeSongRoutine(BGMTrackData newTrack, float duration)
     {
-        // 1. ¾ÉÇúÄ¿ÕûÌåµ­³ö
+        // 1. æ—§æ›²ç›®æ•´ä½“æ·¡å‡º
         if (baseSource.isPlaying)
         {
             float elapsed = 0f;
@@ -79,14 +81,20 @@ public class BGMManager : MonoBehaviour
             }
         }
 
-        StopBGM(); // Í£Ö¹ËùÓĞ¾É²¥·Å
+        StopBGM(); // åœæ­¢æ‰€æœ‰æ—§æ’­æ”¾
 
-        // 2. ×°ÔØĞÂÊı¾İ
+        // âœ¨ æ–°å¢ï¼šå¦‚æœä¼ è¿›æ¥çš„æ–°æ›²ç›®æ˜¯ nullï¼ˆè¯´æ˜åªæ˜¯çº¯ç²¹çš„æ·¡å‡ºåœæ­¢ï¼‰ï¼Œç›´æ¥ç»“æŸåç¨‹ï¼
+        if (newTrack == null)
+        {
+            yield break;
+        }
+
+        // 2. è£…è½½æ–°æ•°æ®
         CurrentTrackData = newTrack;
         baseSource.clip = newTrack.baseClip;
         baseSource.volume = newTrack.baseVolume;
 
-        // ¶¯Ì¬ÊÊÅä·Ö¹ì³ØÊıÁ¿
+        // åŠ¨æ€é€‚é…åˆ†è½¨æ± æ•°é‡
         EnsureStemSourceCapacity(newTrack.stems.Count);
         activeStems.Clear();
 
@@ -134,7 +142,7 @@ public class BGMManager : MonoBehaviour
         }
     }
 
-    #region »ù´¡²¥·Å¿ØÖÆ (ÔİÍ£/»Ö¸´/Í£Ö¹)
+    #region åŸºç¡€æ’­æ”¾æ§åˆ¶ (æš‚åœ/æ¢å¤/åœæ­¢)
 
     public void PauseBGM()
     {
@@ -165,7 +173,7 @@ public class BGMManager : MonoBehaviour
 
     #endregion
 
-    #region ·Ö¹ì¿ØÖÆ½Ó¿Ú (Event List µ÷ÓÃ)
+    #region åˆ†è½¨æ§åˆ¶æ¥å£ (Event List è°ƒç”¨)
 
     public void EnableTrack(string trackName) => SetTrackActive(trackName, true);
     public void DisableTrack(string trackName) => SetTrackActive(trackName, false);
@@ -174,7 +182,7 @@ public class BGMManager : MonoBehaviour
     {
         if (!activeStems.TryGetValue(trackName, out ActiveStem stem))
         {
-            Debug.LogWarning($"[BGMManager] µ±Ç°²¥·ÅµÄÇúÄ¿Î´°üº¬·Ö¹ì: {trackName}");
+            Debug.LogWarning($"[BGMManager] å½“å‰æ’­æ”¾çš„æ›²ç›®æœªåŒ…å«åˆ†è½¨: {trackName}");
             return;
         }
 
@@ -207,17 +215,17 @@ public class BGMManager : MonoBehaviour
 
     #endregion
     /// <summary>
-    /// ½«Ö¸¶¨·Ö¹ìÆ½»¬½¥±äµ½¾ßÌåµÄÒôÁ¿Öµ (0f ~ 1f)
+    /// å°†æŒ‡å®šåˆ†è½¨å¹³æ»‘æ¸å˜åˆ°å…·ä½“çš„éŸ³é‡å€¼ (0f ~ 1f)
     /// </summary>
     public void SetTrackVolume(string trackName, float targetVolume)
     {
         if (!activeStems.TryGetValue(trackName, out ActiveStem stem))
         {
-            Debug.LogWarning($"[BGMManager] µ±Ç°²¥·ÅµÄÇúÄ¿Î´°üº¬·Ö¹ì: {trackName}");
+            Debug.LogWarning($"[BGMManager] å½“å‰æ’­æ”¾çš„æ›²ç›®æœªåŒ…å«åˆ†è½¨: {trackName}");
             return;
         }
 
-        // È·±£²»³¬¹ı¸Ã·Ö¹ìÉèÖÃµÄ×î´óÏŞÖÆ
+        // ç¡®ä¿ä¸è¶…è¿‡è¯¥åˆ†è½¨è®¾ç½®çš„æœ€å¤§é™åˆ¶
         targetVolume = Mathf.Clamp(targetVolume, 0f, stem.config.maxVolume);
 
         if (Mathf.Approximately(stem.currentTargetVolume, targetVolume)) return;
@@ -225,5 +233,40 @@ public class BGMManager : MonoBehaviour
         stem.currentTargetVolume = targetVolume;
         if (stem.fadeCoroutine != null) StopCoroutine(stem.fadeCoroutine);
         stem.fadeCoroutine = StartCoroutine(FadeStemRoutine(stem, targetVolume, stem.config.fadeDuration));
+    }
+
+    /// <summary>
+    /// å°†ä¸»è½¨ï¼ˆBaseClipï¼‰å¹³æ»‘æ¸å˜åˆ°æŒ‡å®šéŸ³é‡
+    /// </summary>
+    public void SetBaseTrackVolume(float targetVolume, float fadeDuration = 0.5f)
+    {
+        if (baseSource == null) return;
+
+        if (baseFadeCoroutine != null) StopCoroutine(baseFadeCoroutine);
+        baseFadeCoroutine = StartCoroutine(FadeBaseRoutine(targetVolume, fadeDuration));
+    }
+
+    /// <summary>
+    /// æ¢å¤ä¸»è½¨åˆ°å½“å‰é…ç½®çš„é»˜è®¤éŸ³é‡
+    /// </summary>
+    public void RestoreBaseTrackVolume(float fadeDuration = 0.5f)
+    {
+        if (CurrentTrackData != null)
+        {
+            SetBaseTrackVolume(CurrentTrackData.baseVolume, fadeDuration);
+        }
+    }
+
+    private IEnumerator FadeBaseRoutine(float targetVol, float duration)
+    {
+        float startVol = baseSource.volume;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            baseSource.volume = Mathf.Lerp(startVol, targetVol, elapsed / duration);
+            yield return null;
+        }
+        baseSource.volume = targetVol;
     }
 }

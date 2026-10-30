@@ -49,4 +49,22 @@ public class BGMTrigger : MonoBehaviour
     // --- 代理分轨控制 ---
     public void EnableTrack(string trackName) => BGMManager.Instance?.EnableTrack(trackName);
     public void DisableTrack(string trackName) => BGMManager.Instance?.DisableTrack(trackName);
+
+    // --- 代理主轨剥离控制 ---
+
+    /// <summary>
+    /// 剥离（静音）主旋律，保留分轨
+    /// </summary>
+    public void MuteBaseTrack()
+    {
+        BGMManager.Instance?.SetBaseTrackVolume(0f, defaultFadeDuration);
+    }
+
+    /// <summary>
+    /// 恢复主旋律
+    /// </summary>
+    public void RestoreBaseTrack()
+    {
+        BGMManager.Instance?.RestoreBaseTrackVolume(defaultFadeDuration);
+    }
 }
