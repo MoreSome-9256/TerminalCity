@@ -1,67 +1,72 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class EntryLinkHandler : MonoBehaviour, IPointerClickHandler
 {
-    public EntryWindow entryWindowPrefab;   // ´ÊÌõµ¯´° Prefab£¨ÏÂÃæµÄ EntryWindow.cs£©
+    public EntryWindow entryWindowPrefab;   // è¯æ¡å¼¹çª— Prefabï¼ˆä¸‹é¢çš„ EntryWindow.csï¼‰
     private EntryWindow currentWindow;
 
     private TMP_Text textComponent;
     private Canvas rootCanvas;
 
-    [SerializeField] private Button exitButton;  // Inspector ÀïµÄÍË³ö°´Å¥
+    [SerializeField] private Button exitButton;  // Inspector é‡Œçš„é€€å‡ºæŒ‰é’®
 
     private void Awake()
     {
         textComponent = GetComponent<TMP_Text>();
-        rootCanvas = textComponent.canvas.rootCanvas; // ÓÃ¸ù Canvas
+        rootCanvas = textComponent.canvas.rootCanvas; // ç”¨æ ¹ Canvas
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // ÏÈÈÃ TMP Éú³É×îĞÂµÄ mesh/link ĞÅÏ¢
+        Debug.Log("<color=yellow>[EntryLinkHandler] 1. æˆåŠŸæ¥æ”¶åˆ°ç‚¹å‡»äº‹ä»¶ï¼</color>");
+
         textComponent.ForceMeshUpdate();
 
-        int linkIndex = TMP_TextUtilities.FindIntersectingLink(textComponent, eventData.position, eventData.pressEventCamera);
+        // ğŸŒŸ æ ¸å¿ƒä¿®å¤ï¼šå¦‚æœ Canvas æ˜¯ ScreenSpaceOverlayï¼Œç›¸æœºå¿…é¡»ä¼  nullï¼Œå¦åˆ™ TMP ä¼šåˆ¤å®šç‚¹å‡»å¤±æ•ˆ
+        Camera cam = (rootCanvas.renderMode == RenderMode.ScreenSpaceOverlay) ? null : eventData.pressEventCamera;
+
+        int linkIndex = TMP_TextUtilities.FindIntersectingLink(textComponent, eventData.position, cam);
+
         if (linkIndex != -1)
         {
             TMP_LinkInfo linkInfo = textComponent.textInfo.linkInfo[linkIndex];
             string linkID = linkInfo.GetLinkID();
+            Debug.Log($"<color=green>[EntryLinkHandler] 2. æˆåŠŸç‚¹ä¸­é“¾æ¥ï¼Œè§£æåˆ°çš„ linkID: '{linkID}'</color>");
 
             string definition = DictionaryManager.Instance.GetDefinition(linkID);
-            if (string.IsNullOrEmpty(definition)) return;
+            if (string.IsNullOrEmpty(definition))
+            {
+                Debug.LogError($"<color=red>[EntryLinkHandler] 3. æ‹¦æˆªï¼åœ¨å­—å…¸ä¸­æŸ¥ä¸åˆ° linkID: '{linkID}' çš„è§£é‡Šã€‚è¯·æ£€æŸ¥å­—å…¸æ•°æ®æ˜¯å¦æ­£ç¡®åŠ è½½ï¼Œæˆ– linkID æ˜¯å¦æœ‰å¤šä½™ç©ºæ ¼ã€‚</color>");
+                return;
+            }
 
-            // ÒÑÓĞµ¯´° ¡ú ÏÈ¹Øµô
+            Debug.Log("<color=cyan>[EntryLinkHandler] 4. è·å–è§£é‡ŠæˆåŠŸï¼Œå‡†å¤‡ç”Ÿæˆå¹¶æ˜¾ç¤ºå¼¹çª—...</color>");
+
             if (currentWindow != null)
             {
                 Destroy(currentWindow.gameObject);
                 currentWindow = null;
             }
 
-            // ¼ÆËã¡°Á´½Ó¾ØĞÎ¡±µÄÆÁÄ»ÖĞĞÄµã£¨¸üÎÈ£©
-            Vector2 screenPos = GetLinkScreenCenter(textComponent, linkInfo, eventData.pressEventCamera);
-
-            // ÔÚ¸ù Canvas ÏÂÉú³Éµ¯´°
+            // è·å–ä¸­å¿ƒç‚¹å¹¶ç”Ÿæˆå¼¹çª—
+            Vector2 screenPos = GetLinkScreenCenter(textComponent, linkInfo, cam);
             currentWindow = Instantiate(entryWindowPrefab, rootCanvas.transform);
 
             currentWindow.Show(
                 definition,
-                eventData.position,   // ÆÁÄ»×ø±ê
+                eventData.position,
                 rootCanvas,
-                eventData.pressEventCamera
+                cam // åŒæ ·ä¼ å…¥å…¼å®¹çš„ cam
             );
+
             if (exitButton != null) exitButton.interactable = false;
-            /*currentWindow.onClosed += () =>
-            {
-                if (exitButton != null) exitButton.interactable = true;
-                currentWindow = null;
-            };*/
         }
         else
         {
-            // µãµ½¿Õ°× ¡ú ¹Ø±Õµ¯´°
+            Debug.Log("[EntryLinkHandler] ç‚¹å‡»ä½ç½®æœªå‘½ä¸­ä»»ä½•æœ‰æ•ˆé“¾æ¥ (-1)ï¼Œå¯èƒ½æ˜¯ç‚¹åœ¨äº†æ–‡å­—çš„ç©ºç™½å¤„ã€‚");
             if (currentWindow != null)
             {
                 Destroy(currentWindow.gameObject);
@@ -72,15 +77,15 @@ public class EntryLinkHandler : MonoBehaviour, IPointerClickHandler
     }
 
     /// <summary>
-    /// È¡µ±Ç°Á´½ÓÔÚÆÁÄ»ÉÏµÄ¾ØĞÎÖĞĞÄ£¨°ÑÁ´½ÓÄÚËùÓĞ×Ö·ûµÄ°üÎ§ºĞºÏ²¢£©
+    /// å–å½“å‰é“¾æ¥åœ¨å±å¹•ä¸Šçš„çŸ©å½¢ä¸­å¿ƒï¼ˆæŠŠé“¾æ¥å†…æ‰€æœ‰å­—ç¬¦çš„åŒ…å›´ç›’åˆå¹¶ï¼‰
     /// </summary>
     private Vector2 GetLinkScreenCenter(TMP_Text text, TMP_LinkInfo linkInfo, Camera eventCam)
     {
         var charInfos = text.textInfo.characterInfo;
-        int first = linkInfo.linkTextfirstCharacterIndex;              // ×¢Òâ£º´óĞ¡Ğ´Óë°æ±¾Ò»ÖÂ
+        int first = linkInfo.linkTextfirstCharacterIndex;              // æ³¨æ„ï¼šå¤§å°å†™ä¸ç‰ˆæœ¬ä¸€è‡´
         int last = first + linkInfo.linkTextLength - 1;
 
-        // ºÏ²¢°üÎ§ºĞ
+        // åˆå¹¶åŒ…å›´ç›’
         Vector3 min = new Vector3(float.MaxValue, float.MaxValue, 0);
         Vector3 max = new Vector3(float.MinValue, float.MinValue, 0);
 
@@ -88,7 +93,7 @@ public class EntryLinkHandler : MonoBehaviour, IPointerClickHandler
         {
             if (i < 0 || i >= charInfos.Length) continue;
             var c = charInfos[i];
-            // ×Ö·ûËÄ¸ö¶¥µãÊÇ±¾µØ¿Õ¼ä ¡ú ×ªÊÀ½ç ¡ú ÔÙ×ªÆÁÄ»
+            // å­—ç¬¦å››ä¸ªé¡¶ç‚¹æ˜¯æœ¬åœ°ç©ºé—´ â†’ è½¬ä¸–ç•Œ â†’ å†è½¬å±å¹•
             var bl = text.transform.TransformPoint(c.bottomLeft);
             var tl = text.transform.TransformPoint(c.topLeft);
             var br = text.transform.TransformPoint(c.bottomRight);
