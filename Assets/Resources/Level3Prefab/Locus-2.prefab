@@ -622,8 +622,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 46fdfef2f33c7934da2518617f0e32fd, type: 2}
-  m_sharedMaterial: {fileID: 21673861866412392, guid: 46fdfef2f33c7934da2518617f0e32fd,
+  m_fontAsset: {fileID: 11400000, guid: c0f63996f4d1eea4ea5a23eee9bcab67, type: 2}
+  m_sharedMaterial: {fileID: 1959779955882323795, guid: c0f63996f4d1eea4ea5a23eee9bcab67,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1445,6 +1445,7 @@ MonoBehaviour:
     - ">> \u97A0\u8EAC\u3002"
     - ">> \u70ED\u70C8\u7684\u638C\u58F0\u3002"
   officialText: {fileID: 6932860911223288466}
+  typingSpeed: 0.05
   choicePanel: {fileID: 3506955171188043369}
   choiceButtons:
   - {fileID: 560269876924174700}

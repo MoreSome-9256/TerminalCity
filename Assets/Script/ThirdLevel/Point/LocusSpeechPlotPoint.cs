@@ -10,6 +10,7 @@ public class LocusSpeechPlotPoint : PlotPoint
 
     [Header("UI References")]
     public TextMeshProUGUI officialText;
+    public float typingSpeed = 0.02f; // ✨ 新增这行，方便你在面板里随意调速
 
     [Header("Choice UI")]
     public GameObject choicePanel;
@@ -164,13 +165,18 @@ public class LocusSpeechPlotPoint : PlotPoint
     {
         choicePanel.SetActive(false);
         officialText.gameObject.SetActive(true);
-        officialText.text = "";
 
-        foreach (char c in line)
+        // 🌟 一次性赋全文以撑开排版，初始全隐身
+        officialText.text = line;
+        officialText.maxVisibleCharacters = 0;
+        officialText.ForceMeshUpdate();
+
+        int totalVisibleCharacters = officialText.textInfo.characterCount;
+
+        for (int i = 0; i <= totalVisibleCharacters; i++)
         {
-            officialText.text += c;
-
-            yield return new WaitForSeconds(0.02f);
+            officialText.maxVisibleCharacters = i;
+            yield return new WaitForSeconds(typingSpeed); // ✨ 读取你设置的速度变量
         }
     }
     void UpdateBreakdownVisual()
