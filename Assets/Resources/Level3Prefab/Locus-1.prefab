@@ -1927,6 +1927,9 @@ MonoBehaviour:
   onDialogueEnd:
     m_PersistentCalls:
       m_Calls: []
+  onDialogueStep:
+    m_PersistentCalls:
+      m_Calls: []
   startDelay: 0
   endDelay: 0
   targetButton: {fileID: 4001023326060656931}
@@ -2028,6 +2031,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueStep:
     m_PersistentCalls:
       m_Calls: []
   startDelay: 0
@@ -3242,7 +3248,7 @@ MonoBehaviour:
     characterSprite: {fileID: 0}
     backgroundSprite: {fileID: 0}
   - charName: "\u7F57\u5948\u5C14\u5FB7/Ronald"
-    dialogueText: "\u5B83\u53EA\u662F\u2026\u2026\u5728\u67D0\u4E2A\u6211\u4EEC\u770B\u4E0D\u89C1\u7684\u5C42\u9762\uFF0C<b>\u8BA9\u2018\u6234\u5229\u514B\u5728\u6B64\u65F6\u6B64\u523B\u5B8C\u6210\u5E76\u53D1\u9001\u62A5\u544A\u2019\u8FD9\u4E2A\u5FF5\u5934\uFF0C\u6210\u4E3A\u4ED6\u6240\u6709\u53EF\u80FD\u5FF5\u5934\u4E2D\u2018\u6700\u81EA\u7136\u2019\u3001\u2018\u6700\u5408\u7406\u2019\u7684\u90A3\u4E00\u4E2A</b>\u3002"
+    dialogueText: "\u5B83\u53EA\u662F\u2026\u2026\u5728\u67D0\u4E2A\u6211\u4EEC\u770B\u4E0D\u89C1\u7684\u5C42\u9762\uFF0C<b>\u8BA9\u201C\u6234\u5229\u514B\u5728\u6B64\u65F6\u6B64\u523B\u5B8C\u6210\u5E76\u53D1\u9001\u62A5\u544A\u201D\u8FD9\u4E2A\u5FF5\u5934\uFF0C\u6210\u4E3A\u4ED6\u6240\u6709\u53EF\u80FD\u5FF5\u5934\u4E2D\u201C\u6700\u81EA\u7136\u201D\u3001\u201C\u6700\u5408\u7406\u201D\u7684\u90A3\u4E00\u4E2A</b>\u3002"
     characterSprite: {fileID: 0}
     backgroundSprite: {fileID: 0}
   - charName: "\u6D1B\u5E93\u65AF/Locus"
@@ -3272,6 +3278,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueStep:
     m_PersistentCalls:
       m_Calls: []
   startDelay: 0
@@ -3440,7 +3449,7 @@ MonoBehaviour:
     characterSprite: {fileID: 0}
     backgroundSprite: {fileID: 0}
   - charName: "\u7F57\u5948\u5C14\u5FB7/Ronald"
-    dialogueText: "\u90FD\u884C\u3002\u53EF\u4EE5\u5148\u7528\u7B80\u5355\u7684\u8BD5\u8BD5\u3002\u6BD4\u5982\u2026\u2026\u2018\u8BA9\u8FD9\u4E2A\u623F\u95F4\u7684\u5E94\u6025\u706F\u4EAE\u5EA6\u63D0\u9AD8\u767E\u5206\u4E4B\u5341\u2019\u3002\u6B63\u597D\u80FD\u76F4\u89C2\u770B\u5230\u6548\u679C\uFF0C\u4E5F\u4E0D\u4F1A\u6709\u4EC0\u4E48\u5F71\u54CD\u3002"
+    dialogueText: "\u90FD\u884C\u3002\u53EF\u4EE5\u5148\u7528\u7B80\u5355\u7684\u8BD5\u8BD5\u3002\u6BD4\u5982\u2026\u2026\u201C\u8BA9\u8FD9\u4E2A\u623F\u95F4\u7684\u5E94\u6025\u706F\u4EAE\u5EA6\u63D0\u9AD8\u767E\u5206\u4E4B\u5341\u201D\u3002\u6B63\u597D\u80FD\u76F4\u89C2\u770B\u5230\u6548\u679C\uFF0C\u4E5F\u4E0D\u4F1A\u6709\u4EC0\u4E48\u5F71\u54CD\u3002"
     characterSprite: {fileID: 0}
     backgroundSprite: {fileID: 0}
   typingSpeed: 0.05
@@ -3450,6 +3459,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueStep:
     m_PersistentCalls:
       m_Calls: []
   startDelay: 0
@@ -3754,6 +3766,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onDialogueEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onDialogueStep:
     m_PersistentCalls:
       m_Calls: []
   startDelay: 0
