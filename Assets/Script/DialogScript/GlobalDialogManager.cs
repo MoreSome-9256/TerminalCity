@@ -266,25 +266,33 @@ public class GlobalDialogManager : MonoBehaviour
     private IEnumerator TypeText(string fullText)
     {
         isTyping = true;
-        dialogueText.text = "";
+        dialogueText.text = fullText;
+        dialogueText.ForceMeshUpdate();
 
-        foreach (char letter in fullText)
+        int totalVisibleCharacters = dialogueText.textInfo.characterCount;
+        dialogueText.maxVisibleCharacters = 0;
+
+        for (int i = 0; i <= totalVisibleCharacters; i++)
         {
-            dialogueText.text += letter;
+            dialogueText.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
         }
 
         isTyping = false;
     }
-    // 修改打字协程，增加完成回调
+
     private IEnumerator TypeText(string fullText, Action onComplete)
     {
         isTyping = true;
-        dialogueText.text = "";
+        dialogueText.text = fullText;
+        dialogueText.ForceMeshUpdate();
 
-        foreach (char letter in fullText)
+        int totalVisibleCharacters = dialogueText.textInfo.characterCount;
+        dialogueText.maxVisibleCharacters = 0;
+
+        for (int i = 0; i <= totalVisibleCharacters; i++)
         {
-            dialogueText.text += letter;
+            dialogueText.maxVisibleCharacters = i;
             yield return new WaitForSeconds(typingSpeed);
         }
 
@@ -299,14 +307,17 @@ public class GlobalDialogManager : MonoBehaviour
 
         if (isTyping)
         {
-            if (typingCoroutine != null) StopCoroutine(typingCoroutine); //[cite: 1]
+            if (typingCoroutine != null) StopCoroutine(typingCoroutine);
 
-            // 🔍 核心修改：这里原本是直接写 segment.dialogueText，改成获取翻译后的文本
+            // 将正在打字的文本直接完整显示
             string localizedText = GetLocalizedText($"dialog_{currentDialogue[currentIndex].id}", currentDialogue[currentIndex].dialogueText);
             dialogueText.text = localizedText;
 
-            isTyping = false; //[cite: 1]
-            return; //[cite: 1]
+            // 🌟 瞬间把可见字符数量拉到最大
+            dialogueText.maxVisibleCharacters = 99999;
+
+            isTyping = false;
+            return;
         }
 
         // 如果是问答的第一句回答，创建 QARecord

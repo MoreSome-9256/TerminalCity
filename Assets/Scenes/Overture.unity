@@ -41863,8 +41863,8 @@ MonoBehaviour:
   window: {fileID: 2006787394}
   windowBehavior: {fileID: 1605271287}
   text1Fade: {fileID: 1249244679}
-  text2Fade: {fileID: 0}
-  clueWindow: {fileID: 653610274}
+  text2Fade: {fileID: 653610275}
+  clueWindow: {fileID: 1708024101}
   moveControllers:
   - {fileID: 1854617229}
   - {fileID: 804197677}
