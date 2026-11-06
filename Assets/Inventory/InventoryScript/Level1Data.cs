@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New First Level", menuName = "Inventory/New First Level")]
 public class Level1Data : Item
 {
+    [Header("一级资料专有属性")]
     public int itemType; //记录某级中的具体类别
     public string Name; // 物品的特性
     public string Time;

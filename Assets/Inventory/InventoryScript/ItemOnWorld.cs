@@ -51,9 +51,28 @@ public class ItemOnWorld : MonoBehaviour, IPointerClickHandler
         AddNewItem();
         AddGraph();
         AddDictionaryEntries();
+        UnlockTimelineEvent(); // ✨ 新增：尝试解锁时间轴事件
 
         Destroy(gameObject);
         onClick?.Invoke();
+    }
+
+    // ✨ 新增：时间轴解锁逻辑
+    private void UnlockTimelineEvent()
+    {
+        // 检查当前物品是否配置了时间轴 ID
+        if (item != null && !string.IsNullOrEmpty(item.timelineEventId))
+        {
+            if (TimelineManager.Instance != null)
+            {
+                TimelineManager.Instance.UnlockEvent(item.timelineEventId);
+                Debug.Log($"[ItemOnWorld] 拾取了 {item.itemName}，已成功解锁时间轴事件: {item.timelineEventId}");
+            }
+            else
+            {
+                Debug.LogWarning("[ItemOnWorld] 未找到 TimelineManager.Instance，无法解锁时间轴事件！");
+            }
+        }
     }
 
     private void AddNewItem()
@@ -88,6 +107,7 @@ public class ItemOnWorld : MonoBehaviour, IPointerClickHandler
         // 刷新面板内容
         PreView.ShowInformation(item);
     }
+
     private void AddGraph()
     {
         // 改用静态单例，且打印一条明确的调试日志！
@@ -104,6 +124,7 @@ public class ItemOnWorld : MonoBehaviour, IPointerClickHandler
             }
         }
     }
+
     private void AddDictionaryEntries()
     {
         if (item != null && item.materialData != null && DictionaryManager.Instance != null)
