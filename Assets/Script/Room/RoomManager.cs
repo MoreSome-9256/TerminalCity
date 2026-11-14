@@ -38,14 +38,7 @@ public class RoomManager : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        // 初始化区域内所有房间的运行时状态
-        /*foreach (int id in roomIDsInArea)
-        {
-            if (!roomStates.ContainsKey(id))
-            {
-                roomStates[id] = new RoomState(id, 9500, 10000); 
-            }
-        }*/
+        // 🌟 修改：通过数据库获取房间 Prefab，读取挂载在它身上的默认逆恒值
         foreach (int id in roomIDsInArea)
         {
             if (!roomStates.ContainsKey(id))
@@ -53,13 +46,23 @@ public class RoomManager : MonoBehaviour
                 int defaultInstability = 9500;
                 int threshold = 10000;
 
-                // 你可以在这里做差异化初始化
-                if (id == 11) defaultInstability = 9700;
-                if (id == 2) defaultInstability = 9900;
+                // 尝试从数据库里拿到对应的房间 Prefab
+                RoomInfo info = database.GetRoomInfo(id);
+                if (info != null && info.prefab != null)
+                {
+                    Room roomScript = info.prefab.GetComponent<Room>();
+                    if (roomScript != null)
+                    {
+                        // 读取 Prefab 上的配置
+                        defaultInstability = roomScript.defaultInstability;
+                        threshold = roomScript.instabilityThreshold;
+                    }
+                }
 
                 roomStates[id] = new RoomState(id, defaultInstability, threshold);
             }
         }
+
         // 默认解锁房间 0
         RoomInfo room0 = database.GetRoomInfo(0);
         if (room0 != null)
@@ -67,7 +70,7 @@ public class RoomManager : MonoBehaviour
             room0.unlocked = true;
             EnterRoom(currentRoomID);
         }
-        //UpdateAreaInstability();
+
         FindObjectOfType<MapUIController>()?.RefreshMap();
     }
     private void Update()

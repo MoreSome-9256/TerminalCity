@@ -35,6 +35,10 @@ public class UIManager : MonoBehaviour
     [Header("Level3 UI")]
     public Transform viewPanelTransform;
 
+    [Header("Big Room Edge Pan")]
+    [Tooltip("挂载在全局 Canvas 上的大房间边缘平移控制器")]
+    public RoomEdgePanController edgePanController;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

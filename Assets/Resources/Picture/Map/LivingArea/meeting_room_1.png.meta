@@ -105,7 +105,7 @@ TextureImporter:
         width: 620
         height: 1483
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -126,7 +126,7 @@ TextureImporter:
         width: 426
         height: 453
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -139,7 +139,28 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: meeting_room_1_2
+      name: meeting_room_1_4
+      rect:
+        serializedVersion: 2
+        x: 1177
+        y: 949
+        width: 133
+        height: 238
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d648365d08cf69a408bc4273c3e538f9
+      internalID: 1646748621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: meeting_room_1_6
       rect:
         serializedVersion: 2
         x: 697
@@ -147,20 +168,20 @@ TextureImporter:
         width: 347
         height: 955
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aabc3589e86005741bbdb5f9d08474b2
-      internalID: -1093380700
+      spriteID: 09fe9430a9c4a9f4ca3edb1503dbd694
+      internalID: 1534062630
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: meeting_room_1_3
+      name: meeting_room_1_7
       rect:
         serializedVersion: 2
         x: 1064
@@ -168,14 +189,77 @@ TextureImporter:
         width: 163
         height: 248
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ccb08cb40b39df6429bd9f24ff97141a
-      internalID: -1034933911
+      spriteID: 44b413e445a1c7740af37fd73141407f
+      internalID: -2118299629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: meeting_room_1_8
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 423
+        width: 201
+        height: 247
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 209f31d9fc3ca1d4d8ca1fce970c6fad
+      internalID: -1147918763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: meeting_room_1_9
+      rect:
+        serializedVersion: 2
+        x: 1083
+        y: 106
+        width: 94
+        height: 269
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c37bb2cb569e06d47a307ce5c9c3ece6
+      internalID: -936800170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: meeting_room_1_10
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 131
+        width: 68
+        height: 251
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbad0da7ae83e3c4e837ddf933784165
+      internalID: 1058165052
       vertices: []
       indices: 
       edges: []
@@ -193,8 +277,15 @@ TextureImporter:
     nameFileIdTable:
       meeting_room_1_0: -1725750678
       meeting_room_1_1: 1530805348
+      meeting_room_1_10: 1058165052
       meeting_room_1_2: -1093380700
       meeting_room_1_3: -1034933911
+      meeting_room_1_4: 1646748621
+      meeting_room_1_5: 1181855065
+      meeting_room_1_6: 1534062630
+      meeting_room_1_7: -2118299629
+      meeting_room_1_8: -1147918763
+      meeting_room_1_9: -936800170
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

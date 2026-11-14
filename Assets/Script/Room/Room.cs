@@ -1,25 +1,29 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class Room : MonoBehaviour
 {
-    [Header("·¿¼äID£¨È«¾ÖÎ¨Ò»£©")]
+    [Header("æˆ¿é—´IDï¼ˆå…¨å±€å”¯ä¸€ï¼‰")]
     public int roomID;
 
     //public string roomName;
+    // âœ¨ æ–°å¢ï¼šå…è®¸åœ¨ Prefab ä¸Šç›´æ¥é…ç½®è¯¥æˆ¿é—´çš„åˆå§‹é€†æ’å€¼å’Œé˜ˆå€¼
+    [Header("é€†æ’å€¼é…ç½®")]
+    public int defaultInstability = 9500;
+    public int instabilityThreshold = 10000;
 
     public Vector3 defaultPosition = Vector3.zero;
 
-    [Header("¿ÉÍ¨ÍùµÄÆäËû·¿¼äID")]
+    [Header("å¯é€šå¾€çš„å…¶ä»–æˆ¿é—´ID")]
     public List<int> connectedRoomIDs = new List<int>();
-    [Header("Ê×´Î½øÈë´¥·¢µÄÊÂ¼şÁĞ±í")]
+    [Header("é¦–æ¬¡è¿›å…¥è§¦å‘çš„äº‹ä»¶åˆ—è¡¨")]
     public UnityEvent onFirstEnter;
-    [Header("Àë¿ª·¿¼äÊ±´¥·¢µÄÊÂ¼şÁĞ±í")]
-    public UnityEvent onLeave; // ? ĞÂÔöÀë¿ªÊÂ¼ş
+    [Header("ç¦»å¼€æˆ¿é—´æ—¶è§¦å‘çš„äº‹ä»¶åˆ—è¡¨")]
+    public UnityEvent onLeave; // ? æ–°å¢ç¦»å¼€äº‹ä»¶
 
     /// <summary>
-    /// µã»÷·¿¼äÄÚµÄÃÅÊ±µ÷ÓÃ
+    /// ç‚¹å‡»æˆ¿é—´å†…çš„é—¨æ—¶è°ƒç”¨
     /// </summary>
     public void OnDoorClicked(int targetRoomID)
     {
@@ -29,16 +33,16 @@ public class Room : MonoBehaviour
         }
         else
         {
-            Debug.LogError("RoomManager.Instance Îª¿Õ£¬ÎŞ·¨ÇĞ»»·¿¼ä£¡");
+            Debug.LogError("RoomManager.Instance ä¸ºç©ºï¼Œæ— æ³•åˆ‡æ¢æˆ¿é—´ï¼");
         }
     }
-    // ´úÀí·½·¨£¬¿ÉÒÔÔÚ Inspector ÀïÖ±½Ó°ó¶¨
+    // ä»£ç†æ–¹æ³•ï¼Œå¯ä»¥åœ¨ Inspector é‡Œç›´æ¥ç»‘å®š
     public void TriggerGlobalDialog(string dialogID)
     {
         GlobalDialogManager.Instance?.TriggerDialogue(dialogID);
     }
     /// <summary>
-    /// Àë¿ª·¿¼äÊ±µ÷ÓÃ
+    /// ç¦»å¼€æˆ¿é—´æ—¶è°ƒç”¨
     /// </summary>
     public void LeaveRoom()
     {
