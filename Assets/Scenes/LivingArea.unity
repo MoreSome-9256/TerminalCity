@@ -7443,6 +7443,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previewArea: {fileID: 1097387407}
   firstLevel: {fileID: 7970378}
+  doorInventoryUI: {fileID: 1457122146}
+  messagePanel: {fileID: 1123219987}
+  moveButton: {fileID: 389512280}
   dialogueUI: {fileID: 37589765}
   charNameText: {fileID: 823946997}
   dialogueText: {fileID: 602861516}
@@ -7915,7 +7918,7 @@ MonoBehaviour:
   btnDown: {fileID: 190714329}
   btnLeft: {fileID: 1324282264}
   btnRight: {fileID: 371019190}
-  moveSpeed: 350
+  moveSpeed: 400
   smoothTime: 0.08
   hideButtonAtLimit: 1
 --- !u!1 &296715692
@@ -9554,8 +9557,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -364.79535, y: 803}
-  m_SizeDelta: {x: 208.6485, y: 2461.539}
+  m_AnchoredPosition: {x: 16.554718, y: 797.2636}
+  m_SizeDelta: {x: 220.1211, y: 3241.912}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &348114134
 MonoBehaviour:
@@ -17036,7 +17039,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -87, y: 221}
+  m_AnchoredPosition: {x: -87, y: 202}
   m_SizeDelta: {x: 148, y: 106}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &618479798
@@ -35322,7 +35325,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -42, y: -112}
+  m_AnchoredPosition: {x: -42, y: -501}
   m_SizeDelta: {x: 148, y: 106}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1256134065
@@ -37752,8 +37755,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1454, y: 2.5464}
-  m_SizeDelta: {x: 300.5295, y: 1793.5391}
+  m_AnchoredPosition: {x: -1454, y: 7.1569953}
+  m_SizeDelta: {x: 300.5296, y: 1802.7603}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1324282265
 MonoBehaviour:
@@ -56145,7 +56148,7 @@ MonoBehaviour:
   database: {fileID: 11400000, guid: 3dbce3f0c01adbb49abbca7ce97329e3, type: 2}
   placeNumber: 1
   roomIDsInArea: 00000000010000000200000004000000050000000b0000000c000000
-  currentRoomID: 2
+  currentRoomID: 1
 --- !u!225 &2122119473
 CanvasGroup:
   m_ObjectHideFlags: 0

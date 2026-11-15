@@ -74,6 +74,9 @@ public class DialogForPrefab : MonoBehaviour
     [SerializeField] private float clickVolume = 0.3f;
     private AudioSource audioSource;
 
+    private GameObject moveButton;
+    private bool wasMoveButtonActive;
+
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -90,6 +93,7 @@ public class DialogForPrefab : MonoBehaviour
             nextButton = UIManager.Instance.nextButton;
             background = UIManager.Instance.dialogueBackground;
             selectionUI = UIManager.Instance.selectionUI;
+            moveButton = UIManager.Instance.moveButton; // ✨ 新增：获取打开背包按钮
         }
         else
         {
@@ -113,6 +117,15 @@ public class DialogForPrefab : MonoBehaviour
             EndDialogue();
             return;
         }
+
+        if (moveButton != null)
+        {
+            wasMoveButtonActive = moveButton.activeSelf;
+            moveButton.SetActive(false);
+        }
+        // 启用 UI
+        if (selectionUI != null) selectionUI.SetActive(false);
+        dialogueUI.SetActive(true);
 
         if (nextButton != null)
         {
@@ -230,8 +243,15 @@ public class DialogForPrefab : MonoBehaviour
         if (background != null) background.SetActive(false);
 
         if (dialogueUI != null) dialogueUI.SetActive(false);
+        // ✨ 新增：仅当对话开始前按钮是显示状态时，才在结束时恢复显示
+        if (moveButton != null && wasMoveButtonActive)
+        {
+            moveButton.SetActive(true);
+        }
 
         if (RoomManager.Instance != null && RoomManager.Instance.currentRoomID == 0)
+
+            if (RoomManager.Instance != null && RoomManager.Instance.currentRoomID == 0)
         {
             if (UIManager.Instance.selectionUI != null)
                 UIManager.Instance.selectionUI.SetActive(true);

@@ -10,6 +10,9 @@ public class UIManager : MonoBehaviour
     [Header("Inventory UI")]
     public GameObject previewArea;  // 对应 PreView 面板
     public GameObject firstLevel;   // 对应 FirstLevel 面板 / 背包 UI
+    public GameObject doorInventoryUI;  // 门解锁专用的背包面板（若与 firstLevel 相同可拖同一个）
+    public GameObject messagePanel;     // 对应 Message 提示面板
+    public GameObject moveButton;       // 打开背包的侧边栏按钮（MoveButton）
 
     [Header("Dialogue UI")]
     public GameObject dialogueUI;

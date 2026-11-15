@@ -96,12 +96,15 @@ public class RoomEdgePanController : MonoBehaviour
 
     public void SetPositionImmediate(Vector2 pixelPos)
     {
+        // 1. 彻底清零平滑阻尼的残留速度，防止切房间时惯性抽动
+        currentVelocity = Vector2.zero;
+        currentHoverDir = Vector2.zero;
+
         targetPosition.x = Mathf.Clamp(pixelPos.x, leftMoveX, rightMoveX);
         targetPosition.y = Mathf.Clamp(pixelPos.y, downMoveY, upMoveY);
 
         if (roomContent != null)
         {
-            // 沿用 MapRoomNavigator 的取反坐标映射
             roomContent.anchoredPosition = new Vector2(-targetPosition.x, -targetPosition.y);
         }
         UpdateButtonVisibility();
@@ -119,7 +122,6 @@ public class RoomEdgePanController : MonoBehaviour
     {
         if (roomContent == null) return;
 
-        // 1. 鼠标悬停时持续累加目标坐标，并实时用 Clamp 限制在边界内
         if (currentHoverDir != Vector2.zero)
         {
             targetPosition += currentHoverDir * moveSpeed * Time.unscaledDeltaTime;
@@ -127,8 +129,16 @@ public class RoomEdgePanController : MonoBehaviour
             targetPosition.y = Mathf.Clamp(targetPosition.y, downMoveY, upMoveY);
         }
 
-        // 2. 平滑插值更新 anchoredPosition
         Vector2 desiredAnchored = new Vector2(-targetPosition.x, -targetPosition.y);
+
+        // 2. 如果已经到达目标点且没有悬停输入，直接对齐并停止阻尼计算
+        if (currentHoverDir == Vector2.zero && (roomContent.anchoredPosition - desiredAnchored).sqrMagnitude < 0.01f)
+        {
+            roomContent.anchoredPosition = desiredAnchored;
+            currentVelocity = Vector2.zero;
+            return;
+        }
+
         if (smoothTime > 0f)
         {
             roomContent.anchoredPosition = Vector2.SmoothDamp(

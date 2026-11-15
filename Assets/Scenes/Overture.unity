@@ -24067,6 +24067,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previewArea: {fileID: 70022092}
   firstLevel: {fileID: 1420779316}
+  doorInventoryUI: {fileID: 0}
+  messagePanel: {fileID: 0}
+  moveButton: {fileID: 23925862}
   dialogueUI: {fileID: 2094463886}
   charNameText: {fileID: 1375257670}
   dialogueText: {fileID: 1356904297}
@@ -24080,6 +24083,7 @@ MonoBehaviour:
   descriptionText: {fileID: 1305900849}
   npcImage: {fileID: 1036170161}
   viewPanelTransform: {fileID: 1639807900}
+  edgePanController: {fileID: 0}
 --- !u!114 &942102260
 MonoBehaviour:
   m_ObjectHideFlags: 0
