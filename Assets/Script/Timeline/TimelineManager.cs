@@ -39,6 +39,11 @@ public class TimelineManager : MonoBehaviour
     [Tooltip("主界面 Scroll View 上的 DynamicTimelineView")]
     [SerializeField] private DynamicTimelineView mainTimelineView;
 
+    // ✨ 新增：支持同时绑定多个红点标记（例如：侧边栏终端按钮上的红点 + 终端菜单里时间轴按键上的红点）
+    [Header("未读红点提示 (New Badge)")]
+    [Tooltip("当有未读时间轴条目时显示的提示图标/红点物体")]
+    [SerializeField] private GameObject[] newBadges;
+
     // 所有当前活跃的视图列表（主视图、合成页小窗等）
     private readonly List<DynamicTimelineView> registeredViews = new List<DynamicTimelineView>();
 
@@ -64,6 +69,7 @@ public class TimelineManager : MonoBehaviour
         }
 
         LoadData();
+        UpdateNewBadges(); // ✨ 读档后立刻同步红点初始状态
 
         // 默认将主视图加入管理
         if (mainTimelineView != null)
@@ -126,6 +132,7 @@ public class TimelineManager : MonoBehaviour
             unreadEventIds.Add(eventId);
             SaveData();
 
+            UpdateNewBadges(); // ✨ 新增条目时点亮红点
             // 广播刷新大屏和小屏
             RefreshAllViews();
         }
@@ -177,6 +184,25 @@ public class TimelineManager : MonoBehaviour
         {
             unreadEventIds.Clear();
             SaveData();
+            UpdateNewBadges(); // ✨ 标记已读后熄灭红点
+        }
+    }
+
+    /// <summary>
+    /// ✨ 统一控制所有绑定红点物体的显示与隐藏
+    /// </summary>
+    public void UpdateNewBadges()
+    {
+        bool hasUnread = unreadEventIds != null && unreadEventIds.Count > 0;
+        if (newBadges != null)
+        {
+            foreach (var badge in newBadges)
+            {
+                if (badge != null)
+                {
+                    badge.SetActive(hasUnread);
+                }
+            }
         }
     }
 
