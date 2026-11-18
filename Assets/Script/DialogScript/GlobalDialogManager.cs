@@ -55,6 +55,8 @@ public class GlobalDialogManager : MonoBehaviour
     // 已选择过的选项 flag
     public static List<string> triggeredFlags = new List<string>();
 
+    private Action onDialogueComplete;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -517,6 +519,10 @@ public class GlobalDialogManager : MonoBehaviour
             if (selectionUI != null)
                 selectionUI.SetActive(true);
         }
+        // ✨ 新增：通知外部“本段对话已彻底播完”，可以接下一段了
+        Action callback = onDialogueComplete;
+        onDialogueComplete = null;
+        callback?.Invoke();
     }
 
     [System.Serializable]
@@ -605,8 +611,16 @@ public class GlobalDialogManager : MonoBehaviour
         public bool isStoryBranch;
     }
 
+    // 版本 1（无回调，兼容旧调用和 UnityEvent 面板绑定）
     public void TriggerDialogue(string dialogueID)
     {
+        TriggerDialogue(dialogueID, null);
+    }
+
+    // 版本 2（带回调，供对话队列串行播放使用）
+    public void TriggerDialogue(string dialogueID, Action onComplete)
+    {
+        this.onDialogueComplete = onComplete;
         SidePanelManager.Instance.HideAll();
         StartDialogue(dialogueID);
     }

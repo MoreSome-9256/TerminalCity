@@ -437,7 +437,7 @@ MonoBehaviour:
   closeButton: {fileID: 465807580}
   contentRect: {fileID: 1955486530}
   itemDialogMappings: []
-  dialogTriggerAfterInventory: {fileID: 0}
+  dialogTriggerAfterInventory: {fileID: 317109051}
   bagController: {fileID: 389512281}
 --- !u!114 &7970381
 MonoBehaviour:
@@ -8792,6 +8792,7 @@ GameObject:
   m_Component:
   - component: {fileID: 317109049}
   - component: {fileID: 317109050}
+  - component: {fileID: 317109051}
   m_Layer: 0
   m_Name: Dialogue
   m_TagString: Untagged
@@ -8840,6 +8841,55 @@ MonoBehaviour:
   branchButtonPrefab: {fileID: 5235536883887483169, guid: bd3d3c049c2b31a489032882896419cb,
     type: 3}
   targetButton: {fileID: 389512282}
+--- !u!114 &317109051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317109047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eb3c1c1d6e59664c95fee554f3be803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDialogMappings:
+  - itemID: 102006
+    dialogEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 317109050}
+          m_TargetAssemblyTypeName: GlobalDialogManager, Assembly-CSharp
+          m_MethodName: StartDialogue
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 1001
+            m_BoolArgument: 0
+          m_CallState: 2
+  multiItemDialogGroups:
+  - groupName: ABOUT_LOCUS_1
+    requiredItemIDs: 7f8e0100808e0100818e0100
+    dialogEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 317109050}
+          m_TargetAssemblyTypeName: GlobalDialogManager, Assembly-CSharp
+          m_MethodName: StartDialogue
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 1010
+            m_BoolArgument: 0
+          m_CallState: 2
+    triggerOnce: 1
+    hasTriggered: 0
 --- !u!1 &320698119
 GameObject:
   m_ObjectHideFlags: 0
@@ -37212,7 +37262,7 @@ MonoBehaviour:
   closeButton: {fileID: 465807580}
   contentRect: {fileID: 1955486530}
   chatManager: {fileID: 1283420822}
-  dialogTriggerAfterInventory: {fileID: 0}
+  dialogTriggerAfterInventory: {fileID: 317109051}
   bagController: {fileID: 389512281}
 --- !u!114 &1307957802
 MonoBehaviour:
@@ -52978,7 +53028,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1955486534

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,11 +8,11 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
 
     [Header("Inventory UI")]
-    public GameObject previewArea;  // ¶ÔÓ¦ PreView Ãæ°å
-    public GameObject firstLevel;   // ¶ÔÓ¦ FirstLevel Ãæ°å / ±³°ü UI
-    public GameObject doorInventoryUI;  // ÃÅ½âËø×¨ÓÃµÄ±³°üÃæ°å£¨ÈôÓë firstLevel ÏàÍ¬¿ÉÍÏÍ¬Ò»¸ö£©
-    public GameObject messagePanel;     // ¶ÔÓ¦ Message ÌáÊ¾Ãæ°å
-    public GameObject moveButton;       // ´ò¿ª±³°üµÄ²à±ßÀ¸°´Å¥£¨MoveButton£©
+    public GameObject previewArea;  // å¯¹åº” PreView é¢æ¿
+    public GameObject firstLevel;   // å¯¹åº” FirstLevel é¢æ¿ / èƒŒåŒ… UI
+    public GameObject doorInventoryUI;  // é—¨è§£é”ä¸“ç”¨çš„èƒŒåŒ…é¢æ¿ï¼ˆè‹¥ä¸ firstLevel ç›¸åŒå¯æ‹–åŒä¸€ä¸ªï¼‰
+    public GameObject messagePanel;     // å¯¹åº” Message æç¤ºé¢æ¿
+    public GameObject moveButton;       // æ‰“å¼€èƒŒåŒ…çš„ä¾§è¾¹æ æŒ‰é’®ï¼ˆMoveButtonï¼‰
 
     [Header("Dialogue UI")]
     public GameObject dialogueUI;
@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
     public GameObject selectionUI;
 
     [Header("Room Canvas")]
-    [Tooltip("³¡¾°ÖĞÈ«¾ÖäÖÈ¾ Room µÄ Canvas ÎïÌå»ò¸ùÈİÆ÷")]
+    [Tooltip("åœºæ™¯ä¸­å…¨å±€æ¸²æŸ“ Room çš„ Canvas ç‰©ä½“æˆ–æ ¹å®¹å™¨")]
     public RectTransform roomPanel;
 
     [Header("Room Info UI")]
@@ -39,8 +39,11 @@ public class UIManager : MonoBehaviour
     public Transform viewPanelTransform;
 
     [Header("Big Room Edge Pan")]
-    [Tooltip("¹ÒÔØÔÚÈ«¾Ö Canvas ÉÏµÄ´ó·¿¼ä±ßÔµÆ½ÒÆ¿ØÖÆÆ÷")]
+    [Tooltip("æŒ‚è½½åœ¨å…¨å±€ Canvas ä¸Šçš„å¤§æˆ¿é—´è¾¹ç¼˜å¹³ç§»æ§åˆ¶å™¨")]
     public RoomEdgePanController edgePanController;
+
+    // åˆ¤æ–­å½“å‰å±å¹•æ˜¯å¦æ­£æœ‰ä»»æ„ç³»ç»Ÿçš„å¯¹è¯åœ¨æ’­æ”¾
+    public bool IsAnyDialoguePlaying => dialogueUI != null && dialogueUI.activeInHierarchy;
 
     private void Awake()
     {
@@ -51,6 +54,6 @@ public class UIManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject); // Èç¹ûĞèÒª¿ç³¡¾°
+        DontDestroyOnLoad(gameObject); // å¦‚æœéœ€è¦è·¨åœºæ™¯
     }
 }
