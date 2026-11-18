@@ -386,6 +386,9 @@ public class GlobalDialogManager : MonoBehaviour
 
         bool hasStoryBranch = options.Any(opt => opt.isStoryBranch); // 检查是否剧情分支
 
+        // 让带前置条件的剧情新话题优先排在列表最前面，避免被普通闲聊挤到 3 个名额之外
+        options = options.OrderByDescending(opt => !string.IsNullOrEmpty(opt.requireFlag)).ToList();
+
         int shownCount = 0;
         foreach (var opt in options)
         {
@@ -393,6 +396,13 @@ public class GlobalDialogManager : MonoBehaviour
 
             if (!string.IsNullOrEmpty(localOpt.conditionFlag) &&
                 GlobalDialogManager.triggeredFlags.Contains(localOpt.conditionFlag))
+            {
+                continue;
+            }
+
+            // 配置了前置解锁标记，但玩家尚未达成该条件的，暂时锁住跳过
+            if (!string.IsNullOrEmpty(localOpt.requireFlag) &&
+                !GlobalDialogManager.triggeredFlags.Contains(localOpt.requireFlag))
             {
                 continue;
             }
@@ -482,6 +492,18 @@ public class GlobalDialogManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 供外部系统（读完资料、触发剧情、拾取物品等）解锁新问答话题
+    /// </summary>
+    public static void UnlockFlag(string flag)
+    {
+        if (!string.IsNullOrEmpty(flag) && !triggeredFlags.Contains(flag))
+        {
+            triggeredFlags.Add(flag);
+            Debug.Log($"[GlobalDialogManager] 已解锁全局问答标记: {flag}");
+        }
+    }
+
 
     private void EndDialogue()
     {
@@ -544,7 +566,7 @@ public class GlobalDialogManager : MonoBehaviour
             conn.Open();
             using (var cmd = conn.CreateCommand())
             {
-                cmd.CommandText = "SELECT optionText, nextID, conditionFlag, isStoryBranch FROM branch WHERE branchGroup=@id ORDER BY rowid ASC";
+                cmd.CommandText = "SELECT optionText, nextID, conditionFlag, isStoryBranch, requireFlag FROM branch WHERE branchGroup=@id ORDER BY rowid ASC";
                 cmd.Parameters.AddWithValue("@id", branchGroupID);
 
                 using (var reader = cmd.ExecuteReader())
@@ -608,6 +630,7 @@ public class GlobalDialogManager : MonoBehaviour
         public string optionText;
         public string targetDialogueID;
         public string conditionFlag;
+        public string requireFlag;   // 前置解锁标记
         public bool isStoryBranch;
     }
 

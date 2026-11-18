@@ -8870,6 +8870,26 @@ MonoBehaviour:
             m_StringArgument: 1001
             m_BoolArgument: 0
           m_CallState: 2
+    triggerOnce: 1
+    hasTriggered: 0
+  - itemID: 201001
+    dialogEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 317109050}
+          m_TargetAssemblyTypeName: GlobalDialogManager, Assembly-CSharp
+          m_MethodName: StartDialogue
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 1014
+            m_BoolArgument: 0
+          m_CallState: 2
+    triggerOnce: 1
+    hasTriggered: 0
   multiItemDialogGroups:
   - groupName: ABOUT_LOCUS_1
     requiredItemIDs: 7f8e0100808e0100818e0100
@@ -56336,7 +56356,7 @@ MonoBehaviour:
   database: {fileID: 11400000, guid: 3dbce3f0c01adbb49abbca7ce97329e3, type: 2}
   placeNumber: 1
   roomIDsInArea: 00000000010000000200000004000000050000000b0000000c000000
-  currentRoomID: 2
+  currentRoomID: 0
 --- !u!225 &2122119473
 CanvasGroup:
   m_ObjectHideFlags: 0
